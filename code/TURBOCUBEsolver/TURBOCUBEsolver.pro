@@ -16,11 +16,11 @@ SOURCES += main.cpp\
         turbocubesolver.cpp \
     cube.cpp \
     fridrich.cpp \
-    notation_solver.cpp
+    notation_decoder.cpp
 
 HEADERS  += turbocubesolver.h \
     cube.h \
     fridrich.h \
-    notation_solver.h
+    notation_decoder.h
 
 FORMS    += turbocubesolver.ui
