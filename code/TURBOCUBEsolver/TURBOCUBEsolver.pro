@@ -15,10 +15,12 @@ TEMPLATE = app
 SOURCES += main.cpp\
         turbocubesolver.cpp \
     cube.cpp \
-    fridrich.cpp
+    fridrich.cpp \
+    notation_solver.cpp
 
 HEADERS  += turbocubesolver.h \
     cube.h \
-    fridrich.h
+    fridrich.h \
+    notation_solver.h
 
 FORMS    += turbocubesolver.ui
