@@ -12,9 +12,11 @@ public:
     Widget(QWidget *parent = 0);
 
 private:
-    QTextEdit *moves;
+    QTextEdit *moves_instructions;
     QLineEdit *entry;
     QPushButton *btn_decode;
+
+    bool isAMove(QChar);
 
 public slots:
     void decode();
