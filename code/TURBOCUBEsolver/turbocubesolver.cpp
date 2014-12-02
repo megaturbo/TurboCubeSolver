@@ -1,5 +1,7 @@
 #include "turbocubesolver.h"
 #include "ui_turbocubesolver.h"
+#include "cube.h"
+
 
 TURBOCUBEsolver::TURBOCUBEsolver(QWidget *parent) :
     QMainWindow(parent),

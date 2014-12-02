@@ -15,10 +15,13 @@ TEMPLATE = app
 SOURCES += main.cpp\
         turbocubesolver.cpp \
     cube.cpp \
-    fridrich.cpp
+    fridrich.cpp \
+    cubie.cpp
 
 HEADERS  += turbocubesolver.h \
     cube.h \
-    fridrich.h
+    fridrich.h \
+    CubeColor.h \
+    cubie.h
 
 FORMS    += turbocubesolver.ui

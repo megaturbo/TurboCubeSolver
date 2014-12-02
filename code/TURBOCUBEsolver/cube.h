@@ -1,37 +1,31 @@
 #ifndef CUBE_H
 #define CUBE_H
 
+#include <QMap>
+#include <QVector>
+#include <QList>
+#include <CubeColor.h>
+
+using namespace CubeColor;
 class Cube{
   public:
     Cube ();
-    Cube(QMatrix<Cubie> Cube);
-    void setMatrix(QMatrix<Cubie> Cube);
+    Cube(QList<QMap<color, color> > newCube);
+    void setCube(QList<QMap<color, color> > newCube);
     //returns faces the cubie's on
-    QArray<int> locateCubie(int c1, int c2, int c3 = 0);
+    int* locateCubie(color c1, color c2, color c3 = UNDEFINED);
   private:
     //actually moves the faces
     void moveSequence(QString sequence);
 
     //matrix rotation per face
-    void u();
-    void up();
-    void u2();
-    void d();
-    void dp();
-    void d2();
-    void b();
-    void bp();
-    void b2();
-    void f();
-    void fp();
-    void f2();
-    void r();
-    void rp();
-    void r2();
-    void l();
-    void lp();
-    void l2();
+    void U(int nbQuarterTurn);
+    void D(int nbQuarterTurn);
+    void B(int nbQuarterTurn);
+    void F(int nbQuarterTurn);
+    void R(int nbQuarterTurn);
+    void L(int nbQuarterTurn);
 
-    QMatrix<Cubie> cube;
-}
+    QList<QMap<color, color> > cube;
+};
 #endif // CUBE_H
