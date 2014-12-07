@@ -17,14 +17,12 @@ SOURCES += main.cpp\
     cube.cpp \
     fridrich.cpp \
     notation_decoder.cpp \
-<<<<<<< HEAD
     cubie.cpp
 
 HEADERS  += turbocubesolver.h \
     cube.h \
     fridrich.h \
     notation_decoder.h \
-<<<<<<< HEAD
     CubeColor.h \
     cubie.h
 

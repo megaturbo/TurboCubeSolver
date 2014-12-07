@@ -9,10 +9,12 @@ using namespace CubeColor;
 class Cubie
 {
 public:
-    Cubie();
+    Cubie(color* colors);
+    bool operator==(const Cubie c) const;
+    bool operator<(const Cubie c) const ;
+private:
     QList<color> colors;
-    QList<color> faces;
-    int pos[3];
+    int id;
 };
 
 #endif // CUBIE_H

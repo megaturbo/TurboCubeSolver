@@ -2,7 +2,6 @@
 #include <QString>
 #include <iostream>
 #include <qdebug.h>
-#include <QMap>
 #include <QList>
 
 //Public methods
@@ -11,25 +10,27 @@ Cube::Cube()
 {
 }
 
-Cube::Cube(QList<QMap<color, color> > newCube){
+Cube::Cube(QList<Cubie> newCube){
     setCube(newCube);
 }
 
-//Utility methods
-void Cube::setCube(QList<QMap<color, color> > newCube){
-    for(int i = 0; i < newCube.size(); i++){
+Cube::Cube(QMap<Cubie, QList<color> > newCube){
 
-    }
+}
+
+//Utility methods
+
+void Cube::setCube(QList<Cubie> newCube){
+
+}
+
+void Cube::setCube(QMap<Cubie, QList<color> > newCube){
+        this->cube = newCube;
 }
 
 //returns faces the cubie's on
-int* Cube::locateCubie(color c1, color c2, color c3){
-    if (c3 == UNDEFINED){
-        //Then edge
-    }
-    else{
-        //Then corner
-    }
+QList<color> Cube::locateCubie(Cubie c){
+    return cube.find(c).value();
 }
 
 //Private methods
