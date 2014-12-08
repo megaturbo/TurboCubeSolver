@@ -17,7 +17,8 @@ SOURCES += main.cpp\
     cube.cpp \
     fridrich.cpp \
     notation_decoder.cpp \
-    cubie.cpp
+    cubie.cpp \
+	CubeInput.cpp
 
 HEADERS  += turbocubesolver.h \
     cube.h \
@@ -25,5 +26,7 @@ HEADERS  += turbocubesolver.h \
     notation_decoder.h \
     CubeColor.h \
     cubie.h
+	CubeInput.h
 
-FORMS    += turbocubesolver.ui
+FORMS    += turbocubesolver.ui\
+	CubeInput.ui
