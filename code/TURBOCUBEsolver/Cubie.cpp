@@ -1,4 +1,4 @@
-#include "cubie.h"
+#include "Cubie.h"
 
 //Public methods
 //Constructor

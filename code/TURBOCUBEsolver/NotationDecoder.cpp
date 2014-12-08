@@ -1,4 +1,4 @@
-#include "notation_decoder.h"
+#include "NotationDecoder.h"
 
 #include <QtWidgets>
 

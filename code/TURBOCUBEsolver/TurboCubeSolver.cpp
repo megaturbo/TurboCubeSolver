@@ -1,4 +1,4 @@
-#include "turbocubesolver.h"
+#include "TurboCubeSolver.h"
 #include "ui_turbocubesolver.h"
 #include "cube.h"
 

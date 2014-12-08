@@ -1,4 +1,4 @@
-#include "fridrich.h"
+#include "Fridrich.h"
 #include <QString>
 #include <QStringBuilder>
 #include <cubie.h>
