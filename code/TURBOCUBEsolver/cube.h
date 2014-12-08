@@ -18,8 +18,6 @@ class Cube{
     //returns the 2 or 3 colors of the cubie linked to the sticker at (i, j) on matCube
     QList<int> cubie(int i, int j);
 
-private:
-    //actually moves the faces
     void moveSequence(QString sequence);
 
     //matrix rotation per face
@@ -29,6 +27,11 @@ private:
     void F(int nbQuarterTurn);
     void R(int nbQuarterTurn);
     void L(int nbQuarterTurn);
+
+private:
+    //utility
+    bool cubieEqual(QList<int> cubi, color c1, color c2);
+    bool cubieEqual(QList<int> cubi, color c1, color c2, color c3);
 
     color matCube[18][3];
 };

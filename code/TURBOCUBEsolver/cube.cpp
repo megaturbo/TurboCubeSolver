@@ -15,23 +15,35 @@ Cube::Cube()
 //returns indices of the cubie's stickers
 QList<int> Cube::locateCubie(color c1, color c2){
     //we're testing 3 cubies on 4 faces, it will cover the entire cube
+    QList<int> cubi;
     for (int face = 0; face < 4; ++face) {
-
+        cubi = cubie(face * 3 + 1, 0);
+        if(cubieEqual(cubi, c1, c2)){
+            return cubi;
+        }
+        cubi = cubie(face * 3 + 1, 2);
+        if(cubieEqual(cubi, c1, c2)){
+            return cubi;
+        }
+        cubi = cubie(face * 3, 1);
+        if(cubieEqual(cubi, c1, c2)){
+            return cubi;
+        }
     }
 }
 
+//returns indices of the cubie's stickers
 QList<int> Cube::locateCubie(color c1, color c2, color c3){
-    for (int face = 0; face < 6; ++face) {
-        for (int x = 0; x < 3; ++x) {
-            for (int y = 0; y < 3; ++y) {
-                if(x == 2 && y == 2){
-                    //center
-                }
-                else if(matCube[x + face * 3][y] == c1){
-                    QList<int> c = cubie(x, y);
-                    int y = c.length();
-                }
-            }
+    //we're testing 2 cubies on 4 faces, it will cover the entire cube
+    QList<int> cubi;
+    for (int face = 0; face < 4; ++face) {
+        cubi = cubie(face * 3, 0);
+        if(cubieEqual(cubi, c1, c2, c3)){
+            return cubi;
+        }
+        cubi = cubie(face * 3, 2);
+        if(cubieEqual(cubi, c1, c2, c3)){
+            return cubi;
         }
     }
 }
@@ -268,9 +280,6 @@ QList<int> Cube::cubie(int i, int j){
     }
 }
 
-//Private methods
-
-//actually moves the faces
 void Cube::moveSequence(QString sequence){
 
 }
@@ -299,3 +308,21 @@ void Cube::R(int nbQuarterTurn){
 void Cube::L(int nbQuarterTurn){
 
 }
+
+//Private methods
+
+bool Cube::cubieEqual(QList<int> cubi, color c1, color c2){
+    return ((matCube[cubi.at(0)][cubi.at(1)] == c1 && matCube[cubi.at(2)][cubi.at(3)] == c2)
+         || (matCube[cubi.at(0)][cubi.at(1)] == c2 && matCube[cubi.at(2)][cubi.at(3)] == c1));
+
+}
+
+bool Cube::cubieEqual(QList<int> cubi, color c1, color c2, color c3){
+    return((matCube[cubi.at(0)][cubi.at(1)] == c1 &&((matCube[cubi.at(2)][cubi.at(3)] == c2 && matCube[cubi.at(4)][cubi.at(5)] == c3)
+                                                  || (matCube[cubi.at(2)][cubi.at(3)] == c3 && matCube[cubi.at(4)][cubi.at(5)] == c2)))
+        || (matCube[cubi.at(0)][cubi.at(1)] == c2 &&((matCube[cubi.at(2)][cubi.at(3)] == c1 && matCube[cubi.at(4)][cubi.at(5)] == c3)
+                                                  || (matCube[cubi.at(2)][cubi.at(3)] == c3 && matCube[cubi.at(4)][cubi.at(5)] == c1)))
+        || (matCube[cubi.at(0)][cubi.at(1)] == c3 &&((matCube[cubi.at(2)][cubi.at(3)] == c2 && matCube[cubi.at(4)][cubi.at(5)] == c1)
+                                                  || (matCube[cubi.at(2)][cubi.at(3)] == c1 && matCube[cubi.at(4)][cubi.at(5)] == c2))));
+}
+
