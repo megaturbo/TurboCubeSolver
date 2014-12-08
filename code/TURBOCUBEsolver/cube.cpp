@@ -1,4 +1,4 @@
-#include "cube.h"
+#include "Cube.h"
 #include <QString>
 #include <iostream>
 #include <qdebug.h>

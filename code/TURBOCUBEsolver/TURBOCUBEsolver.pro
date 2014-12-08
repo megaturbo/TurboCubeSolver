@@ -13,20 +13,22 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        turbocubesolver.cpp \
-    cube.cpp \
-    fridrich.cpp \
-    notation_decoder.cpp \
-    cubie.cpp \
-	CubeInput.cpp
+	CubeInput.cpp \
+    Cube.cpp \
+    Cubie.cpp \
+    Fridrich.cpp \
+    NotationDecoder.cpp \
+    TurboCubeSolver.cpp
 
-HEADERS  += turbocubesolver.h \
-    cube.h \
-    fridrich.h \
-    notation_decoder.h \
+HEADERS  += \
     CubeColor.h \
-    cubie.h
+    Cube.h \
+    Fridrich.h \
+    Cubie.h \
+    NotationDecoder.h \
+    TurboCubeSolver.h
 	CubeInput.h
 
-FORMS    += turbocubesolver.ui\
-	CubeInput.ui
+FORMS    +=\
+	CubeInput.ui \
+    TurboCubeSolver.ui

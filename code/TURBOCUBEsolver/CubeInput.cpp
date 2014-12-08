@@ -1,4 +1,4 @@
-#include "cubeinput.h"
+#include "CubeInput.h"
 #include "ui_CubeInput.h"
 
 CubeInput::CubeInput(QDialog* parent) :
