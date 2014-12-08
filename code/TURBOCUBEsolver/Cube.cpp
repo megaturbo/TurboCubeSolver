@@ -309,6 +309,124 @@ void Cube::L(int nbQuarterTurn){
 
 }
 
+void Cube::turn(color face){
+    //rotates the stickers on the face
+    color saveF[2];
+    saveF[0] = matCube[face * 3][0];
+    saveF[1] = matCube[face * 3 + 1][0];
+    matCube[face * 3][0] = matCube[face * 3][2];
+    matCube[face * 3 + 1][0] = matCube[face * 3][1];
+    matCube[face * 3][2] = matCube[face * 3 + 2][2];
+    matCube[face * 3][1] = matCube[face * 3 + 1][2];
+    matCube[face * 3 + 2][2] = matCube[face * 3 + 2][0];
+    matCube[face * 3 + 1][2] = matCube[face * 3 + 2][1];
+    matCube[face * 3 + 2][0] = saveF[0];
+    matCube[face * 3 + 2][1] = saveF[1];
+
+    //rotates the stickers on the stickers adjacent to the face
+    int* indicesx;
+    int* indicesy;
+    switch(face){
+    case RED:
+        //{WHITE, BLUE, YELLOW, GREEN};
+        indicesx = new int[12]{WHITE * 3 + 2, WHITE * 3 + 1, WHITE * 3,
+                                BLUE * 3, BLUE * 3, BLUE * 3,
+                                YELLOW * 3, YELLOW * 3 + 1, YELLOW * 3 + 2,
+                                GREEN * 3 + 2, GREEN * 3 + 2, GREEN * 3 + 2};
+        indicesy = new int[12]{2, 2, 2,
+                                0, 1, 2,
+                                2, 2, 2,
+                                2, 1, 0};
+        break;
+    case BLUE:
+        //{WHITE, ORANGE, YELLOW, RED};
+        indicesx = new int[12]{WHITE * 3 + 2, WHITE * 3 + 2, WHITE * 3 + 2,
+                                ORANGE * 3, ORANGE * 3, ORANGE * 3,
+                                YELLOW * 3, YELLOW * 3, YELLOW * 3,
+                                RED * 3 + 2, RED * 3 + 2, RED * 3 + 2};
+        indicesy = new int[12]{2, 1, 0,
+                                0, 1, 2,
+                                0, 1, 2,
+                                2, 1, 0};
+        break;
+    case ORANGE:
+        //{WHITE, GREEN, YELLOW, BLUE};
+        indicesx = new int[12]{WHITE * 3, WHITE * 3 + 1, WHITE * 3 + 2,
+                                GREEN * 3, GREEN * 3, GREEN * 3,
+                                YELLOW * 3 + 2, YELLOW * 3 + 1, YELLOW * 3,
+                                BLUE * 3 + 2, BLUE * 3 + 2, BLUE * 3 + 2};
+        indicesy = new int[12]{0, 0, 0,
+                                0, 1, 2,
+                                0, 0 ,0,
+                                2, 1, 0};
+        break;
+    case GREEN:
+        //{WHITE, RED, YELLOW, ORANGE};
+        indicesx = new int[12]{WHITE * 3, WHITE * 3, WHITE * 3,
+                                RED * 3, RED * 3, RED * 3,
+                                YELLOW * 3 + 2, YELLOW * 3 + 2, YELLOW * 3 + 2,
+                                ORANGE * 3 + 2, ORANGE * 3 + 2, ORANGE * 3 + 2};
+        indicesy = new int[12]{0, 1, 2,
+                                0, 1, 2,
+                                2, 1, 0,
+                                2, 1, 0};
+        break;
+    case WHITE:
+        //{RED, GREEN, ORANGE, BLUE};
+        indicesx = new int[12]{RED * 3, RED * 3 + 1, RED * 3 + 2,
+                                GREEN * 3, GREEN * 3 + 1, GREEN * 3 + 2,
+                                ORANGE * 3, ORANGE * 3 + 1, ORANGE * 3 + 2,
+                                BLUE * 3, BLUE * 3 + 1, BLUE * 3 + 2};
+        indicesy = new int[12]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        break;
+    case YELLOW:
+        //{RED, BLUE, ORANGE, GREEN};
+        indicesx = new int[12]{RED * 3, RED * 3 + 1, RED * 3 + 2,
+                                BLUE * 3, BLUE * 3 + 1, BLUE * 3 + 2,
+                                ORANGE * 3, ORANGE * 3 + 1, ORANGE * 3 + 2,
+                                GREEN * 3, GREEN * 3 + 1, GREEN * 3 + 2};
+        indicesy = new int[12]{2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2};
+        break;
+    default:
+        break;
+    }
+    color save[3];
+    for (int i = 0; i < 3; ++i) {
+        save[i] = matCube[indicesx[i]][indicesy[i]];
+    }
+    for (int i = 0; i < 9; i+=3) {
+        matCube[indicesx[i]][indicesy[i]] = matCube[indicesx[i + 3]][indicesy[i + 3]];
+        matCube[indicesx[i + 1]][indicesy[i + 1]] = matCube[indicesx[i + 4]][indicesy[i + 4]];
+        matCube[indicesx[i + 2]][indicesy[i + 2]] = matCube[indicesx[i + 5]][indicesy[i + 5]];
+    }
+    matCube[indicesx[9]][indicesy[9]] = save[0];
+    matCube[indicesx[10]][indicesy[10]] = save[1];
+    matCube[indicesx[11]][indicesy[11]] = save[2];
+}
+
+void Cube::turnRed(int nbQuarterTurn){
+}
+
+void Cube::turnBlue(int nbQuarterTurn){
+
+}
+
+void Cube::turnOrange(int nbQuarterTurn){
+
+}
+
+void Cube::turnGreen(int nbQuarterTurn){
+
+}
+
+void Cube::turnWhite(int nbQuarterTurn){
+
+}
+
+void Cube::turnYellow(int nbQuarterTurn){
+
+}
+
 //Private methods
 
 bool Cube::cubieEqual(QList<int> cubi, color c1, color c2){

@@ -27,11 +27,19 @@ class Cube{
     void F(int nbQuarterTurn);
     void R(int nbQuarterTurn);
     void L(int nbQuarterTurn);
+    void turnRed(int nbQuarterTurn);
+    void turnBlue(int nbQuarterTurn);
+    void turnOrange(int nbQuarterTurn);
+    void turnGreen(int nbQuarterTurn);
+    void turnWhite(int nbQuarterTurn);
+    void turnYellow(int nbQuarterTurn);
 
 private:
     //utility
     bool cubieEqual(QList<int> cubi, color c1, color c2);
     bool cubieEqual(QList<int> cubi, color c1, color c2, color c3);
+
+    void turn(color face);
 
     color matCube[18][3];
 };
