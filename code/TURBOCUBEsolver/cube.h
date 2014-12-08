@@ -12,13 +12,13 @@ using namespace CubeColor;
 class Cube{
   public:
     Cube ();
-    Cube(QList<Cubie> newCube);
-    Cube(QMap<Cubie, QList<color> > newCube);
-    void setCube(QList<Cubie> newCube);
-    void setCube(QMap<Cubie, QList<color> > newCube);
     //returns faces the cubie's on
-    QList<color> locateCubie(Cubie c);
-  private:
+    QList<int> locateCubie(color c1, color c2);
+    QList<int> locateCubie(color c1, color c2, color c3);
+    //returns the 2 or 3 colors of the cubie linked to the sticker at (i, j) on matCube
+    QList<int> cubie(int i, int j);
+
+private:
     //actually moves the faces
     void moveSequence(QString sequence);
 
@@ -30,13 +30,6 @@ class Cube{
     void R(int nbQuarterTurn);
     void L(int nbQuarterTurn);
 
-    //this one sucks, probably
-    QList<Cubie> cubeZOR;
-    //Cubies linked with the 2/3 faces on which they are
-    QMap<Cubie, QList<color> > cube;
-    //3d array for the cubies
-    Cubie cube[3][3][3];
-    //FUCKING MATRIX
-    QMatrix matCube();
+    color matCube[18][3];
 };
 #endif // CUBE_H

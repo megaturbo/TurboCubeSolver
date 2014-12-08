@@ -13,15 +13,11 @@ QString Fridrich::solve(Cube *c){
 }
 
 //For now, it's only solving for the white face
-QString Fridrich::cross(Cube *c, color color){
-    Cubie wr(WHITE, RED);
-    Cubie wg(WHITE, GREEN);
-    Cubie wb(WHITE, BLUE);
-    Cubie wo(WHITE, ORANGE);
-    QList<color> wrpos = c->locateCubie(wr);
-    QList<color> wgpos = c->locateCubie(wr);
-    QList<color> wbpos = c->locateCubie(wr);
-    QList<color> wopos = c->locateCubie(wr);
+QString Fridrich::cross(Cube *c, color col){
+    QList<int> wrpos = c->locateCubie(WHITE, RED);
+    QList<int> wbpos = c->locateCubie(WHITE, BLUE);
+    QList<int> wopos = c->locateCubie(WHITE, ORANGE);
+    QList<int> wgpos = c->locateCubie(WHITE, GREEN);
     return "";
 }
 
