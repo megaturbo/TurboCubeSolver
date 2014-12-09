@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
         cube.displayCube();
     }
 
-    QList<int> indices = cube.locateCubie(BLUE, YELLOW);
+    QList<int> indices = cube.locateCubie(YELLOW, RED, BLUE);
 
     QString s = "";
     for (int i = 0; i < indices.length(); i++) {
