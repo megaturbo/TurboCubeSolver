@@ -42,10 +42,22 @@
            <item row="2" column="1">
             <widget class="QPushButton" name="pushButton_51">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+              <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="sizeIncrement">
+              <size>
+               <width>1</width>
+               <height>1</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>15</width>
+               <height>15</height>
+              </size>
              </property>
              <property name="text">
               <string/>
@@ -55,10 +67,22 @@
            <item row="0" column="1">
             <widget class="QPushButton" name="pushButton_49">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+              <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="sizeIncrement">
+              <size>
+               <width>1</width>
+               <height>1</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>15</width>
+               <height>15</height>
+              </size>
              </property>
              <property name="text">
               <string/>
@@ -68,10 +92,22 @@
            <item row="2" column="0">
             <widget class="QPushButton" name="pushButton_48">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+              <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="sizeIncrement">
+              <size>
+               <width>1</width>
+               <height>1</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>15</width>
+               <height>15</height>
+              </size>
              </property>
              <property name="text">
               <string/>
@@ -81,10 +117,22 @@
            <item row="0" column="0">
             <widget class="QPushButton" name="pushButton_46">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+              <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="sizeIncrement">
+              <size>
+               <width>1</width>
+               <height>1</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>15</width>
+               <height>15</height>
+              </size>
              </property>
              <property name="text">
               <string/>
@@ -94,10 +142,22 @@
            <item row="1" column="0">
             <widget class="QPushButton" name="pushButton_47">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+              <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="sizeIncrement">
+              <size>
+               <width>1</width>
+               <height>1</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>15</width>
+               <height>15</height>
+              </size>
              </property>
              <property name="text">
               <string/>
@@ -107,10 +167,22 @@
            <item row="1" column="1">
             <widget class="QPushButton" name="pushButton_50">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+              <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="sizeIncrement">
+              <size>
+               <width>1</width>
+               <height>1</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>15</width>
+               <height>15</height>
+              </size>
              </property>
              <property name="text">
               <string>B</string>
@@ -120,10 +192,22 @@
            <item row="0" column="2">
             <widget class="QPushButton" name="pushButton_52">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+              <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="sizeIncrement">
+              <size>
+               <width>1</width>
+               <height>1</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>15</width>
+               <height>15</height>
+              </size>
              </property>
              <property name="text">
               <string/>
@@ -133,10 +217,22 @@
            <item row="1" column="2">
             <widget class="QPushButton" name="pushButton_53">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+              <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="sizeIncrement">
+              <size>
+               <width>1</width>
+               <height>1</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>15</width>
+               <height>15</height>
+              </size>
              </property>
              <property name="text">
               <string/>
@@ -146,10 +242,22 @@
            <item row="2" column="2">
             <widget class="QPushButton" name="pushButton_54">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+              <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="sizeIncrement">
+              <size>
+               <width>1</width>
+               <height>1</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>15</width>
+               <height>15</height>
+              </size>
              </property>
              <property name="text">
               <string/>
@@ -166,10 +274,22 @@
            <item row="1" column="0">
             <widget class="QPushButton" name="pushButton_20">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+              <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="sizeIncrement">
+              <size>
+               <width>1</width>
+               <height>1</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>15</width>
+               <height>15</height>
+              </size>
              </property>
              <property name="autoFillBackground">
               <bool>false</bool>
@@ -182,10 +302,22 @@
            <item row="0" column="1">
             <widget class="QPushButton" name="pushButton_22">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Maximum" vsizetype="Minimum">
+              <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="sizeIncrement">
+              <size>
+               <width>1</width>
+               <height>1</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>15</width>
+               <height>15</height>
+              </size>
              </property>
              <property name="autoFillBackground">
               <bool>false</bool>
@@ -198,7 +330,7 @@
            <item row="0" column="0">
             <widget class="QPushButton" name="pushButton_19">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Maximum" vsizetype="Minimum">
+              <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
@@ -214,10 +346,22 @@
            <item row="2" column="0">
             <widget class="QPushButton" name="pushButton_21">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+              <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="sizeIncrement">
+              <size>
+               <width>1</width>
+               <height>1</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>15</width>
+               <height>15</height>
+              </size>
              </property>
              <property name="autoFillBackground">
               <bool>false</bool>
@@ -230,10 +374,22 @@
            <item row="0" column="2">
             <widget class="QPushButton" name="pushButton_23">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Maximum" vsizetype="Minimum">
+              <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="sizeIncrement">
+              <size>
+               <width>1</width>
+               <height>1</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>15</width>
+               <height>15</height>
+              </size>
              </property>
              <property name="autoFillBackground">
               <bool>false</bool>
@@ -246,10 +402,22 @@
            <item row="1" column="1">
             <widget class="QPushButton" name="pushButton_24">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+              <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="sizeIncrement">
+              <size>
+               <width>1</width>
+               <height>1</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>15</width>
+               <height>15</height>
+              </size>
              </property>
              <property name="autoFillBackground">
               <bool>false</bool>
@@ -262,10 +430,22 @@
            <item row="1" column="2">
             <widget class="QPushButton" name="pushButton_25">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+              <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="sizeIncrement">
+              <size>
+               <width>1</width>
+               <height>1</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>15</width>
+               <height>15</height>
+              </size>
              </property>
              <property name="autoFillBackground">
               <bool>false</bool>
@@ -278,10 +458,22 @@
            <item row="2" column="1">
             <widget class="QPushButton" name="pushButton_26">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+              <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="sizeIncrement">
+              <size>
+               <width>1</width>
+               <height>1</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>15</width>
+               <height>15</height>
+              </size>
              </property>
              <property name="autoFillBackground">
               <bool>false</bool>
@@ -294,10 +486,22 @@
            <item row="2" column="2">
             <widget class="QPushButton" name="pushButton_27">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+              <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="sizeIncrement">
+              <size>
+               <width>1</width>
+               <height>1</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>15</width>
+               <height>15</height>
+              </size>
              </property>
              <property name="autoFillBackground">
               <bool>false</bool>
@@ -317,10 +521,22 @@
            <item row="0" column="1">
             <widget class="QPushButton" name="pushButton_40">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+              <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="sizeIncrement">
+              <size>
+               <width>1</width>
+               <height>1</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>15</width>
+               <height>15</height>
+              </size>
              </property>
              <property name="text">
               <string/>
@@ -330,10 +546,22 @@
            <item row="1" column="0">
             <widget class="QPushButton" name="pushButton_38">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+              <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="sizeIncrement">
+              <size>
+               <width>1</width>
+               <height>1</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>15</width>
+               <height>15</height>
+              </size>
              </property>
              <property name="text">
               <string/>
@@ -343,10 +571,22 @@
            <item row="2" column="0">
             <widget class="QPushButton" name="pushButton_39">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+              <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="sizeIncrement">
+              <size>
+               <width>1</width>
+               <height>1</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>15</width>
+               <height>15</height>
+              </size>
              </property>
              <property name="text">
               <string/>
@@ -356,10 +596,22 @@
            <item row="2" column="1">
             <widget class="QPushButton" name="pushButton_42">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+              <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="sizeIncrement">
+              <size>
+               <width>1</width>
+               <height>1</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>15</width>
+               <height>15</height>
+              </size>
              </property>
              <property name="text">
               <string/>
@@ -369,10 +621,22 @@
            <item row="1" column="1">
             <widget class="QPushButton" name="pushButton_41">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+              <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="sizeIncrement">
+              <size>
+               <width>1</width>
+               <height>1</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>15</width>
+               <height>15</height>
+              </size>
              </property>
              <property name="text">
               <string>D</string>
@@ -382,10 +646,22 @@
            <item row="0" column="0">
             <widget class="QPushButton" name="pushButton_37">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+              <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="sizeIncrement">
+              <size>
+               <width>1</width>
+               <height>1</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>15</width>
+               <height>15</height>
+              </size>
              </property>
              <property name="text">
               <string/>
@@ -395,10 +671,22 @@
            <item row="0" column="2">
             <widget class="QPushButton" name="pushButton_43">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+              <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="sizeIncrement">
+              <size>
+               <width>1</width>
+               <height>1</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>15</width>
+               <height>15</height>
+              </size>
              </property>
              <property name="text">
               <string/>
@@ -408,10 +696,22 @@
            <item row="1" column="2">
             <widget class="QPushButton" name="pushButton_44">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+              <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="sizeIncrement">
+              <size>
+               <width>1</width>
+               <height>1</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>15</width>
+               <height>15</height>
+              </size>
              </property>
              <property name="text">
               <string/>
@@ -421,10 +721,22 @@
            <item row="2" column="2">
             <widget class="QPushButton" name="pushButton_45">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+              <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="sizeIncrement">
+              <size>
+               <width>1</width>
+               <height>1</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>15</width>
+               <height>15</height>
+              </size>
              </property>
              <property name="text">
               <string/>
@@ -441,10 +753,22 @@
            <item row="0" column="0">
             <widget class="QPushButton" name="pushButton">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+              <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="sizeIncrement">
+              <size>
+               <width>1</width>
+               <height>1</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>15</width>
+               <height>15</height>
+              </size>
              </property>
              <property name="text">
               <string/>
@@ -457,10 +781,22 @@
            <item row="1" column="0">
             <widget class="QPushButton" name="pushButton_2">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+              <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="sizeIncrement">
+              <size>
+               <width>1</width>
+               <height>1</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>15</width>
+               <height>15</height>
+              </size>
              </property>
              <property name="text">
               <string/>
@@ -473,10 +809,22 @@
            <item row="2" column="0">
             <widget class="QPushButton" name="pushButton_3">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+              <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="sizeIncrement">
+              <size>
+               <width>1</width>
+               <height>1</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>15</width>
+               <height>15</height>
+              </size>
              </property>
              <property name="text">
               <string/>
@@ -489,10 +837,22 @@
            <item row="0" column="1">
             <widget class="QPushButton" name="pushButton_4">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+              <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="sizeIncrement">
+              <size>
+               <width>1</width>
+               <height>1</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>15</width>
+               <height>15</height>
+              </size>
              </property>
              <property name="text">
               <string/>
@@ -505,10 +865,22 @@
            <item row="1" column="1">
             <widget class="QPushButton" name="pushButton_5">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+              <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="sizeIncrement">
+              <size>
+               <width>1</width>
+               <height>1</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>15</width>
+               <height>15</height>
+              </size>
              </property>
              <property name="text">
               <string>L</string>
@@ -521,10 +893,22 @@
            <item row="2" column="1">
             <widget class="QPushButton" name="pushButton_6">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+              <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="sizeIncrement">
+              <size>
+               <width>1</width>
+               <height>1</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>15</width>
+               <height>15</height>
+              </size>
              </property>
              <property name="text">
               <string/>
@@ -537,10 +921,22 @@
            <item row="0" column="2">
             <widget class="QPushButton" name="pushButton_7">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+              <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="sizeIncrement">
+              <size>
+               <width>1</width>
+               <height>1</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>15</width>
+               <height>15</height>
+              </size>
              </property>
              <property name="text">
               <string/>
@@ -553,10 +949,22 @@
            <item row="1" column="2">
             <widget class="QPushButton" name="pushButton_8">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+              <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="sizeIncrement">
+              <size>
+               <width>1</width>
+               <height>1</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>15</width>
+               <height>15</height>
+              </size>
              </property>
              <property name="text">
               <string/>
@@ -569,10 +977,22 @@
            <item row="2" column="2">
             <widget class="QPushButton" name="pushButton_9">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+              <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="sizeIncrement">
+              <size>
+               <width>1</width>
+               <height>1</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>15</width>
+               <height>15</height>
+              </size>
              </property>
              <property name="text">
               <string/>
@@ -592,10 +1012,22 @@
            <item row="2" column="0">
             <widget class="QPushButton" name="pushButton_30">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+              <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="sizeIncrement">
+              <size>
+               <width>1</width>
+               <height>1</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>15</width>
+               <height>15</height>
+              </size>
              </property>
              <property name="text">
               <string/>
@@ -605,10 +1037,22 @@
            <item row="0" column="1">
             <widget class="QPushButton" name="pushButton_31">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+              <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="sizeIncrement">
+              <size>
+               <width>1</width>
+               <height>1</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>15</width>
+               <height>15</height>
+              </size>
              </property>
              <property name="text">
               <string/>
@@ -618,10 +1062,22 @@
            <item row="1" column="0">
             <widget class="QPushButton" name="pushButton_28">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+              <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="sizeIncrement">
+              <size>
+               <width>1</width>
+               <height>1</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>15</width>
+               <height>15</height>
+              </size>
              </property>
              <property name="text">
               <string/>
@@ -631,10 +1087,22 @@
            <item row="0" column="0">
             <widget class="QPushButton" name="pushButton_29">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+              <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="sizeIncrement">
+              <size>
+               <width>1</width>
+               <height>1</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>15</width>
+               <height>15</height>
+              </size>
              </property>
              <property name="text">
               <string/>
@@ -644,10 +1112,22 @@
            <item row="0" column="2">
             <widget class="QPushButton" name="pushButton_32">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+              <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="sizeIncrement">
+              <size>
+               <width>1</width>
+               <height>1</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>15</width>
+               <height>15</height>
+              </size>
              </property>
              <property name="text">
               <string/>
@@ -657,10 +1137,22 @@
            <item row="1" column="1">
             <widget class="QPushButton" name="pushButton_33">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+              <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="sizeIncrement">
+              <size>
+               <width>1</width>
+               <height>1</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>15</width>
+               <height>15</height>
+              </size>
              </property>
              <property name="text">
               <string>R</string>
@@ -670,10 +1162,22 @@
            <item row="2" column="1">
             <widget class="QPushButton" name="pushButton_34">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+              <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="sizeIncrement">
+              <size>
+               <width>1</width>
+               <height>1</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>15</width>
+               <height>15</height>
+              </size>
              </property>
              <property name="text">
               <string/>
@@ -683,10 +1187,22 @@
            <item row="1" column="2">
             <widget class="QPushButton" name="pushButton_35">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+              <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="sizeIncrement">
+              <size>
+               <width>1</width>
+               <height>1</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>15</width>
+               <height>15</height>
+              </size>
              </property>
              <property name="text">
               <string/>
@@ -696,10 +1212,22 @@
            <item row="2" column="2">
             <widget class="QPushButton" name="pushButton_36">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+              <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="sizeIncrement">
+              <size>
+               <width>1</width>
+               <height>1</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>15</width>
+               <height>15</height>
+              </size>
              </property>
              <property name="text">
               <string/>
@@ -716,10 +1244,22 @@
            <item row="0" column="0">
             <widget class="QPushButton" name="pushButton_10">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+              <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="sizeIncrement">
+              <size>
+               <width>1</width>
+               <height>1</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>15</width>
+               <height>15</height>
+              </size>
              </property>
              <property name="text">
               <string/>
@@ -729,10 +1269,22 @@
            <item row="0" column="1">
             <widget class="QPushButton" name="pushButton_11">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+              <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="sizeIncrement">
+              <size>
+               <width>1</width>
+               <height>1</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>15</width>
+               <height>15</height>
+              </size>
              </property>
              <property name="text">
               <string/>
@@ -742,10 +1294,22 @@
            <item row="0" column="2">
             <widget class="QPushButton" name="pushButton_12">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+              <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="sizeIncrement">
+              <size>
+               <width>1</width>
+               <height>1</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>15</width>
+               <height>15</height>
+              </size>
              </property>
              <property name="text">
               <string/>
@@ -755,10 +1319,22 @@
            <item row="1" column="0">
             <widget class="QPushButton" name="pushButton_13">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+              <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="sizeIncrement">
+              <size>
+               <width>1</width>
+               <height>1</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>15</width>
+               <height>15</height>
+              </size>
              </property>
              <property name="text">
               <string/>
@@ -768,10 +1344,22 @@
            <item row="2" column="0">
             <widget class="QPushButton" name="pushButton_14">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+              <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="sizeIncrement">
+              <size>
+               <width>1</width>
+               <height>1</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>15</width>
+               <height>15</height>
+              </size>
              </property>
              <property name="text">
               <string/>
@@ -781,10 +1369,22 @@
            <item row="1" column="1">
             <widget class="QPushButton" name="pushButton_15">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+              <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="sizeIncrement">
+              <size>
+               <width>1</width>
+               <height>1</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>15</width>
+               <height>15</height>
+              </size>
              </property>
              <property name="text">
               <string>F</string>
@@ -794,10 +1394,22 @@
            <item row="1" column="2">
             <widget class="QPushButton" name="pushButton_16">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+              <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="sizeIncrement">
+              <size>
+               <width>1</width>
+               <height>1</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>15</width>
+               <height>15</height>
+              </size>
              </property>
              <property name="text">
               <string/>
@@ -807,10 +1419,22 @@
            <item row="2" column="1">
             <widget class="QPushButton" name="pushButton_17">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+              <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="sizeIncrement">
+              <size>
+               <width>1</width>
+               <height>1</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>15</width>
+               <height>15</height>
+              </size>
              </property>
              <property name="text">
               <string/>
@@ -820,10 +1444,22 @@
            <item row="2" column="2">
             <widget class="QPushButton" name="pushButton_18">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+              <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="sizeIncrement">
+              <size>
+               <width>1</width>
+               <height>1</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>15</width>
+               <height>15</height>
+              </size>
              </property>
              <property name="text">
               <string/>

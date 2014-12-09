@@ -15,6 +15,11 @@ public:
     explicit TURBOCUBEsolver(QWidget *parent = 0);
     ~TURBOCUBEsolver();
 
+private slots:
+    void on_pushButton_clicked();
+
+    void on_pushButton_released();
+
 private:
     Ui::TURBOCUBEsolver *ui;
 };

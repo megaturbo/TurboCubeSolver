@@ -1,6 +1,6 @@
 #include "TurboCubeSolver.h"
-#include "ui_turbocubesolver.h"
-#include "cube.h"
+#include "ui_TurboCubeSolver.h"
+#include "CubeInput.h"
 
 
 TURBOCUBEsolver::TURBOCUBEsolver(QWidget *parent) :
@@ -13,4 +13,15 @@ TURBOCUBEsolver::TURBOCUBEsolver(QWidget *parent) :
 TURBOCUBEsolver::~TURBOCUBEsolver()
 {
     delete ui;
+}
+
+void TURBOCUBEsolver::on_pushButton_clicked()
+{
+    CubeInput *c = new CubeInput();
+    c->show();
+}
+
+void TURBOCUBEsolver::on_pushButton_released()
+{
+
 }
