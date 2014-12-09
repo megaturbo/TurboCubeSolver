@@ -11,7 +11,7 @@
 using namespace CubeColor;
 class Cube{
   public:
-    Cube ();
+    Cube(color matrix[18][3]);
     //returns faces the cubie's on
     QList<int> locateCubie(color c1, color c2);
     QList<int> locateCubie(color c1, color c2, color c3);
@@ -34,12 +34,16 @@ class Cube{
     void turnWhite(int nbQuarterTurn);
     void turnYellow(int nbQuarterTurn);
 
+    void turnFace(color face);
+
+    void displayCube();
+
+    void setMatrix(color matrix[18][3]);
 private:
     //utility
     bool cubieEqual(QList<int> cubi, color c1, color c2);
     bool cubieEqual(QList<int> cubi, color c1, color c2, color c3);
 
-    void turn(color face);
 
     color matCube[18][3];
 };
