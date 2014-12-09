@@ -15,8 +15,8 @@ private:
     //int face is the face we begin with,
     //usually white so we set it at 0
     //by default
-    QString cross(Cube *c, color color = WHITE);
-    QString F2L(Cube *c, color color = WHITE);
+    QString cross(Cube *c);
+    QString F2L(Cube *c);
     //as 2 layers are solved at this point,
     //we don't need to set a face to solve
     QString OLL(Cube *c);

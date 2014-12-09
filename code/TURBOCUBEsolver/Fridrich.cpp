@@ -2,6 +2,7 @@
 #include <QString>
 #include <QStringBuilder>
 #include <cubie.h>
+#include <qdebug.h>
 
 QString Fridrich::solve(Cube *c){
     QString s;
@@ -13,7 +14,7 @@ QString Fridrich::solve(Cube *c){
 }
 
 //For now, it's only solving for the white face
-QString Fridrich::cross(Cube *c, color col){
+QString Fridrich::cross(Cube *c){
     QList<int> wrpos = c->locateCubie(WHITE, RED);
     QList<int> wbpos = c->locateCubie(WHITE, BLUE);
     QList<int> wopos = c->locateCubie(WHITE, ORANGE);
@@ -22,7 +23,7 @@ QString Fridrich::cross(Cube *c, color col){
 }
 
 //For now, it's only solving for the white face
-QString Fridrich::F2L(Cube *c, color color){
+QString Fridrich::F2L(Cube *c){
     return "";
 }
 //as 2 layers are solved at this point,
