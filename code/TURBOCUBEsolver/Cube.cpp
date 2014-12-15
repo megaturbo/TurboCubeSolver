@@ -59,38 +59,104 @@ Cube::Cube(color matrix[18][3])
 //Utility methods
 
 //returns indices of the cubie's stickers
+//ordered by colors
 QList<int> Cube::locateCubie(color c1, color c2) {
     //we're testing 3 cubies on 4 faces, it will cover the entire cube
     QList<int> cubi;
     for (int face = 0; face < 4; ++face) {
         cubi = cubie(face * 3 + 1, 0);
-        qDebug() << "boucle";
-        if(cubieEqual(cubi, c1, c2)) {
-            return cubi;
+        if (cubieEqual(cubi, c1, c2)) {
+            if (matCube[cubi.at(0)][cubi.at(1)] == c1) {
+                return cubi;
+            } else {
+                QList<int> ret;
+                ret += cubi.at(2);
+                ret += cubi.at(3);
+                ret += cubi.at(0);
+                ret += cubi.at(1);
+                return ret;
+            }
         }
         cubi = cubie(face * 3 + 1, 2);
-        if(cubieEqual(cubi, c1, c2)) {
-            return cubi;
+        if (cubieEqual(cubi, c1, c2)) {
+            if (matCube[cubi.at(0)][cubi.at(1)] == c1) {
+                return cubi;
+            } else {
+                QList<int> ret;
+                ret += cubi.at(2);
+                ret += cubi.at(3);
+                ret += cubi.at(0);
+                ret += cubi.at(1);
+                return ret;
+            }
         }
         cubi = cubie(face * 3, 1);
-        if(cubieEqual(cubi, c1, c2)) {
-            return cubi;
+        if (cubieEqual(cubi, c1, c2)) {
+            if (matCube[cubi.at(0)][cubi.at(1)] == c1) {
+                return cubi;
+            } else {
+                QList<int> ret;
+                ret += cubi.at(2);
+                ret += cubi.at(3);
+                ret += cubi.at(0);
+                ret += cubi.at(1);
+                return ret;
+            }
         }
     }
 }
 
 //returns indices of the cubie's stickers
+//ordered by colors
 QList<int> Cube::locateCubie(color c1, color c2, color c3) {
     //we're testing 2 cubies on 4 faces, it will cover the entire cube
     QList<int> cubi;
     for (int face = 0; face < 4; ++face) {
         cubi = cubie(face * 3, 0);
         if(cubieEqual(cubi, c1, c2, c3)) {
-            return cubi;
+            QList<int> ret;
+            for (int i = 0; i < 6; i+=2) {
+                if (matCube[cubi.at(i)][cubi.at(i + 1)] == c1) {
+                    ret += cubi.at(i);
+                    ret += cubi.at(i + 1);
+                }
+            }
+            for (int i = 0; i < 6; i+=2) {
+                if (matCube[cubi.at(i)][cubi.at(i + 1)] == c2) {
+                    ret += cubi.at(i);
+                    ret += cubi.at(i + 1);
+                }
+            }
+            for (int i = 0; i < 6; i+=2) {
+                if (matCube[cubi.at(i)][cubi.at(i + 1)] == c3) {
+                    ret += cubi.at(i);
+                    ret += cubi.at(i + 1);
+                }
+            }
+            return ret;
         }
         cubi = cubie(face * 3, 2);
         if(cubieEqual(cubi, c1, c2, c3)) {
-            return cubi;
+            QList<int> ret;
+            for (int i = 0; i < 6; i+=2) {
+                if (matCube[cubi.at(i)][cubi.at(i + 1)] == c1) {
+                    ret += cubi.at(i);
+                    ret += cubi.at(i + 1);
+                }
+            }
+            for (int i = 0; i < 6; i+=2) {
+                if (matCube[cubi.at(i)][cubi.at(i + 1)] == c2) {
+                    ret += cubi.at(i);
+                    ret += cubi.at(i + 1);
+                }
+            }
+            for (int i = 0; i < 6; i+=2) {
+                if (matCube[cubi.at(i)][cubi.at(i + 1)] == c3) {
+                    ret += cubi.at(i);
+                    ret += cubi.at(i + 1);
+                }
+            }
+            return ret;
         }
     }
 }
@@ -255,99 +321,118 @@ void Cube::L(int nbQuarterTurn) {
 
 }
 
-void Cube::turnFace(color face) {
-    //rotates the stickers on the face
-    color saveF[2];
-    saveF[0] = matCube[face * 3][0];
-    saveF[1] = matCube[face * 3 + 1][0];
-    matCube[face * 3][0] = matCube[face * 3][2];
-    matCube[face * 3 + 1][0] = matCube[face * 3][1];
-    matCube[face * 3][2] = matCube[face * 3 + 2][2];
-    matCube[face * 3][1] = matCube[face * 3 + 1][2];
-    matCube[face * 3 + 2][2] = matCube[face * 3 + 2][0];
-    matCube[face * 3 + 1][2] = matCube[face * 3 + 2][1];
-    matCube[face * 3 + 2][0] = saveF[0];
-    matCube[face * 3 + 2][1] = saveF[1];
-
-    //rotates the stickers on the stickers adjacent to the face
-    int* indicesx;
-    int* indicesy;
+QString Cube::turnFace(color face, int number) {
+    number = (number + 4) % 4;
+    //defining which stickers are on the face
+    int* indicesFaceX = new int[8]{face * 3 + 2, face * 3 + 2,
+                            face * 3 + 1, face * 3 + 2,
+                            face * 3, face * 3,
+                            face * 3 + 1, face * 3};
+    int* indicesFaceY = new int[8]{1, 0,
+                            2, 2,
+                            1, 2,
+                            0, 0};
+//    indicesFaceX = new int[8]{face * 3, face * 3 + 1,
+//                            face * 3, face * 3,
+//                            face * 3 + 2, face * 3 + 1,
+//                            face * 3 + 2, face * 3 + 2};
+//    indicesFaceY = new int[8]{0, 0,
+//                            2, 1,
+//                            2, 2,
+//                            0, 1};
+    //defining which stickers are adjacent to the face
+    int* indicesX;
+    int* indicesY;
     switch(face) {
     case RED:
-        //{WHITE, BLUE, YELLOW, GREEN};
-        indicesx = new int[12]{WHITE * 3 + 2, WHITE * 3 + 1, WHITE * 3,
+        //{WHITE, BLUE, YELLOW, GREEN} are adjacent, in this order;
+        indicesX = new int[12]{WHITE * 3 + 2, WHITE * 3 + 1, WHITE * 3,
                                 BLUE * 3, BLUE * 3, BLUE * 3,
                                 YELLOW * 3, YELLOW * 3 + 1, YELLOW * 3 + 2,
                                 GREEN * 3 + 2, GREEN * 3 + 2, GREEN * 3 + 2};
-        indicesy = new int[12]{2, 2, 2,
+        indicesY = new int[12]{2, 2, 2,
                                 0, 1, 2,
                                 2, 2, 2,
                                 2, 1, 0};
         break;
     case BLUE:
-        //{WHITE, ORANGE, YELLOW, RED};
-        indicesx = new int[12]{WHITE * 3 + 2, WHITE * 3 + 2, WHITE * 3 + 2,
+        //{WHITE, ORANGE, YELLOW, RED} are adjacent, in this order;
+        indicesX = new int[12]{WHITE * 3 + 2, WHITE * 3 + 2, WHITE * 3 + 2,
                                 ORANGE * 3, ORANGE * 3, ORANGE * 3,
                                 YELLOW * 3, YELLOW * 3, YELLOW * 3,
                                 RED * 3 + 2, RED * 3 + 2, RED * 3 + 2};
-        indicesy = new int[12]{2, 1, 0,
+        indicesY = new int[12]{2, 1, 0,
                                 0, 1, 2,
                                 0, 1, 2,
                                 2, 1, 0};
         break;
     case ORANGE:
-        //{WHITE, GREEN, YELLOW, BLUE};
-        indicesx = new int[12]{WHITE * 3 + 2, WHITE * 3 + 1, WHITE * 3,
+        //{WHITE, GREEN, YELLOW, BLUE} are adjacent, in this order;
+        indicesX = new int[12]{WHITE * 3 + 2, WHITE * 3 + 1, WHITE * 3,
                                 GREEN * 3, GREEN * 3, GREEN * 3,
                                 YELLOW * 3 + 2, YELLOW * 3 + 1, YELLOW * 3,
                                 BLUE * 3 + 2, BLUE * 3 + 2, BLUE * 3 + 2};
-        indicesy = new int[12]{0, 0, 0,
+        indicesY = new int[12]{0, 0, 0,
                                 0, 1, 2,
                                 0, 0 ,0,
                                 2, 1, 0};
         break;
     case GREEN:
-        //{WHITE, RED, YELLOW, ORANGE};
-        indicesx = new int[12]{WHITE * 3, WHITE * 3, WHITE * 3,
+        //{WHITE, RED, YELLOW, ORANGE} are adjacent, in this order;
+        indicesX = new int[12]{WHITE * 3, WHITE * 3, WHITE * 3,
                                 RED * 3, RED * 3, RED * 3,
                                 YELLOW * 3 + 2, YELLOW * 3 + 2, YELLOW * 3 + 2,
                                 ORANGE * 3 + 2, ORANGE * 3 + 2, ORANGE * 3 + 2};
-        indicesy = new int[12]{0, 1, 2,
+        indicesY = new int[12]{0, 1, 2,
                                 0, 1, 2,
                                 2, 1, 0,
                                 2, 1, 0};
         break;
     case WHITE:
-        //{RED, GREEN, ORANGE, BLUE};
-        indicesx = new int[12]{RED * 3, RED * 3 + 1, RED * 3 + 2,
+        //{RED, GREEN, ORANGE, BLUE} are adjacent, in this order;
+        indicesX = new int[12]{RED * 3, RED * 3 + 1, RED * 3 + 2,
                                 GREEN * 3, GREEN * 3 + 1, GREEN * 3 + 2,
                                 ORANGE * 3, ORANGE * 3 + 1, ORANGE * 3 + 2,
                                 BLUE * 3, BLUE * 3 + 1, BLUE * 3 + 2};
-        indicesy = new int[12]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        indicesY = new int[12]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
         break;
     case YELLOW:
-        //{RED, BLUE, ORANGE, GREEN};
-        indicesx = new int[12]{RED * 3, RED * 3 + 1, RED * 3 + 2,
+        //{RED, BLUE, ORANGE, GREEN} are adjacent, in this order;
+        indicesX = new int[12]{RED * 3, RED * 3 + 1, RED * 3 + 2,
                                 BLUE * 3, BLUE * 3 + 1, BLUE * 3 + 2,
                                 ORANGE * 3, ORANGE * 3 + 1, ORANGE * 3 + 2,
                                 GREEN * 3, GREEN * 3 + 1, GREEN * 3 + 2};
-        indicesy = new int[12]{2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2};
+        indicesY = new int[12]{2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2};
         break;
     default:
         break;
     }
+
+    //turning the face
+    color saveFace[2];
+    saveFace[0] = matCube[indicesFaceX[6]][indicesFaceY[6]];
+    saveFace[1] = matCube[indicesFaceX[7]][indicesFaceY[7]];
+    for (int i = 7; i > 1; i -= 2) {
+        matCube[indicesFaceX[i]][indicesFaceY[i]] = matCube[indicesFaceX[i - 2]][indicesFaceY[i - 2]];
+        matCube[indicesFaceX[i - 1]][indicesFaceY[i - 1]] = matCube[indicesFaceX[i - 3]][indicesFaceY[i - 3]];
+    }
+    matCube[indicesFaceX[0]][indicesFaceY[0]] = saveFace[0];
+    matCube[indicesFaceX[1]][indicesFaceY[1]] = saveFace[1];
+    //rotates the stickers on the adjacent faces
     color save[3];
     for (int i = 0; i < 3; ++i) {
-        save[i] = matCube[indicesx[i + 9]][indicesy[i + 9]];
+        save[i] = matCube[indicesX[i + 9]][indicesY[i + 9]];
     }
     for (int i = 11; i > 3; i-=3) {
-        matCube[indicesx[i]][indicesy[i]] = matCube[indicesx[i - 3]][indicesy[i - 3]];
-        matCube[indicesx[i - 1]][indicesy[i - 1]] = matCube[indicesx[i - 4]][indicesy[i - 4]];
-        matCube[indicesx[i - 2]][indicesy[i - 2]] = matCube[indicesx[i - 5]][indicesy[i - 5]];
+        matCube[indicesX[i]][indicesY[i]] = matCube[indicesX[i - 3]][indicesY[i - 3]];
+        matCube[indicesX[i - 1]][indicesY[i - 1]] = matCube[indicesX[i - 4]][indicesY[i - 4]];
+        matCube[indicesX[i - 2]][indicesY[i - 2]] = matCube[indicesX[i - 5]][indicesY[i - 5]];
     }
-    matCube[indicesx[0]][indicesy[0]] = save[0];
-    matCube[indicesx[1]][indicesy[1]] = save[1];
-    matCube[indicesx[2]][indicesy[2]] = save[2];
+    matCube[indicesX[0]][indicesY[0]] = save[0];
+    matCube[indicesX[1]][indicesY[1]] = save[1];
+    matCube[indicesX[2]][indicesY[2]] = save[2];
+    QString s = "";
+    return s;
 }
 
 void Cube::turnRed(int nbQuarterTurn) {
@@ -390,6 +475,10 @@ void Cube::turnYellow(int nbQuarterTurn) {
         qDebug() << "turnYellow!";
         turnFace(YELLOW);
     }
+}
+
+color Cube::colorAt(int i, int j){
+    return matCube[i][j];
 }
 
 //Private methods
