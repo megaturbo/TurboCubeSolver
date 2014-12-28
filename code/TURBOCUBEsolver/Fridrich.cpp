@@ -25,30 +25,35 @@ QString Fridrich::solve(Cube *c){
 //can be optimized
 QString Fridrich::cross(Cube *c){
     QString s; //string return
-    for (int col = 0; col < 4; col++) {
-        QList<int> pos = c->locateCubie(WHITE, (color) col);
-        color faceWhite = (color) (pos.at(0) / 3);
-        color faceCol = (color) (pos.at(2) / 3);
+    for (int col = 0; col < 4; col++) { //Solving the 4 cubies {WHITE, RED}, {WHITE, ORANGE}, {WHITE, GREEN}, {WHITE, BLUE}
+        QList<int> pos = c->locateCubie(WHITE, (color) col); //Locating the cubie
+        color faceWhite = (color) (pos.at(0) / 3); //face on which the WHITE sticker is
+        color faceCol = (color) (pos.at(2) / 3); //face on which the col sticker is
         //while the cubie is not at its solved state
         while(faceWhite != WHITE || faceCol != col){
-            pos = c->locateCubie(WHITE, (color) col);
+            pos = c->locateCubie(WHITE, (color) col); //Locating the cubie
             faceWhite = (color) (pos.at(0) / 3);
             faceCol = (color) (pos.at(2) / 3);
+            //Depending on where the WHITE sticker is:
             switch(faceWhite){
             case WHITE:
-                //if the cubie is on the white face but not at its correct place
-                c->turnFace(faceCol);
-                c->turnFace(faceCol);
+                //if the WHITE sticker is on the WHITE face but col is not on the right face
+                //Turning this cubie on the yellow face to further solve it
+                c->turnFace(faceCol, 2);
                 break;
             case YELLOW:
-                //if it's on the yellow face
+                //if it's on the YELLOW face
                 if(faceCol == col){
-                    //if it's on the correct face
-                    c->turnFace((color) col);
-                    c->turnFace((color) col);
+                    //if col is on the right face
+                    c->turnFace((color) col, 2);
+                    //cubie solved
                 } else {
-                    //if its not, we turn the face until it isc
-                    c->turnFace(YELLOW);
+                    //if it's not, we turn the face until it is
+                    if(pos.at(2) > faceCol * 3 + 1){
+                        c->turnFace(YELLOW);
+                    } else {
+                        c->turnFace(YELLOW, -1);
+                    }
                 }
                 break;
             default:
@@ -59,27 +64,20 @@ QString Fridrich::cross(Cube *c){
                 } else if (pos.at(1) == 1){
                     //if it is on any of the 4 edges, we turn the face it's on so the white sticker is on the yellow face
                     if(pos.at(2) > faceCol * 3 + 1){
-                        c->turnFace((faceCol));
-                        c->turnFace(YELLOW);
-                        c->turnFace(YELLOW);
-                        c->turnFace((faceCol));
-                        c->turnFace((faceCol));
-                        c->turnFace((faceCol));
+                        //if it's on the right of the face
+                        c->turnFace(faceCol);
+                        c->turnFace(YELLOW, 2);
+                        c->turnFace(faceCol, -1);
                     } else {
-                        c->turnFace((faceCol));
-                        c->turnFace((faceCol));
-                        c->turnFace((faceCol));
-                        c->turnFace(YELLOW);
-                        c->turnFace(YELLOW);
-                        c->turnFace((faceCol));
+                        c->turnFace(faceCol, -1);
+                        c->turnFace(YELLOW, 2);
+                        c->turnFace(faceCol);
                     }
                 } else if (faceCol == WHITE){
                     //if the col sticker is on white
                     //we do the algorithm
                     c->turnFace((color)col);
-                    c->turnFace(WHITE);
-                    c->turnFace(WHITE);
-                    c->turnFace(WHITE);
+                    c->turnFace(WHITE, -1);
                     pos = c->locateCubie(WHITE, (color) col);
                     faceWhite = (color) (pos.at(0) / 3);
                     faceCol = (color) (pos.at(2) / 3);
@@ -90,17 +88,13 @@ QString Fridrich::cross(Cube *c){
                     c->turnFace(YELLOW);
                 } else {
                     //we do the algorithm to solve the cubie
-                    c->turnYellow(1);
+                    c->turnFace(YELLOW);
                     pos = c->locateCubie(WHITE, (color) col);
                     faceWhite = (color) (pos.at(0) / 3);
                     faceCol = (color) (pos.at(2) / 3);
                     c->turnFace(faceWhite);
-                    c->turnFace((color) col);
-                    c->turnFace((color) col);
-                    c->turnFace((color) col);
-                    c->turnFace(faceWhite);
-                    c->turnFace(faceWhite);
-                    c->turnFace(faceWhite);
+                    c->turnFace((color) col, -1);
+                    c->turnFace(faceWhite, -1);
                 }
                 break;
             }

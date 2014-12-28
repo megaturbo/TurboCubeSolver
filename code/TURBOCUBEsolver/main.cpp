@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
     Cube *testCube = new Cube(matCube);
     testCube->displayCube();
     for (int col = 5; col > -1; --col) {
-        testCube->turnFace((color)col, 1);
+        testCube->turnFace((color)col, -1);
         testCube->displayCube();
     }
 
@@ -32,6 +32,9 @@ int main(int argc, char *argv[])
     QString s = Fridrich::solve(testCube);
 
     testCube->displayCube();
+
+
+
 
     return a.exec();
 }
