@@ -108,11 +108,11 @@ QString Fridrich::F2L(Cube *c){
                 qDebug() << col1 << " " << faceEdgeCol1;
                 if(faceEdgeCol2 == YELLOW){
                     //if col1 is on YELLOW, then cubie is on the left of the corner, with the YELLOW face up
-                    facesTurned.append(c->turnFace(YELLOW, col2 - faceEdgeCol2 + 1));
+                    facesTurned.append(c->turnFace(YELLOW, col1 - faceEdgeCol1 + 1));
                     //then R U' R'
-                    facesTurned.append(c->turnFace((color)col2, 1));
+                    facesTurned.append(c->turnFace((color)col1, 1));
                     facesTurned.append(c->turnFace(YELLOW, -1));
-                    facesTurned.append(c->turnFace((color)col2, -1));
+                    facesTurned.append(c->turnFace((color)col1, -1));
                 } else {
                     facesTurned.append(c->turnFace(YELLOW, (col2 - faceEdgeCol2 + 3) % 4));
                     //then L' U L

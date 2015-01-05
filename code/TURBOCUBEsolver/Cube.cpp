@@ -51,8 +51,9 @@ void Cube::setMatrix(color matrix[18][3])
 }
 
 color** Cube::getMatrix(){
-    color** mat = new color[18][3];
+    color** mat = new color*[18];
     for (int i = 0; i < 18; ++i) {
+        mat[i] = new color[3];
         for (int j = 0; j < 3; ++j) {
             mat[i][j] = matCube[i][j];
         }
