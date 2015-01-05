@@ -1,0 +1,12 @@
+INPUT(
+./release\main.o
+./release\CubeInput.o
+./release\Cube.o
+./release\Cubie.o
+./release\Fridrich.o
+./release\NotationDecoder.o
+./release\TurboCubeSolver.o
+./release\moc_NotationDecoder.o
+./release\moc_TurboCubeSolver.o
+./release\moc_CubeInput.o
+);

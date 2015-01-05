@@ -1,12 +1,9 @@
 #include "TurboCubeSolver.h"
-<<<<<<< HEAD
 #include "ui_TurboCubeSolver.h"
 #include "CubeInput.h"
-=======
 #include "ui_turbocubesolver.h"
 #include "cube.h"
 #include "qdebug.h"
->>>>>>> 48a3c84d87bc4b76d7f6510f87d443f9b1394ec0
 
 using namespace CubeColor;
 

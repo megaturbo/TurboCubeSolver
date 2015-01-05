@@ -26,9 +26,9 @@ HEADERS  += \
     Fridrich.h \
     Cubie.h \
     NotationDecoder.h \
-    TurboCubeSolver.h
+    TurboCubeSolver.h \
+    CubeInput.h
 	CubeInput.h
 
 FORMS    +=\
-	CubeInput.ui \
     TurboCubeSolver.ui
