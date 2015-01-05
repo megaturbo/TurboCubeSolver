@@ -37,10 +37,13 @@ int main(int argc, char *argv[])
     }
     Cube *testCube = new Cube(matCube);
     testCube->displayCube();
-    for (int col = 5; col > -1; --col) {
-        testCube->turnFace((color)col, 1);
-        testCube->displayCube();
-    }
+//    for (int col = 5; col > -1; --col) {
+//        testCube->turnFace((color)col, -1);
+//        testCube->displayCube();
+//    }
+    testCube->turnFace(BLUE, 1);
+    testCube->turnFace(YELLOW, 1);
+    testCube->displayCube();
 
 
 <<<<<<< HEAD
@@ -59,6 +62,9 @@ int main(int argc, char *argv[])
 
     testCube->displayCube();
 >>>>>>> e32f5c2fd61a43310da2e0b8eff80e4eda74d151
+
+
+
 
     return a.exec();
 }
