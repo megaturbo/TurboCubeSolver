@@ -3,6 +3,7 @@
 #include <qdebug.h>
 #include <Cube.h>
 #include <QList>
+#include <IsometricCubeWidget.h>
 #include <Fridrich.h>
 
 using namespace CubeColor;
@@ -10,10 +11,8 @@ using namespace CubeColor;
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    TURBOCUBEsolver w;
 
     qDebug() << "Debug console test";
-    w.show();
 
     color matCube[18][3];
     for (int x = 0; x < 18; x++) {
@@ -46,7 +45,25 @@ int main(int argc, char *argv[])
     testCube->displayCube();
 
 
+    // DISPLAY ISOMETRIC CUBE
 
+    // get color matrix
+    color** matrix = testCube->getMatrix();
+
+    // put it into a 18x3 int array
+    int displayableCube[18][3];
+
+    for(int x = 0; x < 18; x++)
+    {
+        for(int y = 0; y < 3; y++)
+        {
+            displayableCube[x][y] = matrix[x][y];
+        }
+    }
+
+    // create the isometric widget
+    IsometricCubeWidget w(displayableCube);
+    w.show();
 
     return a.exec();
 }
