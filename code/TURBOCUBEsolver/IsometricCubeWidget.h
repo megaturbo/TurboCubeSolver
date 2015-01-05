@@ -18,7 +18,7 @@ private:
     QPoint isogrid[7][7];
     int testCube[18][3];
 
-    QBrush getQColorFromValue(int color);
+    QColor getQColorFromValue(int color, int alpha = 255);
     QPolygon* getPolygon(int first_x, int first_y, int type_polygon);
     void initIsoGrid();
     void initCubeGrid(int cubeGrid[][3]);

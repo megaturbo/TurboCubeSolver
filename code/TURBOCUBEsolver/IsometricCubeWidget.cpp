@@ -105,17 +105,19 @@ void IsometricCubeWidget::paintEvent(QPaintEvent* event)
 
                 // CREATE AND TRANSLATE THE HIDDEN FACES
                 plgnDown = QPolygon(plgnUp);
-                plgnDown.translate(0,8*H);
+                plgnDown.translate(3*W,3*H);
 
-                plgnBack = QPolygon(plgnFront);
-                plgnBack.translate(4*W,-4*H);
+                plgnBack = QPolygon(plgnRight);
+                plgnBack.translate(1.5*W,-1.5*H);
 
-                plgnLeft = QPolygon(plgnRight);
-                plgnLeft.translate(-4*W,-4*H);
+                plgnLeft = QPolygon(plgnFront);
+                plgnLeft.translate(4.5*W,-1.5*H);
 
                 // DRAWING
 
-                painter.setPen(Qt::darkGray);
+                painter.setPen(Qt::black);
+
+                // ### ALPHA 255
 
                 // FRONT FACE
                 painter.setBrush(getQColorFromValue(testCube[x][y]));
@@ -126,11 +128,11 @@ void IsometricCubeWidget::paintEvent(QPaintEvent* event)
                 painter.drawPolygon(plgnRight);
 
                 // BACK FACE
-                painter.setBrush(getQColorFromValue(testCube[x+6][y]));
+                painter.setBrush(getQColorFromValue(testCube[y+6][x]));
                 painter.drawPolygon(plgnBack);
 
                 // LEFT FACE
-                painter.setBrush(getQColorFromValue(testCube[y+9][x]));
+                painter.setBrush(getQColorFromValue(testCube[x+9][y]));
                 painter.drawPolygon(plgnLeft);
 
                 // UP FACE
@@ -138,8 +140,23 @@ void IsometricCubeWidget::paintEvent(QPaintEvent* event)
                 painter.drawPolygon(plgnUp);
 
                 // DOWN FACE
-                painter.setBrush(getQColorFromValue(testCube[x+15][y]));
+                painter.setBrush(getQColorFromValue(testCube[15+y][2-x]));
                 painter.drawPolygon(plgnDown);
+
+
+                // ### ALPHA 100
+
+                /*QColor c;
+
+                // front
+                c = QColor(getQColorFromValue(testCube[x+12][y]), 100);
+
+                plgnUp.translate(4*W,-4*H);
+                painter.setBrush(c);
+                painter.drawPolygon(plgnUp);
+
+
+                plgnUp.translate(-8*W, 0);*/
 
 
 
@@ -189,9 +206,9 @@ QPolygon* IsometricCubeWidget::getPolygon(int first_x, int first_y, int type_pol
 
 // RED = 0, BLUE = 1, ORANGE = 2, GREEN = 3, WHITE = 4, YELLOW = 5
 
-QBrush IsometricCubeWidget::getQColorFromValue(int color)
+QColor IsometricCubeWidget::getQColorFromValue(int color, int alpha)
 {
-    QBrush returnColor;
+    QColor returnColor;
 
     switch(color){
         case RED:
@@ -213,9 +230,11 @@ QBrush IsometricCubeWidget::getQColorFromValue(int color)
             returnColor = QColor(255,219,51);
         break;
         case UNDEFINED:
-            returnColor = Qt::VerPattern;
+            returnColor = Qt::gray;
         break;
     }
+
+    returnColor.setAlpha(alpha);
 
     return returnColor;
 }
