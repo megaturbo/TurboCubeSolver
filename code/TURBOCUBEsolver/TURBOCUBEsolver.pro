@@ -18,7 +18,8 @@ SOURCES += main.cpp\
     Cubie.cpp \
     Fridrich.cpp \
     NotationDecoder.cpp \
-    TurboCubeSolver.cpp
+    TurboCubeSolver.cpp \
+    IsometricCubeWidget.cpp
 
 HEADERS  += \
     CubeColor.h \
@@ -26,9 +27,9 @@ HEADERS  += \
     Fridrich.h \
     Cubie.h \
     NotationDecoder.h \
-    TurboCubeSolver.h
-	CubeInput.h
+    TurboCubeSolver.h \
+    CubeInput.h \
+    IsometricCubeWidget.h
 
 FORMS    +=\
-	CubeInput.ui \
     TurboCubeSolver.ui

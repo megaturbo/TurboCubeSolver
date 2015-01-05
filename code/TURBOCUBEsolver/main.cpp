@@ -1,8 +1,13 @@
 #include "turbocubesolver.h"
 #include <QApplication>
+<<<<<<< HEAD
+#include "CubeInput.h"
+=======
+>>>>>>> 9a431c6829f629646d9e49024ddfc0113077c5d4
 #include <qdebug.h>
 #include <Cube.h>
 #include <QList>
+#include <IsometricCubeWidget.h>
 #include <Fridrich.h>
 
 using namespace CubeColor;
@@ -10,11 +15,24 @@ using namespace CubeColor;
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    TURBOCUBEsolver w;
 
-    qDebug() << "Debug console test";
+<<<<<<< HEAD
+    CubeInput u;
+    u.show();
+
+    return a.exec();
+    /*qDebug() << "Debug console test";
     w.show();
 
+    color solvedCube[18][3];
+
+    for (int x = 0; x < 18; ++x) {
+        for (int y = 0; y < 3; ++y) {
+            solvedCube[x][y] = (color)(x / 3);
+=======
+    qDebug() << "Debug console test";
+
+>>>>>>> 9a431c6829f629646d9e49024ddfc0113077c5d4
     color matCube[18][3];
     for (int x = 0; x < 18; x++) {
         for (int y = 0; y < 3; y++) {
@@ -41,12 +59,42 @@ int main(int argc, char *argv[])
     testCube->displayCube();
 
 
+<<<<<<< HEAD
+    QString s = "";
+    for (int i = 0; i < indices.length(); i++) {
+        s += QString::number(indices.at(i));
+        s += " ";
+        if(i % 2 == 1){
+            s += "\n";
+        }
+    }
+    qDebug() << s;
+=======
+>>>>>>> 9a431c6829f629646d9e49024ddfc0113077c5d4
     QString s = Fridrich::solve(testCube);
 
     testCube->displayCube();
 
 
+    // DISPLAY ISOMETRIC CUBE
 
+    // get color matrix
+    color** matrix = testCube->getMatrix();
 
-    return a.exec();
+    // put it into a 18x3 int array
+    int displayableCube[18][3];
+
+    for(int x = 0; x < 18; x++)
+    {
+        for(int y = 0; y < 3; y++)
+        {
+            displayableCube[x][y] = matrix[x][y];
+        }
+    }
+
+    // create the isometric widget
+    IsometricCubeWidget w(displayableCube);
+    w.show();
+
+    return a.exec();*/
 }
