@@ -23,10 +23,13 @@ int main(int argc, char *argv[])
     }
     Cube *testCube = new Cube(matCube);
     testCube->displayCube();
-    for (int col = 5; col > -1; --col) {
-        testCube->turnFace((color)col, -1);
-        testCube->displayCube();
-    }
+//    for (int col = 5; col > -1; --col) {
+//        testCube->turnFace((color)col, -1);
+//        testCube->displayCube();
+//    }
+    testCube->turnFace(BLUE, 1);
+    testCube->turnFace(YELLOW, 1);
+    testCube->displayCube();
 
 
     QString s = Fridrich::solve(testCube);

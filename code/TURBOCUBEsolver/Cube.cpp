@@ -50,6 +50,16 @@ void Cube::setMatrix(color matrix[18][3])
     }
 }
 
+color** Cube::getMatrix(){
+    color** mat = new color[18][3];
+    for (int i = 0; i < 18; ++i) {
+        for (int j = 0; j < 3; ++j) {
+            mat[i][j] = matCube[i][j];
+        }
+    }
+    return mat;
+}
+
 Cube::Cube(color matrix[18][3])
 {
     setMatrix(matrix);
@@ -324,6 +334,7 @@ QString Cube::turnFace(color face, int number) {
     qDebug() << "Rotating " << face << "face, by " << number << "quarter turns";
     //defining which stickers are on the face
     //those will get spinned
+    number = (number + 4) % 4;
     int* indicesFaceX = new int[8]{face * 3 + 2, face * 3 + 2,
                             face * 3 + 1, face * 3 + 2,
                             face * 3, face * 3,
@@ -465,7 +476,7 @@ QString Cube::turnFace(color face, int number) {
             matCube[indicesX[i + 6]][indicesY[i + 6]] = saveAdjacent[i];
         }
         break;
-    case -1:
+    case 3: //3 = -1 % 4
         //turning the face
         saveFace[0] = matCube[indicesFaceX[0]][indicesFaceY[0]];
         saveFace[1] = matCube[indicesFaceX[1]][indicesFaceY[1]];
@@ -489,7 +500,7 @@ QString Cube::turnFace(color face, int number) {
         matCube[indicesX[11]][indicesY[11]] = saveAdjacent[2];
         break;
     default:
-        qDebug() << "Invalid rotation";
+        qDebug() << "no rotation for " << number << "quarter turns";
         break;
     }
 
