@@ -34,10 +34,11 @@ class Cube{
     void turnWhite(int nbQuarterTurn);
     void turnYellow(int nbQuarterTurn);
 
-    void turnFace(color face);
+    QString turnFace(color face, int number = 1);
 
     void displayCube();
 
+    color colorAt(int i, int j);
     void setMatrix(color matrix[18][3]);
 private:
     //utility
