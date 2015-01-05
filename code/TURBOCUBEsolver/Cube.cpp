@@ -344,14 +344,6 @@ QString Cube::turnFace(color face, int number) {
                             2, 2,
                             1, 2,
                             0, 0};
-//    indicesFaceX = new int[8]{face * 3, face * 3 + 1,
-//                            face * 3, face * 3,
-//                            face * 3 + 2, face * 3 + 1,
-//                            face * 3 + 2, face * 3 + 2};
-//    indicesFaceY = new int[8]{0, 0,
-//                            2, 1,
-//                            2, 2,
-//                            0, 1};
     //defining which stickers are adjacent to the face
     //those too will get spinned
     int* indicesX;

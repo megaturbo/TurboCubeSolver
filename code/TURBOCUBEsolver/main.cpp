@@ -27,8 +27,17 @@ int main(int argc, char *argv[])
 //        testCube->turnFace((color)col, -1);
 //        testCube->displayCube();
 //    }
-    testCube->turnFace(BLUE, 1);
+    testCube->turnFace(GREEN, 1);
     testCube->turnFace(YELLOW, 1);
+    testCube->turnFace(GREEN, -1);
+    testCube->turnFace(ORANGE, -1);
+    testCube->turnFace(YELLOW, -1);
+    testCube->turnFace(ORANGE, 1);
+    testCube->turnFace(RED, 1);
+    testCube->turnFace(YELLOW, -1);
+
+
+
     testCube->displayCube();
 
 
