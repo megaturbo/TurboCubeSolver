@@ -1,9 +1,6 @@
 #include "turbocubesolver.h"
 #include <QApplication>
-<<<<<<< HEAD
 #include "CubeInput.h"
-=======
->>>>>>> 9a431c6829f629646d9e49024ddfc0113077c5d4
 #include <qdebug.h>
 #include <Cube.h>
 #include <QList>
@@ -16,7 +13,6 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-<<<<<<< HEAD
     CubeInput u;
     u.show();
 

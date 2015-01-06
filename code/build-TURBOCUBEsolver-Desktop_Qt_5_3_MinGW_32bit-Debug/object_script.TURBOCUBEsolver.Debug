@@ -6,7 +6,9 @@ INPUT(
 ./debug\Fridrich.o
 ./debug\NotationDecoder.o
 ./debug\TurboCubeSolver.o
+./debug\IsometricCubeWidget.o
 ./debug\moc_NotationDecoder.o
 ./debug\moc_TurboCubeSolver.o
 ./debug\moc_CubeInput.o
+./debug\moc_IsometricCubeWidget.o
 );
