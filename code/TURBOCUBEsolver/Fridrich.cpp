@@ -113,73 +113,116 @@ QString Fridrich::F2L(Cube *c){
                     if(faceWhite < 4 && faceWhite > -1){
                         //Basic case 1, corner and edge aligned
                         if(faceCornerCol1 == faceEdgeCol1 && faceCornerCol2 == faceEdgeCol2){
-                            //if col2 is on YELLOW, then cubie is on the left of the corner, with the YELLOW face up
-                            if(faceEdgeCol2 == YELLOW){
-                                //turning the corner on the left
-                                facesTurned.append(c->turnFace(YELLOW, col1 - faceEdgeCol1 + 1));
-                                //then R U' R'
-                                facesTurned.append(c->turnFace((color)col1, 1));
-                                facesTurned.append(c->turnFace(YELLOW, -1));
-                                facesTurned.append(c->turnFace((color)col1, -1));
-                            } else {
-                                //turning the corner on the right
-                                facesTurned.append(c->turnFace(YELLOW, col2 - faceEdgeCol2 + 3));
-                                //then L' U L
+                            //if the WHITE sticker points right
+                            if(faceCornerCol1 == YELLOW){
+                                facesTurned.append(c->turnFace(YELLOW, col1 - faceEdgeCol2));
                                 facesTurned.append(c->turnFace((color)col2, -1));
                                 facesTurned.append(c->turnFace(YELLOW, 1));
                                 facesTurned.append(c->turnFace((color)col2, 1));
+                            } else {
+                                facesTurned.append(c->turnFace(YELLOW, col2 - faceEdgeCol1));
+                                facesTurned.append(c->turnFace((color)col1, 1));
+                                facesTurned.append(c->turnFace(YELLOW, -1));
+                                facesTurned.append(c->turnFace((color)col1, -1));
                             }
                         }
                         //Basic case 2, corner and edge cubie aligned after one R or L'
-                        if((faceWhite < 4 && faceWhite > -1) && ((faceCornerCol1 == (faceEdgeCol2 + 2) % 4) || (faceCornerCol2 == (faceEdgeCol1 + 2) % 4))){
-                            //if col2 is on YELLOW, then cubie is on the left of the corner, with the YELLOW face up
-                            if(faceEdgeCol2 == YELLOW){
-                                //turning the corner on the left
+                        else if((faceCornerCol1 == (faceEdgeCol2 + 2) % 4) || (faceCornerCol2 == (faceEdgeCol1 + 2) % 4)){
+                            //if the WHITE sticker points right
+                            if(faceEdgeCol1 == YELLOW){
                                 facesTurned.append(c->turnFace(YELLOW, col2 - faceCornerCol2));
-                                //then R U R'
                                 facesTurned.append(c->turnFace((color)col1, 1));
                                 facesTurned.append(c->turnFace(YELLOW, 1));
                                 facesTurned.append(c->turnFace((color)col1, -1));
                             } else {
-                                //turning the corner on the right
-                                facesTurned.append(c->turnFace(YELLOW, col2 - faceEdgeCol2));
-                                //then L' U' L
+                                facesTurned.append(c->turnFace(YELLOW, col1 - faceCornerCol1));
                                 facesTurned.append(c->turnFace((color)col2, -1));
                                 facesTurned.append(c->turnFace(YELLOW, -1));
                                 facesTurned.append(c->turnFace((color)col2, 1));
                             }
                         }
-//                        if(faceWhite == faceEdgeCol1){
-//                            //
-
-//                        }
-//                        if(){
-//                            //
-
-//                        }
-//                        if(){
-//                            //
-
-//                        }
-//                        if(){
-//                            //
-
-//                        }
-//                        if(){
-//                            //
-
-//                        }
-//                        if(){
-//                            //
-
-//                        }
+                        //if the WHITE sticker and the edge col1 sticker are on the same face
+                        else if(faceWhite == faceEdgeCol1){
+                            //if the WHITE sticker points right
+                            if(faceCornerCol1 == YELLOW){
+                                facesTurned.append(c->turnFace(YELLOW, col1 - faceCornerCol2));
+                                facesTurned.append(c->turnFace((color) col1, 1));
+                                facesTurned.append(c->turnFace(YELLOW, -1));
+                                facesTurned.append(c->turnFace((color) col1, -1));
+                            } else {
+                                facesTurned.append(c->turnFace(YELLOW, col2 - faceCornerCol1);
+                                facesTurned.append(c->turnFace((color) col2, -1));
+                                facesTurned.append(c->turnFace(YELLOW, 1));
+                                facesTurned.append(c->turnFace((color) col2, 1));
+                            }
+                        }
+                        //if the WHITE sticker and edge col1 sticker are on opposite faces
+                        else if(faceWhite == (faceEdgeCol1 + 2) % 4){
+                            //if the WHITE sticker points right
+                            if(faceCornerCol1 == YELLOW){
+                                facesTurned.append(c->turnFace(YELLOW, col1 - faceCornerCol2));
+                                facesTurned.append(c->turnFace((color) col1, 1));
+                                facesTurned.append(c->turnFace(YELLOW, 1));
+                                facesTurned.append(c->turnFace((color) col1, -1));
+                            } else {
+                                facesTurned.append(c->turnFace(YELLOW, col2 - faceCornerCol1));
+                                facesTurned.append(c->turnFace((color) col2, -1));
+                                facesTurned.append(c->turnFace(YELLOW, -1));
+                                facesTurned.append(c->turnFace((color) col2, 1));
+                            }
+                        }
+                        //if the corner and edge cubie are aligned but the colors aren't matching
+                        else if(faceEdgeCol1 == faceCornerCol2 && faceEdgeCol2 == faceCornerCol1){
+                            //if the WHITE sticker points right
+                            if(faceCornerCol1 == YELLOW){
+                                facesTurned.append(c->turnFace(YELLOW, col2 - faceWhite));
+                                facesTurned.append(c->turnFace((color) col2, -1));
+                                facesTurned.append(c->turnFace(YELLOW, 2));
+                                facesTurned.append(c->turnFace((color) col2, 1));
+                            } else {
+                                facesTurned.append(c->turnFace(YELLOW, col1 - faceWhite));
+                                facesTurned.append(c->turnFace((color) col1, 1));
+                                facesTurned.append(c->turnFace(YELLOW, 2));
+                                facesTurned.append(c->turnFace((color) col1, -1));
+                            }
+                        }
+                        //if the WHITE sticker and edge col2 sticker are on the same face
+                        else if(faceWhite == faceEdgeCol2){
+                            //if the WHITE sticker points right
+                            if(faceCornerCol1 == YELLOW){
+                                facesTurned.append(c->turnFace(YELLOW, col1 - faceWhite));
+                                facesTurned.append(c->turnFace(col1, 1));
+                                facesTurned.append(c->turnFace(YELLOW, -1));
+                                facesTurned.append(c->turnFace(col1, -1);
+                            } else {
+                                facesTurned.append(c->turnFace(YELLOW, col2 - faceWhite));
+                                facesTurned.append(c->turnFace(col2, -1));
+                                facesTurned.append(c->turnFace(YELLOW, 1));
+                                facesTurned.append(c->turnFace(col2, 1));
+                            }
+                        }
+                        //we can solve the 2 last cases
+                        else {
+                            //if the WHITE sticker points right
+                            if(faceCornerCol1 == YELLOW){
+                                facesTurned.append(c->turnFace(YELLOW, col2 - faceWhite));
+                                facesTurned.append(c->turnFace(col2, -1));
+                                facesTurned.append(c->turnFace(YELLOW, col2 - faceEdgeCol2 + 1));
+                                facesTurned.append(c->turnFace(col2, 1));
+                            } else {
+                                facesTurned.append(c->turnFace(YELLOW, col1 - faceWhite));
+                                facesTurned.append(c->turnFace(col1, 1));
+                                facesTurned.append(c->turnFace(YELLOW, col2 - faceEdgeCol1 +31));
+                                facesTurned.append(c->turnFace(col1, -1));
+                            }
+                        }
                     }
                 }
             }
 
 
             qDebug() << "break;";
-            break;
+            //break;
             cornerPos = c->locateCubie(WHITE, (color) col1, (color) col2); //Locating the corner cubie
             edgePos = c->locateCubie((color) col1, (color) col2);
             faceWhite = (color) (cornerPos.at(0) / 3); //face on which the WHITE sticker is
