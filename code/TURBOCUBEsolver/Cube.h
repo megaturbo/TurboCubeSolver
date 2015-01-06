@@ -28,7 +28,7 @@ class Cube{
     void R(int nbQuarterTurn);
     void L(int nbQuarterTurn);
 
-    QString turnFace(color face, int number = 1);
+    QString turnFace(int face, int number = 1);
 
     void displayCube();
 

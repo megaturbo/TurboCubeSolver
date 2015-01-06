@@ -31,19 +31,19 @@ int main(int argc, char *argv[])
 
 
     testCube->displayCube();
-//    for (int col = 0; col < 6; ++col) {
-//        testCube->turnFace((color)col, 1);
-//        testCube->displayCube();
-//    }
+    for (int col = 5; col > -1; --col) {
+        testCube->turnFace((color)col, -1);
+        testCube->displayCube();
+    }
 
-    testCube->turnFace(RED);
-    testCube->turnFace(YELLOW, -1);
-    testCube->turnFace(RED, -1);
-    testCube->turnFace(YELLOW, -1);
-    testCube->turnFace(RED);
-    testCube->turnFace(YELLOW, 1);
-    testCube->turnFace(RED, -1);
-    testCube->turnFace(YELLOW, 2);
+//    testCube->turnFace(RED);
+//    testCube->turnFace(YELLOW, -1);
+//    testCube->turnFace(RED, -1);
+//    testCube->turnFace(YELLOW, -1);
+//    testCube->turnFace(RED);
+//    testCube->turnFace(YELLOW, 1);
+//    testCube->turnFace(RED, -1);
+//    testCube->turnFace(YELLOW, 2);
 
     testCube->displayCube();
 

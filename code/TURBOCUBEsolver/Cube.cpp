@@ -325,7 +325,7 @@ void Cube::moveSequence(QString sequence) {
             nbQTurn = 1;
         }
 
-        switch (theMove) {
+        switch (theMove.digitValue()) {
         case 'F':
             F(nbQTurn);
             break;
@@ -350,35 +350,40 @@ void Cube::moveSequence(QString sequence) {
 }
 
 //matrix rotation per face
+//TODO: turn faces relatively
 void Cube::U(int nbQuarterTurn) {
-
+    turnFace(YELLOW, nbQuarterTurn);
 }
 
 void Cube::D(int nbQuarterTurn) {
-
+    turnFace(YELLOW, nbQuarterTurn);
 }
 
 void Cube::B(int nbQuarterTurn) {
-
+    turnFace(YELLOW, nbQuarterTurn);
 }
 
 void Cube::F(int nbQuarterTurn) {
-
+    turnFace(YELLOW, nbQuarterTurn);
 }
 
 void Cube::R(int nbQuarterTurn) {
-
+    turnFace(YELLOW, nbQuarterTurn);
 }
 
 void Cube::L(int nbQuarterTurn) {
-
+    turnFace(YELLOW, nbQuarterTurn);
 }
 
-QString Cube::turnFace(color face, int number) {
+QString Cube::turnFace(int f, int number) {
+    color face = (color) f;
     qDebug() << "Rotating " << face << "face, by " << number << "quarter turns";
     //defining which stickers are on the face
     //those will get spinned
     number = (number + 4) % 4;
+    if(number == 0){
+        return "";
+    }
     int* indicesFaceX = new int[8]{face * 3 + 2, face * 3 + 2,
                             face * 3 + 1, face * 3 + 2,
                             face * 3, face * 3,
