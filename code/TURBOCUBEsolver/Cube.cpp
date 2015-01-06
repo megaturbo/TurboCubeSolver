@@ -304,6 +304,49 @@ QList<int> Cube::cubie(int i, int j) {
 
 void Cube::moveSequence(QString sequence) {
 
+    QStringList moves = sequence.split(' ');
+
+    QChar theMove;
+    int nbQTurn;
+
+    foreach (QString move, moves)
+    {
+        theMove = move[0];
+
+        if(move.length()>1)
+        {
+            if(move[1]=='2')
+            {
+                nbQTurn = 2;
+            }else{
+                nbQTurn = 3;
+            }
+        }else{
+            nbQTurn = 1;
+        }
+
+        switch (theMove) {
+        case 'F':
+            F(nbQTurn);
+            break;
+        case 'B':
+            B(nbQTurn);
+            break;
+        case 'L':
+            L(nbQTurn);
+            break;
+        case 'R':
+            R(nbQTurn);
+        case 'U':
+            U(nbQTurn);
+            break;
+        case 'D':
+            D(nbQTurn);
+            break;
+        }
+
+    }
+
 }
 
 //matrix rotation per face
