@@ -16,15 +16,37 @@ int main(int argc, char *argv[])
     CubeInput u;
     u.show();
 
-    return a.exec();
-    /*qDebug() << "Debug console test";
-    w.show();
+    /*FRIDRICH TESTING*/
 
+    qDebug() << "Fridrich testing, please do not comment or remove this section";
     color solvedCube[18][3];
 
     for (int x = 0; x < 18; ++x) {
         for (int y = 0; y < 3; ++y) {
             solvedCube[x][y] = (color)(x / 3);
+        }
+    }
+    Cube *testCube = new Cube(solvedCube);
+    testCube->displayCube();
+    for (int col = 0; col < 6; ++col) {
+        testCube->turnFace((color)col, 1);
+        testCube->displayCube();
+    }
+
+    QString s = Fridrich::solve(testCube);
+
+    testCube->displayCube();
+
+    qDebug() << s;
+
+    /*FRIDRICH TESTING*/
+
+    return a.exec();
+
+    /*qDebug() << "Debug console test";
+    w.show();
+
+
 =======
     qDebug() << "Debug console test";
 
@@ -33,14 +55,8 @@ int main(int argc, char *argv[])
     for (int x = 0; x < 18; x++) {
         for (int y = 0; y < 3; y++) {
             matCube[x][y] = (color)(x / 3);
-        }
-    }
-    Cube *testCube = new Cube(matCube);
-    testCube->displayCube();
-//    for (int col = 5; col > -1; --col) {
-//        testCube->turnFace((color)col, -1);
-//        testCube->displayCube();
-//    }
+
+
     testCube->turnFace(GREEN, 1);
     testCube->turnFace(YELLOW, 1);
     testCube->turnFace(GREEN, -1);
@@ -67,9 +83,6 @@ int main(int argc, char *argv[])
     qDebug() << s;
 =======
 >>>>>>> 9a431c6829f629646d9e49024ddfc0113077c5d4
-    QString s = Fridrich::solve(testCube);
-
-    testCube->displayCube();
 
 
     // DISPLAY ISOMETRIC CUBE

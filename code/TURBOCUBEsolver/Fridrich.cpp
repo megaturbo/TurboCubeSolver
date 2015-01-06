@@ -23,30 +23,29 @@ QString Fridrich::cross(Cube *c){
         while(faceWhite != WHITE || faceCol != col){
             //Depending on where the WHITE sticker is:
             switch(faceWhite){
-            case WHITE:
-                //if the WHITE sticker is on the WHITE face but col is not on the right face
-                //Turning this cubie on the yellow face to further solve it
-                facesTurned.append(c->turnFace(faceCol, 2));
-                break;
-            case YELLOW:
-                //if it's on the YELLOW face
+            case YELLOW: //if it's on the YELLOW face
                 facesTurned.append(c->turnFace(YELLOW, col - faceCol));
                 facesTurned.append(c->turnFace((color) col, 2));
                 //cubie solved
                 break;
-            default:
-                //if the WHITE sticker is not on the WHITE or YELLOW face
+            case WHITE: //if the WHITE sticker is on the WHITE face but col is not on the right face
+                //Turning this cubie on the yellow face to further solve it
+                facesTurned.append(c->turnFace(faceCol, 2));
+                break;
+            default: //if the WHITE sticker is not on the WHITE or YELLOW
+                //if it's just on quarter turn away from being correctly placed
                 if(col == faceCol){
-                    //if it's just on quarter turn away from being correctly placed
+                    //if it's on the right of the face
                     if(pos.at(2) > faceCol * 3 + 1){
                         facesTurned.append(c->turnFace((color) col, -1));
                     } else {
                         facesTurned.append(c->turnFace((color) col, 1));
                     }
-                } else if (pos.at(1) == 1){
-                    //if it is on any of the 4 edges, we turn the face it's on so the white sticker is on the yellow face
+                }
+                //if it is on any of the 4 edges, we turn the face it's on so the white sticker is on the yellow face
+                else if (pos.at(1) == 1){
+                    //if it's on the right of the face
                     if(pos.at(2) > faceCol * 3 + 1){
-                        //if it's on the right of the face
                         facesTurned.append(c->turnFace(faceCol));
                         facesTurned.append(c->turnFace(YELLOW, col - faceCol));
                         facesTurned.append(c->turnFace(faceCol, -1));
@@ -55,28 +54,31 @@ QString Fridrich::cross(Cube *c){
                         facesTurned.append(c->turnFace(YELLOW, col - faceCol));
                         facesTurned.append(c->turnFace(faceCol));
                     }
-                } else if (faceCol == WHITE){
-                    //if the col sticker is on white
-                    //we do the algorithm
-                    facesTurned.append(c->turnFace((color)col));
-                    facesTurned.append(c->turnFace(WHITE, -1));
-                    pos = c->locateCubie(WHITE, (color) col);
-                    faceWhite = (color) (pos.at(0) / 3);
-                    faceCol = (color) (pos.at(2) / 3);
-                    facesTurned.append(c->turnFace(faceCol));
-                    facesTurned.append(c->turnFace(WHITE));
-                } else if (faceWhite != col) {
-                    //it's on the yellow face but not where we want it
-                    facesTurned.append(c->turnFace(YELLOW));
-                } else {
-                    //we do the algorithm to solve the cubie
-                    facesTurned.append(c->turnFace(YELLOW));
-                    pos = c->locateCubie(WHITE, (color) col);
-                    faceWhite = (color) (pos.at(0) / 3);
-                    faceCol = (color) (pos.at(2) / 3);
-                    facesTurned.append(c->turnFace(faceWhite));
+                }
+                //if the col sticker is on WHITE
+                else if (faceCol == WHITE){
+                    //if the WHITE sticker is on col
+                    if(faceWhite == col){
+                        //we do the corresponding algorithm
+                        facesTurned.append(c->turnFace((color)faceWhite));
+                        facesTurned.append(c->turnFace(WHITE, -1));
+                        facesTurned.append(c->turnFace((color)((faceWhite + 1) % 4), 1));
+                        facesTurned.append(c->turnFace(WHITE));
+                    }
+                    else {
+                        //we put the white sticker on yellow
+                        facesTurned.append(c->turnFace(faceWhite, 1));
+                        facesTurned.append(c->turnFace((color)((faceWhite + 1) % 4), -1));
+                        facesTurned.append(c->turnFace(YELLOW, -1));
+                        facesTurned.append(c->turnFace((color)((faceWhite + 1) % 4), 1));
+                    }
+                }
+                //col sticker is on YELLOW
+                else {
+                    facesTurned.append(c->turnFace(YELLOW, ((col - faceWhite + 1) % 4)));
+                    facesTurned.append(c->turnFace((color)((col + 1) % 4), 1));
                     facesTurned.append(c->turnFace((color) col, -1));
-                    facesTurned.append(c->turnFace(faceWhite, -1));
+                    facesTurned.append(c->turnFace((color)((col + 1) % 4), -1));
                 }
                 break;
             }
@@ -91,8 +93,8 @@ QString Fridrich::cross(Cube *c){
 QString Fridrich::F2L(Cube *c){
     QString facesTurned = ""; //string containing the faces we turn to solve this step on the given cube
     for (int col1 = 0; col1 < 4; col1++) { //Solving the 4 pairs of cubies {{WHITE, RED, BLUE}, {RED BLUE}},
-                                        //{{WHITE, BLUE, ORANGE}, {BLUE, ORANGE}}, {{WHITE, ORANGE, GREEN}, {ORANGE, GREEN}},
-                                        //{{WHITE, GREEN, RED}, {GREEN, RED}}
+        //{{WHITE, BLUE, ORANGE}, {BLUE, ORANGE}}, {{WHITE, ORANGE, GREEN}, {ORANGE, GREEN}},
+        //{{WHITE, GREEN, RED}, {GREEN, RED}}
         int col2 = (col1 + 1) % 4;
         QList<int> cornerPos = c->locateCubie(WHITE, (color) col1, (color) col2); //Locating the corner cubie
         QList<int> edgePos = c->locateCubie((color) col1, (color) col2);
@@ -102,46 +104,80 @@ QString Fridrich::F2L(Cube *c){
         color faceEdgeCol1 = (color) (edgePos.at(0) / 3);
         color faceEdgeCol2 = (color) (edgePos.at(2) / 3);
         //while the pair of cubies is not at its solved state
-        while(faceWhite != WHITE || faceEdgeCol1 != col1 || faceCornerCol1 != col1){
-            //Basic cases
-            qDebug () << col1 << " " << col2;
-            qDebug () << faceCornerCol1 << " " << faceCornerCol2 << " " << faceEdgeCol1 << " " << faceEdgeCol2;
-            if((faceWhite < 4 && faceWhite > -1) && (faceCornerCol1 == faceEdgeCol1 && faceCornerCol2 == faceEdgeCol2)){
-                if(faceEdgeCol2 == YELLOW){
-                    //if col2 is on YELLOW, then cubie is on the left of the corner, with the YELLOW face up
-                    //turning the corner on the left
-                    facesTurned.append(c->turnFace(YELLOW, col1 - faceEdgeCol1 + 1));
-                    //then R U' R'
-                    facesTurned.append(c->turnFace((color)col1, 1));
-                    facesTurned.append(c->turnFace(YELLOW, -1));
-                    facesTurned.append(c->turnFace((color)col1, -1));
-                } else {
-                    //turning the corner on the right
-                    facesTurned.append(c->turnFace(YELLOW, col2 - faceEdgeCol2 + 3));
-                    //then L' U L
-                    facesTurned.append(c->turnFace((color)col2, -1));
-                    facesTurned.append(c->turnFace(YELLOW, 1));
-                    facesTurned.append(c->turnFace((color)col2, 1));
+        while(faceWhite != WHITE || faceEdgeCol1!= col1 || faceEdgeCol1 != col1 || faceCornerCol1 != col1){
+            //corner cubie on the YELLOW face
+            if(faceWhite == YELLOW || faceCornerCol1 == YELLOW || faceCornerCol2 == YELLOW){
+                //edge cubie on the YELLOW face
+                if(faceEdgeCol1 == YELLOW || faceEdgeCol2 == YELLOW){
+                    //Corner pointing outward
+                    if(faceWhite < 4 && faceWhite > -1){
+                        //Basic case 1, corner and edge aligned
+                        if(faceCornerCol1 == faceEdgeCol1 && faceCornerCol2 == faceEdgeCol2){
+                            //if col2 is on YELLOW, then cubie is on the left of the corner, with the YELLOW face up
+                            if(faceEdgeCol2 == YELLOW){
+                                //turning the corner on the left
+                                facesTurned.append(c->turnFace(YELLOW, col1 - faceEdgeCol1 + 1));
+                                //then R U' R'
+                                facesTurned.append(c->turnFace((color)col1, 1));
+                                facesTurned.append(c->turnFace(YELLOW, -1));
+                                facesTurned.append(c->turnFace((color)col1, -1));
+                            } else {
+                                //turning the corner on the right
+                                facesTurned.append(c->turnFace(YELLOW, col2 - faceEdgeCol2 + 3));
+                                //then L' U L
+                                facesTurned.append(c->turnFace((color)col2, -1));
+                                facesTurned.append(c->turnFace(YELLOW, 1));
+                                facesTurned.append(c->turnFace((color)col2, 1));
+                            }
+                        }
+                        //Basic case 2, corner and edge cubie aligned after one R or L'
+                        if((faceWhite < 4 && faceWhite > -1) && ((faceCornerCol1 == (faceEdgeCol2 + 2) % 4) || (faceCornerCol2 == (faceEdgeCol1 + 2) % 4))){
+                            //if col2 is on YELLOW, then cubie is on the left of the corner, with the YELLOW face up
+                            if(faceEdgeCol2 == YELLOW){
+                                //turning the corner on the left
+                                facesTurned.append(c->turnFace(YELLOW, col2 - faceCornerCol2));
+                                //then R U R'
+                                facesTurned.append(c->turnFace((color)col1, 1));
+                                facesTurned.append(c->turnFace(YELLOW, 1));
+                                facesTurned.append(c->turnFace((color)col1, -1));
+                            } else {
+                                //turning the corner on the right
+                                facesTurned.append(c->turnFace(YELLOW, col2 - faceEdgeCol2));
+                                //then L' U' L
+                                facesTurned.append(c->turnFace((color)col2, -1));
+                                facesTurned.append(c->turnFace(YELLOW, -1));
+                                facesTurned.append(c->turnFace((color)col2, 1));
+                            }
+                        }
+//                        if(faceWhite == faceEdgeCol1){
+//                            //
+
+//                        }
+//                        if(){
+//                            //
+
+//                        }
+//                        if(){
+//                            //
+
+//                        }
+//                        if(){
+//                            //
+
+//                        }
+//                        if(){
+//                            //
+
+//                        }
+//                        if(){
+//                            //
+
+//                        }
+                    }
                 }
             }
-            if((faceWhite < 4 && faceWhite > -1) && ((faceCornerCol1 == (faceEdgeCol2 + 2) % 4) || (faceCornerCol2 == (faceEdgeCol1 + 2) % 4))){
-                if(faceEdgeCol2 == YELLOW){
-                    //if col2 is on YELLOW, then cubie is on the left of the corner, with the YELLOW face up
-                    //turning the corner on the left
-                    facesTurned.append(c->turnFace(YELLOW, col2 - faceCornerCol2));
-                    //then R U R'
-                    facesTurned.append(c->turnFace((color)col1, 1));
-                    facesTurned.append(c->turnFace(YELLOW, 1));
-                    facesTurned.append(c->turnFace((color)col1, -1));
-                } else {
-                    //turning the corner on the right
-                    facesTurned.append(c->turnFace(YELLOW, col2 - faceEdgeCol2));
-                    //then L' U' L
-                    facesTurned.append(c->turnFace((color)col2, -1));
-                    facesTurned.append(c->turnFace(YELLOW, -1));
-                    facesTurned.append(c->turnFace((color)col2, 1));
-                }
-            }
+
+
             qDebug() << "break;";
             break;
             cornerPos = c->locateCubie(WHITE, (color) col1, (color) col2); //Locating the corner cubie
