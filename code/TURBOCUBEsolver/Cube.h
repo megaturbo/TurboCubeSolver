@@ -3,6 +3,7 @@
 
 #include <QMap>
 #include <QVector>
+#include <Cube.h>
 #include <QList>
 #include <CubeColor.h>
 #include <cubie.h>

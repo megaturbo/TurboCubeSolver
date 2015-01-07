@@ -66,9 +66,9 @@ Cube::Cube(color matrix[18][3])
     setMatrix(matrix);
 }
 
-Cube::Cube(Cube c){
+/*Cube::Cube(Cube c){
     setMatrix(c.getMatrix());
-}
+}*/
 
 //Utility methods
 
