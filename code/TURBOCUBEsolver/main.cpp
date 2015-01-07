@@ -84,7 +84,7 @@ int main(int argc, char *argv[])
 =======
 >>>>>>> 9a431c6829f629646d9e49024ddfc0113077c5d4
 
-
+*/
     // DISPLAY ISOMETRIC CUBE
 
     // get color matrix
@@ -105,5 +105,5 @@ int main(int argc, char *argv[])
     IsometricCubeWidget w(displayableCube);
     w.show();
 
-    return a.exec();*/
+    return a.exec();
 }

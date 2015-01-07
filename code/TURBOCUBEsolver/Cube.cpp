@@ -325,6 +325,8 @@ void Cube::moveSequence(QString sequence) {
             nbQTurn = 1;
         }
 
+        char charMove = theMove.toLatin1();
+
         switch (theMove) {
         case 'F':
             F(nbQTurn);
