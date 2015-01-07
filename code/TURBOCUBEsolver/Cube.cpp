@@ -329,7 +329,7 @@ void Cube::moveSequence(QString sequence) {
             nbQTurn = 1;
         }
 
-        switch (theMove.digitValue()) {
+        switch (theMove.toLatin1()) {
         case 'F':
             F(nbQTurn);
             break;
