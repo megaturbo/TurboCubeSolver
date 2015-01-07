@@ -21,7 +21,6 @@ private:
     int displayCube[18][3];
 
     QColor getQColorFromValue(int color, int alpha = 255);
-    QPolygon* getPolygon(int first_x, int first_y, int type_polygon);
     void initIsoGrid();
 };
 

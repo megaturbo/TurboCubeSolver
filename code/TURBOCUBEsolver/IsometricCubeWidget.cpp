@@ -150,34 +150,6 @@ void IsometricCubeWidget::paintEvent(QPaintEvent* event)
 
 }
 
-QPolygon* IsometricCubeWidget::getPolygon(int first_x, int first_y, int type_polygon)
-{
-    QPolygon *returnPolygon = new QPolygon();
-
-    returnPolygon->append(QPoint(first_x, first_y));
-
-    switch (type_polygon)
-    {
-        case POLYGON_UP:
-            returnPolygon->append(QPoint(first_x+1,first_y));
-            returnPolygon->append(QPoint(first_x+1,first_y+1));
-            returnPolygon->append(QPoint(first_x,first_y+1));
-            break;
-        case POLYGON_FRONT:
-            returnPolygon->append(QPoint(first_x,first_y+1));
-            returnPolygon->append(QPoint(first_x-1,first_y+2));
-            returnPolygon->append(QPoint(first_x-1,first_y+1));
-            break;
-        case POLYGON_RIGHT:
-            returnPolygon->append(QPoint(first_x+1,first_y));
-            returnPolygon->append(QPoint(first_x,first_y+1));
-            returnPolygon->append(QPoint(first_x-1,first_y+1));
-        break;
-    }
-
-    return returnPolygon;
-}
-
 // RED = 0, BLUE = 1, ORANGE = 2, GREEN = 3, WHITE = 4, YELLOW = 5
 
 QColor IsometricCubeWidget::getQColorFromValue(int color, int alpha)
