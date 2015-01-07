@@ -10,12 +10,6 @@ void Cube::displayCube() {
     for (int y = 0; y < 3; y++) {
         for (int x = 0; x < 18; x++) {
             switch(matCube[x][y]) {
-            case WHITE:
-                s += "W ";
-                break;
-            case YELLOW:
-                s += "Y ";
-                break;
             case RED:
                 s += "R ";
                 break;
@@ -30,6 +24,12 @@ void Cube::displayCube() {
                 break;
             default:
                 s += "? ";
+                break;
+            case WHITE:
+                s += "W ";
+                break;
+            case YELLOW:
+                s += "Y ";
                 break;
             }
             if(x % 3 == 2) {
@@ -64,6 +64,10 @@ color** Cube::getMatrix(){
 Cube::Cube(color matrix[18][3])
 {
     setMatrix(matrix);
+}
+
+Cube::Cube(Cube c){
+    setMatrix(c.getMatrix());
 }
 
 //Utility methods
@@ -356,27 +360,28 @@ void Cube::U(int nbQuarterTurn) {
 }
 
 void Cube::D(int nbQuarterTurn) {
-    turnFace(YELLOW, nbQuarterTurn);
+    turnFace(WHITE, nbQuarterTurn);
 }
 
 void Cube::B(int nbQuarterTurn) {
-    turnFace(YELLOW, nbQuarterTurn);
+    turnFace(ORANGE, nbQuarterTurn);
 }
 
 void Cube::F(int nbQuarterTurn) {
-    turnFace(YELLOW, nbQuarterTurn);
+    turnFace(RED, nbQuarterTurn);
 }
 
 void Cube::R(int nbQuarterTurn) {
-    turnFace(YELLOW, nbQuarterTurn);
+    turnFace(BLUE, nbQuarterTurn);
 }
 
 void Cube::L(int nbQuarterTurn) {
-    turnFace(YELLOW, nbQuarterTurn);
+    turnFace(GREEN, nbQuarterTurn);
 }
 
 QString Cube::turnFace(int f, int number) {
     color face = (color) f;
+    QString s = "";
     qDebug() << "Rotating " << face << "face, by " << number << "quarter turns";
     //defining which stickers are on the face
     //those will get spinned
@@ -398,6 +403,7 @@ QString Cube::turnFace(int f, int number) {
     int* indicesY;
     switch(face) {
     case RED:
+        s = "F";
         //if the RED face gets turned, then:
         //{WHITE, BLUE, YELLOW, GREEN} are adjacent, in this order;
         indicesX = new int[12]{WHITE * 3, WHITE * 3 + 1, WHITE * 3 + 2,
@@ -410,6 +416,7 @@ QString Cube::turnFace(int f, int number) {
                                 2, 1, 0};
         break;
     case BLUE:
+        s = "R";
         //if the BLUE face gets turned, then:
         //{WHITE, ORANGE, YELLOW, RED} are adjacent, in this order;
         indicesX = new int[12]{WHITE * 3 + 2, WHITE * 3 + 2, WHITE * 3 + 2,
@@ -422,6 +429,7 @@ QString Cube::turnFace(int f, int number) {
                                 2, 1, 0};
         break;
     case ORANGE:
+        s = "B";
         //if the ORANGE face gets turned, then:
         //{WHITE, GREEN, YELLOW, BLUE} are adjacent, in this order;
         indicesX = new int[12]{WHITE * 3 + 2, WHITE * 3 + 1, WHITE * 3,
@@ -434,6 +442,7 @@ QString Cube::turnFace(int f, int number) {
                                 2, 1, 0};
         break;
     case GREEN:
+        s = "L";
         //if the GREEN face gets turned, then:
         //{WHITE, RED, YELLOW, ORANGE} are adjacent, in this order;
         indicesX = new int[12]{WHITE * 3, WHITE * 3, WHITE * 3,
@@ -446,6 +455,7 @@ QString Cube::turnFace(int f, int number) {
                                 2, 1, 0};
         break;
     case WHITE:
+        s = "D";
         //if the WHITE face gets turned, then:
         //{RED, GREEN, ORANGE, BLUE} are adjacent, in this order;
         indicesX = new int[12]{RED * 3, RED * 3 + 1, RED * 3 + 2,
@@ -455,6 +465,7 @@ QString Cube::turnFace(int f, int number) {
         indicesY = new int[12]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
         break;
     case YELLOW:
+        s = "U";
         //if the YELLOW face gets turned, then:
         //{RED, BLUE, ORANGE, GREEN} are adjacent, in this order;
         indicesX = new int[12]{RED * 3, RED * 3 + 1, RED * 3 + 2,
@@ -495,6 +506,7 @@ QString Cube::turnFace(int f, int number) {
         matCube[indicesX[2]][indicesY[2]] = saveAdjacent[2];
         break;
     case 2:
+        s += "2";
         //turning the face
         for (int i = 0; i < 4; ++i) {
             saveFace[i] = matCube[indicesFaceX[i]][indicesFaceY[i]];
@@ -518,6 +530,7 @@ QString Cube::turnFace(int f, int number) {
         }
         break;
     case 3: //3 = -1 % 4
+        s += "'";
         //turning the face
         saveFace[0] = matCube[indicesFaceX[0]][indicesFaceY[0]];
         saveFace[1] = matCube[indicesFaceX[1]][indicesFaceY[1]];
@@ -544,9 +557,7 @@ QString Cube::turnFace(int f, int number) {
         qDebug() << "no rotation for " << number << "quarter turns";
         break;
     }
-
-
-    QString s = "";
+    s += " ";
     return s;
 }
 
