@@ -107,6 +107,7 @@ int main(int argc, char *argv[])
     QString scrambling = solvedCube->scramble();
 
     qDebug() << "SCRAMBLE: " << scrambling;
+    qDebug() << "UNSCRAMBLE: " << Cube::reverseSequence(scrambling);
 
     IsometricCubeWidget w(*solvedCube);
 

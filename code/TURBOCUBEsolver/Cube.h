@@ -22,6 +22,7 @@ class Cube{
 
     void moveSequence(QString sequence);
     QString scramble();
+    static QString reverseSequence(QString sequence);
 
     //matrix rotation per face
     void U(int nbQuarterTurn);
