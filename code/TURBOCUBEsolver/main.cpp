@@ -19,14 +19,15 @@ int main(int argc, char *argv[])
     /*FRIDRICH TESTING*/
 
     qDebug() << "Fridrich testing, please do not comment or remove this section";
-    color solvedCube[18][3];
+    color solvedMatrix[18][3];
 
     for (int x = 0; x < 18; ++x) {
         for (int y = 0; y < 3; ++y) {
-            solvedCube[x][y] = (color)(x / 3);
+            solvedMatrix[x][y] = (color)(x / 3);
         }
     }
-    Cube *testCube = new Cube(solvedCube);
+    Cube *testCube = new Cube(solvedMatrix);
+    Cube *solvedCube = new Cube(solvedMatrix);
 
 
 
@@ -102,11 +103,14 @@ int main(int argc, char *argv[])
     // get color matrix
 
     // create the isometric widget
-    IsometricCubeWidget w(*testCube);
-    w.show();
 
-    testCube->moveSequence("U'");
-    w.setCube(*testCube);
+    QString scrambling = solvedCube->scramble();
+
+    qDebug() << "SCRAMBLE: " << scrambling;
+
+    IsometricCubeWidget w(*solvedCube);
+
+    w.show();
 
     //testCube->turnFace(WHITE,1);
     //w.setCube(*testCube);

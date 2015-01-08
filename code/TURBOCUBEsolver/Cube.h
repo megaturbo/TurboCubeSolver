@@ -21,6 +21,7 @@ class Cube{
     QList<int> cubie(int i, int j);
 
     void moveSequence(QString sequence);
+    QString scramble();
 
     //matrix rotation per face
     void U(int nbQuarterTurn);

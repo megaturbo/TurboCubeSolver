@@ -4,6 +4,8 @@
 #include <qdebug.h>
 #include <QList>
 #include <qdebug.h>
+#include <QGlobal.h>
+#include <QTime>
 
 void Cube::displayCube() {
     QString s = "\n";
@@ -312,6 +314,73 @@ QList<int> Cube::cubie(int i, int j) {
     }
 }
 
+QString Cube::scramble()
+{
+    QString scrambling;
+    int lastMove = -1;
+    int nextMove;
+    int nbQ;
+    QString cMove;
+    QString cQ;
+
+    qsrand(QDateTime::currentDateTime ().toTime_t ());
+
+    for(int i = 0; i < 20; i++)
+    {
+
+        do{
+            nextMove = qrand() % 6;
+        }while(nextMove == lastMove);
+
+        // Get move
+        switch (nextMove) {
+            case 0:
+                cMove = 'U';
+                break;
+            case 1:
+                cMove = 'D';
+                break;
+            case 2:
+                cMove = 'L';
+                break;
+            case 3:
+                cMove = 'R';
+                break;
+            case 4:
+                cMove = 'F';
+                break;
+            case 5:
+                cMove = 'B';
+            break;
+        }
+
+        // Get nb of quarter turn
+        switch(nbQ){
+            case 0:
+                cQ = "";
+                break;
+            case 1:
+                cQ = '2';
+                break;
+            case 2:
+                cQ = '\'';
+                break;
+        }
+
+        nbQ = qrand() % 3;
+
+        // add to scramble
+        scrambling += cMove + cQ + ' ';
+
+        lastMove = nextMove;
+    }
+
+    this->moveSequence(scrambling);
+
+    return scrambling;
+
+}
+
 void Cube::moveSequence(QString sequence) {
 
     QStringList moves = sequence.split(' ');
@@ -347,6 +416,7 @@ void Cube::moveSequence(QString sequence) {
             break;
         case 'R':
             R(nbQTurn);
+            break;
         case 'U':
             U(nbQTurn);
             break;
@@ -362,11 +432,11 @@ void Cube::moveSequence(QString sequence) {
 //matrix rotation per face
 //TODO: turn faces relatively
 void Cube::U(int nbQuarterTurn) {
-    turnFace(YELLOW, nbQuarterTurn);
+    turnFace(WHITE, nbQuarterTurn);
 }
 
 void Cube::D(int nbQuarterTurn) {
-    turnFace(WHITE, nbQuarterTurn);
+    turnFace(YELLOW, nbQuarterTurn);
 }
 
 void Cube::B(int nbQuarterTurn) {
