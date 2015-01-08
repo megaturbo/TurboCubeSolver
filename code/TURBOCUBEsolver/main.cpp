@@ -104,11 +104,19 @@ int main(int argc, char *argv[])
 
     // create the isometric widget
 
-    QString scrambling = solvedCube->scramble();
+//    QString scrambling = solvedCube->scramble();
 
-    qDebug() << "SCRAMBLE: " << scrambling;
+    solvedCube->moveSequence("R F D' U' R L' F' L U2 R B2 F2 B' D' U R D F2 B' R'");
 
     IsometricCubeWidget w(*solvedCube);
+
+    QString solv = Fridrich::solve(solvedCube);
+
+    w.setCube(*solvedCube);
+
+    qDebug() << solv;
+
+//    qDebug() << "SCRAMBLE: " << scrambling;
 
     w.show();
 

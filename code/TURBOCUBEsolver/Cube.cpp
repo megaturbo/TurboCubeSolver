@@ -424,9 +424,7 @@ void Cube::moveSequence(QString sequence) {
             D(nbQTurn);
             break;
         }
-
     }
-
 }
 
 //matrix rotation per face
