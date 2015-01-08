@@ -108,6 +108,7 @@ QString Fridrich::cross(Cube *c){
                             if(col4 != col3 && col4 != col2 && col4 != col1){
                                 Cube *testCube = new Cube(*c);
                                 QString facesTurned = "";
+                                qDebug() << col1 << col2 << col3 << col4;
                                 facesTurned += crossEdge(testCube, col1);
                                 facesTurned += crossEdge(testCube, col2);
                                 facesTurned += crossEdge(testCube, col3);

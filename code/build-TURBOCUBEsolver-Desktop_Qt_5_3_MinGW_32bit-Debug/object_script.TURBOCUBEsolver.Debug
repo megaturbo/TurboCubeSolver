@@ -6,8 +6,10 @@ INPUT(
 ./debug\Fridrich.o
 ./debug\TurboCubeSolver.o
 ./debug\IsometricCubeWidget.o
+./debug\MainWidget.o
 ./debug\qrc_resources.o
 ./debug\moc_TurboCubeSolver.o
 ./debug\moc_CubeInput.o
 ./debug\moc_IsometricCubeWidget.o
+./debug\moc_MainWidget.o
 );
