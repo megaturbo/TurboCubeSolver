@@ -27,7 +27,6 @@ int main(int argc, char *argv[])
         }
     }
     Cube *testCube = new Cube(solvedMatrix);
-    Cube *solvedCube = new Cube(solvedMatrix);
 
 
 
@@ -37,15 +36,6 @@ int main(int argc, char *argv[])
         testCube->displayCube();
     }
 
-//    testCube->turnFace(RED);
-//    testCube->turnFace(YELLOW, -1);
-//    testCube->turnFace(RED, -1);
-//    testCube->turnFace(YELLOW, -1);
-//    testCube->turnFace(RED);
-//    testCube->turnFace(YELLOW, 1);
-//    testCube->turnFace(RED, -1);
-//    testCube->turnFace(YELLOW, 2);
-
     testCube->displayCube();
 
     QString s = Fridrich::solve(testCube);
@@ -54,59 +44,19 @@ int main(int argc, char *argv[])
 
     qDebug() << s;
 
-    /*FRIDRICH TESTING*/
-
-    /*qDebug() << "Debug console test";
-    w.show();
-
-
-=======
-    qDebug() << "Debug console test";
-
->>>>>>> 9a431c6829f629646d9e49024ddfc0113077c5d4
-    color matCube[18][3];
-    for (int x = 0; x < 18; x++) {
-        for (int y = 0; y < 3; y++) {
-            matCube[x][y] = (color)(x / 3);
-
-
-    testCube->turnFace(GREEN, 1);
-    testCube->turnFace(YELLOW, 1);
-    testCube->turnFace(GREEN, -1);
-    testCube->turnFace(ORANGE, -1);
-    testCube->turnFace(YELLOW, -1);
-    testCube->turnFace(ORANGE, 1);
-    testCube->turnFace(RED, 1);
-    testCube->turnFace(YELLOW, -1);
-
-
-
-    testCube->displayCube();
-
-
-<<<<<<< HEAD
-    QString s = "";
-    for (int i = 0; i < indices.length(); i++) {
-        s += QString::number(indices.at(i));
-        s += " ";
-        if(i % 2 == 1){
-            s += "\n";
-        }
-    }
-    qDebug() << s;
-=======
->>>>>>> 9a431c6829f629646d9e49024ddfc0113077c5d4
-
-*/
     // DISPLAY ISOMETRIC CUBE
 
     // get color matrix
 
     // create the isometric widget
+    Cube *solvedCube = new Cube(solvedMatrix);
 
-//    QString scrambling = solvedCube->scramble();
+    QString scrambling = solvedCube->scramble();
 
-    solvedCube->moveSequence("R F D' U' R L' F' L U2 R B2 F2 B' D' U R D F2 B' R'");
+//    solvedCube->moveSequence("R F D' U' R L' F' L U2 R B2 F2 B' D' U R D F2 B' R'");
+
+//    qDebug() << "SCRAMBLE: " << scrambling;
+//    qDebug() << "UNSCRAMBLE: " << Cube::reverseSequence(scrambling);
 
     IsometricCubeWidget w(*solvedCube);
 
@@ -116,7 +66,7 @@ int main(int argc, char *argv[])
 
     qDebug() << solv;
 
-//    qDebug() << "SCRAMBLE: " << scrambling;
+    qDebug() << "SCRAMBLE: " << scrambling;
 
     w.show();
 

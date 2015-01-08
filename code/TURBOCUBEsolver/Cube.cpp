@@ -381,6 +381,32 @@ QString Cube::scramble()
 
 }
 
+QString Cube::reverseSequence(QString sequence)
+{
+    QStringList moves = sequence.split(' ');
+    QString reversed = "";
+    QString tmp;
+
+    for(int i = 0; i < moves.length(); i++)
+    {
+        tmp = moves.at(moves.length()-i-1);
+        if(tmp.length()==1)
+        {
+            tmp+="'";
+        }else if(tmp.length()==2)
+        {
+            if(tmp.at(1)== '\'')
+            {
+                tmp = tmp.at(0);
+            }
+        }
+
+        reversed += tmp + " ";
+    }
+
+    return reversed;
+}
+
 void Cube::moveSequence(QString sequence) {
 
     QStringList moves = sequence.split(' ');

@@ -11,6 +11,7 @@ class Fridrich
 public:
     static QString solve(Cube *c);
 
+    static QString crossEdge(Cube *c, int co);
 private:
     //int face is the face we begin with,
     //usually white so we set it at 0
