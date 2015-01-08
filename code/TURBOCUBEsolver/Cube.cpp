@@ -456,11 +456,11 @@ void Cube::moveSequence(QString sequence) {
 //matrix rotation per face
 //TODO: turn faces relatively
 void Cube::U(int nbQuarterTurn) {
-    turnFace(WHITE, nbQuarterTurn);
+    turnFace(YELLOW, nbQuarterTurn);
 }
 
 void Cube::D(int nbQuarterTurn) {
-    turnFace(YELLOW, nbQuarterTurn);
+    turnFace(WHITE, nbQuarterTurn);
 }
 
 void Cube::B(int nbQuarterTurn) {
@@ -472,17 +472,17 @@ void Cube::F(int nbQuarterTurn) {
 }
 
 void Cube::R(int nbQuarterTurn) {
-    turnFace(BLUE, nbQuarterTurn);
+    turnFace(GREEN, nbQuarterTurn);
 }
 
 void Cube::L(int nbQuarterTurn) {
-    turnFace(GREEN, nbQuarterTurn);
+    turnFace(BLUE, nbQuarterTurn);
 }
 
 QString Cube::turnFace(int f, int number) {
     color face = (color) f;
     QString s = "";
-    qDebug() << "Rotating " << face << "face, by " << number << "quarter turns";
+//    qDebug() << "Rotating " << face << "face, by " << number << "quarter turns";
     //defining which stickers are on the face
     //those will get spinned
     number = (number + 4) % 4;

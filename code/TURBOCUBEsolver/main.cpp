@@ -22,57 +22,57 @@ int main(int argc, char *argv[])
 
     /*FRIDRICH TESTING*/
 
-    qDebug() << "Fridrich testing, please do not comment or remove this section";
-    color solvedMatrix[18][3];
+//    qDebug() << "Fridrich testing, please do not comment or remove this section";
+//    color solvedMatrix[18][3];
 
-    for (int x = 0; x < 18; ++x) {
-        for (int y = 0; y < 3; ++y) {
-            solvedMatrix[x][y] = (color)(x / 3);
-        }
-    }
-    Cube *testCube = new Cube(solvedMatrix);
+//    for (int x = 0; x < 18; ++x) {
+//        for (int y = 0; y < 3; ++y) {
+//            solvedMatrix[x][y] = (color)(x / 3);
+//        }
+//    }
+//    Cube *testCube = new Cube(solvedMatrix);
 
 
 
-    testCube->displayCube();
-    for (int col = 5; col > -1; --col) {
-        testCube->turnFace((color)col, -1);
-        testCube->displayCube();
-    }
+//    testCube->displayCube();
+//    for (int col = 5; col > -1; --col) {
+//        testCube->turnFace((color)col, -1);
+//        testCube->displayCube();
+//    }
 
-    testCube->displayCube();
+//    testCube->displayCube();
 
-    QString s = Fridrich::solve(testCube);
+//    QString s = Fridrich::solve(testCube);
 
-    testCube->displayCube();
+//    testCube->displayCube();
 
-    qDebug() << s;
+//    qDebug() << s;
 
     // DISPLAY ISOMETRIC CUBE
 
     // get color matrix
 
     // create the isometric widget
-    Cube *solvedCube = new Cube(solvedMatrix);
+//    Cube *solvedCube = new Cube(solvedMatrix);
 
-    QString scrambling = solvedCube->scramble();
-
-//    solvedCube->moveSequence("R F D' U' R L' F' L U2 R B2 F2 B' D' U R D F2 B' R'");
+//    QString scrambling = solvedCube->scramble();
+//    QString scrambling = "L F2 B U D R' L' F2 D2 F' L2 U2 B F' L' U' D R U F' ";
+//    solvedCube->moveSequence(scrambling);
 
 //    qDebug() << "SCRAMBLE: " << scrambling;
 //    qDebug() << "UNSCRAMBLE: " << Cube::reverseSequence(scrambling);
 
-    IsometricCubeWidget w(*solvedCube);
+//    IsometricCubeWidget w(*solvedCube);
 
-    QString solv = Fridrich::solve(solvedCube);
+//    QString solv = Fridrich::solve(solvedCube);
 
-    w.setCube(*solvedCube);
+//    w.setCube(*solvedCube);
 
-    qDebug() << solv;
+//    qDebug() << solv;
 
-    qDebug() << "SCRAMBLE: " << scrambling;
+//    qDebug() << "SCRAMBLE: " << scrambling;
 
-    w.show();
+//    w.show();
 
     //testCube->turnFace(WHITE,1);
     //w.setCube(*testCube);

@@ -12,6 +12,7 @@ public:
     static QString solve(Cube *c);
 
     static QString crossEdge(Cube *c, int co);
+    static QString F2LPair(Cube *c, int col);
 private:
     //int face is the face we begin with,
     //usually white so we set it at 0
