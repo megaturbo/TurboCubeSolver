@@ -13,8 +13,8 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    CubeInput u;
-    u.show();
+    /*CubeInput u;
+    u.show();*/
 
     /*FRIDRICH TESTING*/
 
@@ -54,8 +54,6 @@ int main(int argc, char *argv[])
     qDebug() << s;
 
     /*FRIDRICH TESTING*/
-
-    return a.exec();
 
     /*qDebug() << "Debug console test";
     w.show();
@@ -102,22 +100,13 @@ int main(int argc, char *argv[])
     // DISPLAY ISOMETRIC CUBE
 
     // get color matrix
-    color** matrix = testCube->getMatrix();
-
-    // put it into a 18x3 int array
-    int displayableCube[18][3];
-
-    for(int x = 0; x < 18; x++)
-    {
-        for(int y = 0; y < 3; y++)
-        {
-            displayableCube[x][y] = matrix[x][y];
-        }
-    }
 
     // create the isometric widget
-    IsometricCubeWidget w(displayableCube);
+    IsometricCubeWidget w(*testCube);
     w.show();
+
+    //testCube->turnFace(WHITE,1);
+    //w.setCube(*testCube);
 
     return a.exec();
 }

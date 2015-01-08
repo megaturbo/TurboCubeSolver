@@ -26,7 +26,8 @@ Makefile*
 
 *-build-*
 
-code/build-TURBOCUBEsolver-Desktop_Qt_5_3_MinGW_32bit-Debug
+/*-Debug
+/*-Release
 
 # QtCreator
 
