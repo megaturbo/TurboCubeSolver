@@ -50,7 +50,7 @@ void Cube::setMatrix(color matrix[18][3])
     }
 }
 
-color** Cube::getMatrix(){
+color** Cube::getMatrix() const{
     color** mat = new color*[18];
     for (int i = 0; i < 18; ++i) {
         mat[i] = new color[3];
@@ -66,9 +66,13 @@ Cube::Cube(color matrix[18][3])
     setMatrix(matrix);
 }
 
-/*Cube::Cube(Cube c){
-    setMatrix(c.getMatrix());
-}*/
+Cube::Cube(const Cube &c){
+    for (int x = 0; x < 18; ++x) {
+        for (int y = 0; y < 3; ++y) {
+            matCube[x][y] = c.getMatrix()[x][y];
+        }
+    }
+}
 
 //Utility methods
 
@@ -118,6 +122,7 @@ QList<int> Cube::locateCubie(color c1, color c2) {
             }
         }
     }
+    return cubi;
 }
 
 //returns indices of the cubie's stickers
@@ -173,6 +178,7 @@ QList<int> Cube::locateCubie(color c1, color c2, color c3) {
             return ret;
         }
     }
+    return cubi;
 }
 
 QList<int> Cube::cubie(int i, int j) {
@@ -416,7 +422,7 @@ QString Cube::turnFace(int f, int number) {
                                 2, 1, 0};
         break;
     case BLUE:
-        s = "R";
+        s = "L";
         //if the BLUE face gets turned, then:
         //{WHITE, ORANGE, YELLOW, RED} are adjacent, in this order;
         indicesX = new int[12]{WHITE * 3 + 2, WHITE * 3 + 2, WHITE * 3 + 2,
@@ -442,7 +448,7 @@ QString Cube::turnFace(int f, int number) {
                                 2, 1, 0};
         break;
     case GREEN:
-        s = "L";
+        s = "R";
         //if the GREEN face gets turned, then:
         //{WHITE, RED, YELLOW, ORANGE} are adjacent, in this order;
         indicesX = new int[12]{WHITE * 3, WHITE * 3, WHITE * 3,

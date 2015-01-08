@@ -102,6 +102,7 @@ QString Fridrich::F2L(Cube *c){
         //{{WHITE, GREEN, RED}, {GREEN, RED}}
         color col1 = (color) col;
         color col2 = (color)((col1 + 1) % 4);
+        qDebug() << endl << endl << "For WHITE " << col1 << " " << col2 << "pair" << endl;
         QList<int> cornerPos = c->locateCubie(WHITE, col1, col2); //Locating the corner cubie
         QList<int> edgePos = c->locateCubie(col1, col2);
         color faceWhite = (color) (cornerPos.at(0) / 3); //face on which the WHITE sticker is
@@ -109,9 +110,10 @@ QString Fridrich::F2L(Cube *c){
         color faceCornerCol2 = (color) (cornerPos.at(4) / 3); //face on which the col2 sticker is
         color faceEdgeCol1 = (color) (edgePos.at(0) / 3);
         color faceEdgeCol2 = (color) (edgePos.at(2) / 3);
-        //while the pair of cubies is not at its solved state
+        //while the pair of cubies is not at its solved state. The loop is useful
+        //because we can reduce complex cases to simpler ones and let the program solve them
         int k = 0;
-        while((faceWhite != WHITE || faceEdgeCol1!= col1 || faceEdgeCol1 != col1 || faceCornerCol1 != col1) && k++<200){
+        while((faceWhite != WHITE  || faceCornerCol1 != col1 || faceEdgeCol1!= col1 || faceEdgeCol2!= col2) && k++<200){
             //edge cubie on the YELLOW face
             if(faceEdgeCol1 == YELLOW || faceEdgeCol2 == YELLOW){
                 qDebug()<< "edge cubie on the YELLOW face";
@@ -139,7 +141,8 @@ QString Fridrich::F2L(Cube *c){
                             }
                         }
                         //Basic case 2, corner and edge cubie aligned after one R or L'
-                        else if((faceCornerCol1 == (faceEdgeCol2 + 2) % 4) || (faceCornerCol2 == (faceEdgeCol1 + 2) % 4)){
+                        else if(((faceEdgeCol1 == (faceWhite + 3) % 4) || (faceEdgeCol2 == (faceWhite + 1) % 4))
+                                && ((faceCornerCol1 == YELLOW && faceCornerCol2 == YELLOW) || (faceCornerCol2 == YELLOW && faceEdgeCol1 == YELLOW))){
                             qDebug()<< "Basic case 2, corner and edge cubie aligned after one R or L'";
                             //WHITE sticker points right
                             if(faceCornerCol1 == YELLOW){
