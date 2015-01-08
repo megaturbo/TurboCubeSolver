@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Fonts/fightclub.ttf</file>
+        <file>Fonts/reservoirdogs.ttf</file>
+    </qresource>
+</RCC>

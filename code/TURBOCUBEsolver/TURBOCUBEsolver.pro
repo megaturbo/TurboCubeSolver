@@ -31,3 +31,6 @@ HEADERS  += \
 
 FORMS    +=\
     TurboCubeSolver.ui
+
+RESOURCES += \
+    RES.qrc

@@ -14,10 +14,15 @@ This class is used to represent the cube in a isometric view
 IsometricCubeWidget::IsometricCubeWidget(Cube c, QWidget *parent)
     : QWidget(parent)
 {
-    this->resize(1000,1000);
-    this->setCube(c);
+    // Widget size
+    this->resize(1000,550);
+    this->setStyleSheet("background-color: rgb(220,220,220);");
+
+    // init isometric grid, used to create polygons
     initIsoGrid();
-    this->update();
+
+    // Use the right cube
+    this->setCube(c);
 }
 
 void IsometricCubeWidget::setCube(Cube c)
@@ -31,6 +36,8 @@ void IsometricCubeWidget::setCube(Cube c)
             displayCube[x][y] = cubeMatrix[x][y];
         }
     }
+
+    this->repaint();
 }
 
 void IsometricCubeWidget::initIsoGrid()
@@ -45,7 +52,7 @@ void IsometricCubeWidget::initIsoGrid()
                 sX = (x * W / 2) + (y * W / 2);
                 sY = (y * H / 2) - (x * H / 2);
 
-                isogrid[x][y] = QPoint(sX,sY+H*7);
+                isogrid[x][y] = QPoint(sX,sY+H*5);
         }
     }
 
@@ -55,16 +62,37 @@ void IsometricCubeWidget::paintEvent(QPaintEvent* event)
 {
     QPainter painter(this);
 
+    painter.setBackground(Qt::blue);
+
+    // START TITLES
+    painter.setPen(Qt::black);
+
+    int rdFontID = QFontDatabase::addApplicationFont(":/Fonts/reservoirdogs.ttf");
+    QString fontFamily = QFontDatabase::applicationFontFamilies(rdFontID).at(0);
+    QFont font(fontFamily);
+    font.setPointSize(30);
+
+    painter.setFont(QFont(font));
+
+    painter.drawText(isogrid[3][0].rx()+0.3*W,100,"FRONT");
+    painter.drawText(isogrid[4][0].rx()+4*W,100,"BACK");
+
+    // END TITLES
+
     // START SHADOW
     painter.setPen(Qt::transparent);
     painter.setBrush(Qt::lightGray);
 
-    QVector<QPoint> shadow;
+    QPolygon shadow;
     shadow.append(isogrid[3][6]);
     shadow.append(isogrid[5][6]);
     shadow.append(isogrid[5][3]);
     shadow.append(isogrid[3][3]);
     painter.drawPolygon(shadow);
+
+    shadow.translate(4*W,0);
+    //painter.drawPolygon(shadow);
+
     // END SHADOW
 
 
@@ -113,7 +141,8 @@ void IsometricCubeWidget::paintEvent(QPaintEvent* event)
 
                 // DRAWING
 
-                painter.setPen(Qt::black);
+                QPen pen(Qt::black, 3);
+                painter.setPen(pen);
 
                 // ### ALPHA 255
 
