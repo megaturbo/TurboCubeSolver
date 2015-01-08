@@ -105,6 +105,9 @@ int main(int argc, char *argv[])
     IsometricCubeWidget w(*testCube);
     w.show();
 
+    testCube->moveSequence("U'");
+    w.setCube(*testCube);
+
     //testCube->turnFace(WHITE,1);
     //w.setCube(*testCube);
 

@@ -26,8 +26,8 @@ Makefile*
 
 *-build-*
 
-/*-Debug
-/*-Release
+*-Debug
+*-Release
 
 # QtCreator
 
