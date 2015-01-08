@@ -73,9 +73,6 @@ Cube::Cube(const Cube &c){
         }
     }
 }
-Cube::Cube(Cube c){
-    setMatrix(c.getMatrix());
-}
 
 //Utility methods
 

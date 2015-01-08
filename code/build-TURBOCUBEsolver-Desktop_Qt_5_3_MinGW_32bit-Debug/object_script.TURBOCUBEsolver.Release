@@ -6,6 +6,7 @@ INPUT(
 ./release\Fridrich.o
 ./release\TurboCubeSolver.o
 ./release\IsometricCubeWidget.o
+./release\qrc_resources.o
 ./release\moc_TurboCubeSolver.o
 ./release\moc_CubeInput.o
 ./release\moc_IsometricCubeWidget.o
