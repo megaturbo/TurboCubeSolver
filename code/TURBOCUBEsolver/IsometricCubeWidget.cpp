@@ -37,7 +37,7 @@ void IsometricCubeWidget::setCube(Cube c)
         }
     }
 
-    this->repaint();
+    this->update();
 }
 
 void IsometricCubeWidget::initIsoGrid()
@@ -67,10 +67,12 @@ void IsometricCubeWidget::paintEvent(QPaintEvent* event)
     // START TITLES
     painter.setPen(Qt::black);
 
-    int rdFontID = QFontDatabase::addApplicationFont(":/Fonts/reservoirdogs.ttf");
-    QString fontFamily = QFontDatabase::applicationFontFamilies(rdFontID).at(0);
-    QFont font(fontFamily);
-    font.setPointSize(30);
+    //int rdFontID = QFontDatabase::addApplicationFont(":/Fonts/reservoirdogs.ttf");
+    //QString fontFamily = QFontDatabase::applicationFontFamilies(rdFontID).at(0);
+    //QFont font(fontFamily);
+
+    QFont font("Arial", 30);
+    //font.setPointSize(30);
 
     painter.setFont(QFont(font));
 

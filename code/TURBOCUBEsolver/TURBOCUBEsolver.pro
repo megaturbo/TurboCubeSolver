@@ -33,4 +33,4 @@ FORMS    +=\
     TurboCubeSolver.ui
 
 RESOURCES += \
-    RES.qrc
+    resources.qrc
