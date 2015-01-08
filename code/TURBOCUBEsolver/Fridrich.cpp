@@ -114,6 +114,10 @@ QString Fridrich::F2L(Cube *c){
         //because we can reduce complex cases to simpler ones and let the program solve them
         int k = 0;
         while((faceWhite != WHITE  || faceCornerCol1 != col1 || faceEdgeCol1!= col1 || faceEdgeCol2!= col2) && k++<200){
+            qDebug() << "faceWhite: " << faceWhite << " " << WHITE;
+            qDebug() << "faceCornerCol1: " << faceCornerCol1 << " " << col1;
+            qDebug() << "faceEdgeCol1: " << faceEdgeCol1 << " " << col1;
+            qDebug() << "faceEdgeCol2: " << faceEdgeCol2 << " " << col2;
             //edge cubie on the YELLOW face
             if(faceEdgeCol1 == YELLOW || faceEdgeCol2 == YELLOW){
                 qDebug()<< "edge cubie on the YELLOW face";
@@ -142,7 +146,7 @@ QString Fridrich::F2L(Cube *c){
                         }
                         //Basic case 2, corner and edge cubie aligned after one R or L'
                         else if(((faceEdgeCol1 == (faceWhite + 3) % 4) || (faceEdgeCol2 == (faceWhite + 1) % 4))
-                                && ((faceCornerCol1 == YELLOW && faceCornerCol2 == YELLOW) || (faceCornerCol2 == YELLOW && faceEdgeCol1 == YELLOW))){
+                                && ((faceCornerCol1 == YELLOW && faceEdgeCol2 == YELLOW) || (faceCornerCol2 == YELLOW && faceEdgeCol1 == YELLOW))){
                             qDebug()<< "Basic case 2, corner and edge cubie aligned after one R or L'";
                             //WHITE sticker points right
                             if(faceCornerCol1 == YELLOW){
@@ -176,7 +180,7 @@ QString Fridrich::F2L(Cube *c){
                             }
                         }
                         //WHITE sticker and edge col1 sticker are on opposite faces
-                        else if(faceWhite == (faceEdgeCol1 + 2) % 4){
+                        else if((faceWhite == (faceEdgeCol1 + 2) % 4)/* || (faceWhite == (faceEdgeCol2 + 2) % 4)*/){
                             qDebug()<< "WHITE sticker and edge col1 sticker are on opposite faces";
                             //WHITE sticker points right
                             if(faceCornerCol1 == YELLOW){
@@ -186,10 +190,15 @@ QString Fridrich::F2L(Cube *c){
                                 facesTurned.append(c->turnFace(YELLOW, 1));
                                 facesTurned.append(c->turnFace(col1, -1));
                             } else {
-                                facesTurned.append(c->turnFace(YELLOW, col2 - faceCornerCol1));
-                                facesTurned.append(c->turnFace(col2, -1));
-                                facesTurned.append(c->turnFace(YELLOW, -1));
-                                facesTurned.append(c->turnFace(col2, 1));
+//                                facesTurned.append(c->turnFace(YELLOW, col2 - faceCornerCol1));
+//                                facesTurned.append(c->turnFace(col2, -1));
+//                                facesTurned.append(c->turnFace(YELLOW, -1));
+//                                facesTurned.append(c->turnFace(col2, 1));
+                                facesTurned.append(c->turnFace(YELLOW, col1 - faceWhite));
+                                facesTurned.append(c->turnFace(col1, 1));
+                                facesTurned.append(c->turnFace(YELLOW, 1));
+                                facesTurned.append(c->turnFace(col1, -1));
+
                             }
                         }
                         //corner and edge cubie are aligned but the colors aren't matching
