@@ -10,7 +10,7 @@
 #include <QMatrix>
 
 using namespace CubeColor;
-class Cube{
+class Cube {
   public:
     Cube(color matrix[18][3]);
     Cube(const Cube &c);
@@ -20,23 +20,14 @@ class Cube{
     //returns the 2 or 3 colors of the cubie linked to the sticker at (i, j) on matCube
     QList<int> cubie(int i, int j);
 
-    void moveSequence(QString sequence);
     QString scramble();
     static QString reverseSequence(QString sequence);
 
-    //matrix rotation per face
-    void U(int nbQuarterTurn);
-    void D(int nbQuarterTurn);
-    void B(int nbQuarterTurn);
-    void F(int nbQuarterTurn);
-    void R(int nbQuarterTurn);
-    void L(int nbQuarterTurn);
-
+    void moveSequence(QString sequence);
     QString turnFace(int face, int number = 1);
 
     void displayCube();
 
-    color colorAt(int i, int j);
     void setMatrix(color matrix[18][3]);
     color** getMatrix() const;
 
@@ -47,6 +38,13 @@ private:
     bool cubieEqual(QList<int> cubi, color c1, color c2);
     bool cubieEqual(QList<int> cubi, color c1, color c2, color c3);
 
+    //matrix rotation per face
+    void U(int nbQuarterTurn);
+    void D(int nbQuarterTurn);
+    void B(int nbQuarterTurn);
+    void F(int nbQuarterTurn);
+    void R(int nbQuarterTurn);
+    void L(int nbQuarterTurn);
 
     color matCube[18][3];
 };

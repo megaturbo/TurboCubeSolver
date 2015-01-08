@@ -375,6 +375,8 @@ QString Cube::scramble()
         lastMove = nextMove;
     }
 
+    qDebug() << scrambling;
+
     this->moveSequence(scrambling);
 
     return scrambling;
@@ -660,12 +662,6 @@ QString Cube::turnFace(int f, int number) {
     s += " ";
     return s;
 }
-
-color Cube::colorAt(int i, int j){
-    return matCube[i][j];
-}
-
-//Private methods
 
 bool Cube::cubieEqual(QList<int> cubi, color c1, color c2) {
     return ((matCube[cubi.at(0)][cubi.at(1)] == c1 && matCube[cubi.at(2)][cubi.at(3)] == c2)
