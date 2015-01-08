@@ -4,8 +4,12 @@
 #include <qdebug.h>
 #include <Cube.h>
 #include <QList>
-#include <IsometricCubeWidget.h>
+#include "IsometricCubeWidget.h"
 #include <Fridrich.h>
+#include <QVBoxLayout>
+#include <QtWidgets>
+#include <QObject>
+#include "MainWidget.h"
 
 using namespace CubeColor;
 
@@ -44,24 +48,8 @@ int main(int argc, char *argv[])
 
     qDebug() << s;
 
-    // DISPLAY ISOMETRIC CUBE
-
-    // get color matrix
-
-    // create the isometric widget
-    Cube *solvedCube = new Cube(solvedMatrix);
-
-    QString scrambling = solvedCube->scramble();
-
-    qDebug() << "SCRAMBLE: " << scrambling;
-    qDebug() << "UNSCRAMBLE: " << Cube::reverseSequence(scrambling);
-
-    IsometricCubeWidget w(*solvedCube);
-
-    w.show();
-
-    //testCube->turnFace(WHITE,1);
-    //w.setCube(*testCube);
+    MainWidget mainWidget;
+    mainWidget.show();
 
     return a.exec();
 }

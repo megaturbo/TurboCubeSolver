@@ -39,6 +39,9 @@ class Cube{
     color colorAt(int i, int j);
     void setMatrix(color matrix[18][3]);
     color** getMatrix() const;
+
+public slots:
+
 private:
     //utility
     bool cubieEqual(QList<int> cubi, color c1, color c2);
