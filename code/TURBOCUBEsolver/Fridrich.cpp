@@ -569,32 +569,50 @@ QString Fridrich::F2L(Cube *c){
 
 QString Fridrich::OLL(Cube *c){
     QString facesTurned = ""; //string containing the faces we turn to solve this step on the given cube
-    //This step heavily depends on the YELLOW face, this smaller matrix containing its colors simplifies the code
-    color face[3][3];
+    //copying the matrix to simplify the code
+    color matrix[18][3];
     //this boolean checks if the face is already solved
     bool solved = true;
-    for (int x = 0; x < 3; ++x) {
+    for (int x = 0; x < 18; ++x) {
         for (int y = 0; y < 3; ++y) {
-            face[x][y] = c->getMatrix()[YELLOW * 3 + x][y];
-            if(face[x][y] != YELLOW){
+            matrix[x][y] = c->getMatrix()[x][y];
+            if(x >= YELLOW * 3 && matrix[x][y] != YELLOW){
                 solved = false;
             }
         }
     }
     //is it solved already?
     if(solved){
+        qDebug() << "OLL already solved";
         return facesTurned;
     }
     //Crosses
-    else if (face[1][0] == YELLOW && face[1][2] == YELLOW && face[0][1] == YELLOW && face[2][1] == YELLOW) {
-
+    else if (matrix[YELLOW * 3 + 1][0] == YELLOW && matrix[YELLOW * 3 + 1][2] == YELLOW && matrix[YELLOW * 3 + 0][1] == YELLOW && matrix[YELLOW * 3 + 2][1] == YELLOW) {
+        qDebug() << "Crosses";
+        //No corner
+        if(matrix[YELLOW * 3 + 0][0] != YELLOW && matrix[YELLOW * 3 + 2][2] != YELLOW && matrix[YELLOW * 3 + 0][2] != YELLOW && matrix[YELLOW * 3 + 2][0] != YELLOW){
+            qDebug() << "No corner";
+            //first side YELLOW parallel
+            if(matrix[0][2] == YELLOW && matrix[2][2] == YELLOW && matrix[ORANGE * 3][2] == YELLOW && matrix[ORANGE * 3 + 2][2] == YELLOW){
+                qDebug() << "first side YELLOW parallel";
+                c->moveSequence("R U2 R' U' R U R' U' R U' R'");
+                return "R U2 R' U' R U R' U' R U' R'";
+            }
+            //second side YELLOW parallel
+            else if (matrix[BLUE * 3][2] == YELLOW && matrix[BLUE * 3 + 2][2] == YELLOW && matrix[GREEN * 3][2] == YELLOW && matrix[GREEN * 3 + 2][2] == YELLOW){
+                qDebug() << "second side YELLOW parallel";
+                c->moveSequence("R U R' U R U' R' U R U2 R'");
+                return "R U R' U R U' R' U R U2 R'";
+            }
+            //first
+        }
     }
     //dots
-    else if (face[1][0] != YELLOW && face[1][2] != YELLOW && face[0][1] != YELLOW && face[2][1] != YELLOW) {
+    else if (matrix[YELLOW * 3 + 1][0] != YELLOW && matrix[YELLOW * 3 + 1][2] != YELLOW && matrix[YELLOW * 3 + 0][1] != YELLOW && matrix[YELLOW * 3 + 2][1] != YELLOW) {
 
     }
     //lines
-    else if ((face[1][0] == YELLOW && face[1][2] == YELLOW) || (face[0][1] == YELLOW && face[2][1] == YELLOW)) {
+    else if ((matrix[YELLOW * 3 + 1][0] == YELLOW && matrix[YELLOW * 3 + 1][2] == YELLOW) || (matrix[YELLOW * 3 + 0][1] == YELLOW && matrix[YELLOW * 3 + 2][1] == YELLOW)) {
 
     }
     //others
