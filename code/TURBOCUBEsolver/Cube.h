@@ -23,7 +23,7 @@ class Cube {
     QString scramble();
     static QString reverseSequence(QString sequence);
 
-    void moveSequence(QString sequence);
+    QString moveSequence(QString sequence, color col1, color col2);
     QString turnFace(int face, int number = 1);
 
     void displayCube();
@@ -39,12 +39,12 @@ private:
     bool cubieEqual(QList<int> cubi, color c1, color c2, color c3);
 
     //matrix rotation per face
-    void U(int nbQuarterTurn);
-    void D(int nbQuarterTurn);
-    void B(int nbQuarterTurn);
-    void F(int nbQuarterTurn);
-    void R(int nbQuarterTurn);
-    void L(int nbQuarterTurn);
+    QString U(int nbQuarterTurn, color col1, color col2);
+    QString D(int nbQuarterTurn, color col1, color col2);
+    QString B(int nbQuarterTurn, color col1, color col2);
+    QString F(int nbQuarterTurn, color col1, color col2);
+    QString R(int nbQuarterTurn, color col1, color col2);
+    QString L(int nbQuarterTurn, color col1, color col2);
 
     color matCube[18][3];
 };

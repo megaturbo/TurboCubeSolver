@@ -377,7 +377,7 @@ QString Cube::scramble()
 
     qDebug() << scrambling;
 
-    this->moveSequence(scrambling);
+    this->moveSequence(scrambling, RED, YELLOW);
 
     return scrambling;
 
@@ -409,12 +409,14 @@ QString Cube::reverseSequence(QString sequence)
     return reversed;
 }
 
-void Cube::moveSequence(QString sequence) {
+QString Cube::moveSequence(QString sequence, color col1, color col2) {
 
     QStringList moves = sequence.split(' ');
 
     QChar theMove;
     int nbQTurn;
+
+    QString facesTurned = "";
 
     foreach (QString move, moves)
     {
@@ -434,51 +436,99 @@ void Cube::moveSequence(QString sequence) {
 
         switch (theMove.toLatin1()) {
         case 'F':
-            F(nbQTurn);
+            facesTurned += F(nbQTurn, col1, col2);
             break;
         case 'B':
-            B(nbQTurn);
+            facesTurned += B(nbQTurn, col1, col2);
             break;
         case 'L':
-            L(nbQTurn);
+            facesTurned += L(nbQTurn, col1, col2);
             break;
         case 'R':
-            R(nbQTurn);
+            facesTurned += R(nbQTurn, col1, col2);
             break;
         case 'U':
-            U(nbQTurn);
+            facesTurned += U(nbQTurn, col1, col2);
             break;
         case 'D':
-            D(nbQTurn);
+            facesTurned += D(nbQTurn, col1, col2);
             break;
         }
     }
+    return facesTurned;
 }
 
 //matrix rotation per face
 //TODO: turn faces relatively
-void Cube::U(int nbQuarterTurn) {
-    turnFace(YELLOW, nbQuarterTurn);
+QString Cube::U(int nbQuarterTurn, color col1, color col2) {
+    return turnFace(col2, nbQuarterTurn);
 }
 
-void Cube::D(int nbQuarterTurn) {
-    turnFace(WHITE, nbQuarterTurn);
+QString Cube::D(int nbQuarterTurn, color col1, color col2) {
+    color face;
+    switch(col2){
+    case YELLOW:
+        face = WHITE;
+        break;
+    case WHITE:
+        face = YELLOW;
+        break;
+    default:
+        face = (color) ((col2 + 2) % 4);
+        break;
+    }
+    return turnFace(face, nbQuarterTurn);
 }
 
-void Cube::B(int nbQuarterTurn) {
-    turnFace(ORANGE, nbQuarterTurn);
+QString Cube::B(int nbQuarterTurn, color col1, color col2) {
+    color face;
+    switch(col1){
+    case YELLOW:
+        face = WHITE;
+        break;
+    case WHITE:
+        face = YELLOW;
+        break;
+    default:
+        face = (color) ((col1 + 2) % 4);
+        break;
+    }
+    return turnFace(face, nbQuarterTurn);
 }
 
-void Cube::F(int nbQuarterTurn) {
-    turnFace(RED, nbQuarterTurn);
+QString Cube::F(int nbQuarterTurn, color col1, color col2) {
+    return turnFace(col1, nbQuarterTurn);
 }
 
-void Cube::R(int nbQuarterTurn) {
-    turnFace(GREEN, nbQuarterTurn);
+QString Cube::R(int nbQuarterTurn, color col1, color col2) {
+    color face;
+    switch(col1){
+    case YELLOW:
+        face = (color) ((col2 + 1) % 4);
+        break;
+    case WHITE:
+        face = (color) ((col2 + 3) % 4);
+        break;
+    default:
+        face = (color) ((col1 + 3) % 4);
+        break;
+    }
+    return turnFace(face, nbQuarterTurn);
 }
 
-void Cube::L(int nbQuarterTurn) {
-    turnFace(BLUE, nbQuarterTurn);
+QString Cube::L(int nbQuarterTurn, color col1, color col2) {
+    color face;
+    switch(col1){
+    case YELLOW:
+        face = (color) ((col2 + 3) % 4);
+    case WHITE:
+        face = (color) ((col2 + 1) % 4);
+        break;
+    default:
+        face = (color) ((col1 + 1) % 4);
+        break;
+    }
+    return turnFace(face, nbQuarterTurn);
 }
 
 QString Cube::turnFace(int f, int number) {

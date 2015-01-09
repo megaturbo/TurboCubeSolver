@@ -60,6 +60,6 @@ void MainWidget::solveSlot()
 
 void MainWidget::sendSequenceSlot()
 {
-    displayedCube->moveSequence(sequenceLE->text());
+    displayedCube->moveSequence(sequenceLE->text(), RED, YELLOW);
     isometricCubeWidget->setCube(*displayedCube);
 }

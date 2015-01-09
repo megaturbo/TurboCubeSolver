@@ -10,6 +10,7 @@ QString Fridrich::solve(Cube *c){
     QString step2 = F2L(c);
     c->displayCube();
     QString step3 = OLL(c);
+    step3 += OLL(c);
     c->displayCube();
     QString step4 = PLL(c);
     c->displayCube();
@@ -103,7 +104,6 @@ QString Fridrich::F2LPair(Cube *c, int col)
     QString facesTurned;
     color col1 = (color) col;
     color col2 = (color)((col1 + 1) % 4);
-    qDebug() << endl << endl << "For WHITE " << col1 << " " << col2 << "pair" << endl;
     QList<int> cornerPos = c->locateCubie(WHITE, col1, col2); //Locating the corner cubie
     QList<int> edgePos = c->locateCubie(col1, col2);
     color faceWhite = (color) (cornerPos.at(0) / 3); //face on which the WHITE sticker is
@@ -113,7 +113,8 @@ QString Fridrich::F2LPair(Cube *c, int col)
     color faceEdgeCol2 = (color) (edgePos.at(2) / 3);
     //while the pair of cubies is not at its solved state. The loop is useful
     //because we can reduce complex cases to simpler ones and let the program solve them
-    while((faceWhite != WHITE  || faceCornerCol1 != col1 || faceEdgeCol1!= col1 || faceEdgeCol2!= col2)){
+    int k = 0;
+    while((faceWhite != WHITE  || faceCornerCol1 != col1 || faceEdgeCol1!= col1 || faceEdgeCol2!= col2) && k++ < 50){
         //edge cubie on the YELLOW face
         if(faceEdgeCol1 == YELLOW || faceEdgeCol2 == YELLOW){
             qDebug()<< "edge cubie on the YELLOW face";
@@ -501,6 +502,9 @@ QString Fridrich::F2LPair(Cube *c, int col)
         faceEdgeCol1 = (color) (edgePos.at(0) / 3);
         faceEdgeCol2 = (color) (edgePos.at(2) / 3);
     }
+    if (k > 50){
+        qDebug() << "Failure for pair " << col1 << col2;
+    }
     return facesTurned;
 }
 
@@ -522,7 +526,6 @@ QString Fridrich::cross(Cube *c){
                                 if(facesTurned.count(' ') < facesTurnedMin.count(' ')){
                                     facesTurnedMin = facesTurned;
                                 }
-                                delete testCube;
                             }
                         }
                     }
@@ -530,10 +533,9 @@ QString Fridrich::cross(Cube *c){
             }
         }
     }
-    c->moveSequence(facesTurnedMin);
+    c->moveSequence(facesTurnedMin, RED, YELLOW);
     return facesTurnedMin;
 }
-
 
 QString Fridrich::F2L(Cube *c){
     QString facesTurnedMin = "F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L ";
@@ -555,7 +557,6 @@ QString Fridrich::F2L(Cube *c){
                                 if(facesTurned.count(' ') < facesTurnedMin.count(' ')){
                                     facesTurnedMin = facesTurned;
                                 }
-                                delete testCube;
                             }
                         }
                     }
@@ -563,12 +564,11 @@ QString Fridrich::F2L(Cube *c){
             }
         }
     }
-    c->moveSequence(facesTurnedMin);
+    c->moveSequence(facesTurnedMin, RED, YELLOW);
     return facesTurnedMin;
 }
 
 QString Fridrich::OLL(Cube *c){
-    QString facesTurned = ""; //string containing the faces we turn to solve this step on the given cube
     //copying the matrix to simplify the code
     color matrix[18][3];
     //this boolean checks if the face is already solved
@@ -584,45 +584,110 @@ QString Fridrich::OLL(Cube *c){
     //is it solved already?
     if(solved){
         qDebug() << "OLL already solved";
-        return facesTurned;
+        return "";
     }
-    //Crosses
-    else if (matrix[YELLOW * 3 + 1][0] == YELLOW && matrix[YELLOW * 3 + 1][2] == YELLOW && matrix[YELLOW * 3 + 0][1] == YELLOW && matrix[YELLOW * 3 + 2][1] == YELLOW) {
-        qDebug() << "Crosses";
-        //No corner
-        if(matrix[YELLOW * 3 + 0][0] != YELLOW && matrix[YELLOW * 3 + 2][2] != YELLOW && matrix[YELLOW * 3 + 0][2] != YELLOW && matrix[YELLOW * 3 + 2][0] != YELLOW){
-            qDebug() << "No corner";
-            //first side YELLOW parallel
-            if(matrix[0][2] == YELLOW && matrix[2][2] == YELLOW && matrix[ORANGE * 3][2] == YELLOW && matrix[ORANGE * 3 + 2][2] == YELLOW){
-                qDebug() << "first side YELLOW parallel";
-                c->moveSequence("R U2 R' U' R U R' U' R U' R'");
-                return "R U2 R' U' R U R' U' R U' R'";
+    int nBCorner = (matrix[YELLOW * 3 + 0][0] == YELLOW) + (matrix[YELLOW * 3 + 2][2] == YELLOW) + (matrix[YELLOW * 3 + 0][2] == YELLOW) + (matrix[YELLOW * 3 + 2][0] == YELLOW);
+    qDebug() << nBCorner;
+    //the 50+ cases can be seen from all four faces, so the code has to check them all
+    for (int co = 0; co < 4; ++co) {
+        color col = (color) co;
+        color topRight;
+        color topLeft;
+        color botRight;
+        color botLeft;
+        switch(col){
+        case RED:
+            topRight = matrix[YELLOW * 3][0];
+            topLeft = matrix[YELLOW * 3 + 2][0];
+            botRight = matrix[YELLOW * 3][2];
+            botLeft = matrix[YELLOW * 3 + 2][2];
+            break;
+        case BLUE:
+            topRight = matrix[YELLOW * 3 + 2][0];
+            topLeft = matrix[YELLOW * 3 + 2][2];
+            botRight = matrix[YELLOW * 3][0];
+            botLeft = matrix[YELLOW * 3][2];
+            break;
+        case ORANGE:
+            topRight = matrix[YELLOW * 3 + 2][2];
+            topLeft = matrix[YELLOW * 3][2];
+            botRight = matrix[YELLOW * 3 + 2][0];
+            botLeft = matrix[YELLOW * 3][0];
+            break;
+        case GREEN:
+            topRight = matrix[YELLOW * 3][2];
+            topLeft = matrix[YELLOW * 3][0];
+            botRight = matrix[YELLOW * 3 + 2][2];
+            botLeft = matrix[YELLOW * 3 + 2][0];
+            break;
+        default:
+            break;
+        }
+
+        //Crosses
+        if (matrix[YELLOW * 3 + 1][0] == YELLOW && matrix[YELLOW * 3 + 1][2] == YELLOW && matrix[YELLOW * 3 + 0][1] == YELLOW && matrix[YELLOW * 3 + 2][1] == YELLOW) {
+            qDebug() << "Crosses";
+            //No corner
+            if(nBCorner == 0) {
+                qDebug() << "No corner";
+                //side YELLOW parallel
+                if(matrix[col * 3 + 0][2] == YELLOW && matrix[col * 3 + 2][2] == YELLOW && matrix[((col + 2) % 4) * 3][2] == YELLOW && matrix[((col + 2) % 4) * 3 + 2][2] == YELLOW) {
+                    qDebug() << "first side YELLOW parallel";
+                    return c->moveSequence("R U2 R' U' R U R' U' R U' R'", col, YELLOW);
+                }
+                //first not parallel case both RED corner are YELLOW
+                else if (matrix[col * 3 + 2][2] == YELLOW && matrix[((col + 2) % 4) * 3][2] == YELLOW && matrix[((col + 3) % 4) * 3][2] == YELLOW && matrix[((col + 3) % 4) * 3 + 2][2] == YELLOW) {
+                    return c->moveSequence("L U' R' U L' U R U R' U R", col, YELLOW);
+                }
             }
-            //second side YELLOW parallel
-            else if (matrix[BLUE * 3][2] == YELLOW && matrix[BLUE * 3 + 2][2] == YELLOW && matrix[GREEN * 3][2] == YELLOW && matrix[GREEN * 3 + 2][2] == YELLOW){
-                qDebug() << "second side YELLOW parallel";
-                c->moveSequence("R U R' U R U' R' U R U2 R'");
-                return "R U R' U R U' R' U R U2 R'";
+            //One corner
+            else if (nBCorner == 1){
+                //algorithm to right
+                if(botLeft == YELLOW && matrix[col * 3 + 2][2] != YELLOW) {
+                    return c->moveSequence("R' U2 R U R' U R", col, YELLOW);
+                }
+                //algorithm to left
+                else if (botLeft == YELLOW && matrix[col * 3 + 2][2] == YELLOW) {
+                    return c->moveSequence("L' U R U' L U R'", col, YELLOW);
+                }
             }
-            //first
+            //Two corners and diagonal
+            else if((matrix[YELLOW * 3 + 0][0] == YELLOW && matrix[YELLOW * 3 + 2][2] == YELLOW) || (matrix[YELLOW * 3 + 2][0] == YELLOW && matrix[YELLOW * 3 + 0][2] == YELLOW)){
+                if(matrix[((col + 1) % 4) * 3][2] == YELLOW) {
+                  return c->moveSequence("R' F' L' F R F' L F", col, YELLOW);
+                }
+            }
+            //Two corners
+            else if(nBCorner == 2) {
+                //YELLOW on the same side face
+                if (matrix[col * 3][2] == YELLOW && matrix[col * 3 + 2][2] == YELLOW) {
+                    return c->moveSequence("R2 D R' U2 R D' R' U2 R'", col, YELLOW);
+                }
+                //YELLOW opposite
+                else if (matrix[col * 3][2] == YELLOW) {
+                    return c->moveSequence("R' F' L F R F' L' F", col, YELLOW);
+                }
+            }
+        }
+        //dots
+        else if (matrix[YELLOW * 3 + 1][0] != YELLOW && matrix[YELLOW * 3 + 1][2] != YELLOW && matrix[YELLOW * 3 + 0][1] != YELLOW && matrix[YELLOW * 3 + 2][1] != YELLOW) {
+            return c->moveSequence("R U R' U R' F R F' U2 R' F R F'", col, YELLOW);
+        }
+        //lines
+        else if ((matrix[YELLOW * 3 + 1][0] == YELLOW && matrix[YELLOW * 3 + 1][2] == YELLOW) || (matrix[YELLOW * 3 + 0][1] == YELLOW && matrix[YELLOW * 3 + 2][1] == YELLOW)) {
+            //horizontal line
+            if(matrix[col * 3 + 1][2] == YELLOW){
+                return c->moveSequence("L' B' L U' R' U R U' R' U R L' B L", col, YELLOW);
+            }
+        }
+        //others
+        else {
+            //little L yellow left and up
+            if (matrix[col * 3 + 1][2] == YELLOW && matrix[((col + 1) % 4) * 3 + 1][2] != YELLOW){
+                return c->moveSequence("F R U R' U' R U R' U' F'", col, YELLOW);
+            }
         }
     }
-    //dots
-    else if (matrix[YELLOW * 3 + 1][0] != YELLOW && matrix[YELLOW * 3 + 1][2] != YELLOW && matrix[YELLOW * 3 + 0][1] != YELLOW && matrix[YELLOW * 3 + 2][1] != YELLOW) {
-
-    }
-    //lines
-    else if ((matrix[YELLOW * 3 + 1][0] == YELLOW && matrix[YELLOW * 3 + 1][2] == YELLOW) || (matrix[YELLOW * 3 + 0][1] == YELLOW && matrix[YELLOW * 3 + 2][1] == YELLOW)) {
-
-    }
-    //others
-    else {
-
-    }
-
-    c->getMatrix(); //REMOVING WARNINGS LOL))
-
-    return facesTurned;
 }
 
 QString Fridrich::PLL(Cube *c){
