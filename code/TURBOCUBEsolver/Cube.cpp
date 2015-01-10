@@ -409,7 +409,14 @@ QString Cube::reverseSequence(QString sequence)
     return reversed;
 }
 
-QString Cube::moveSequence(QString sequence, color col1, color col2) {
+/**
+ * @brief Cube::moveSequence Move a sequence depending of the cube orientation
+ * @param sequence The sequence to do
+ * @param colorF The color on the Front
+ * @param colorU The color on the Up
+ * @return The actual sequence did
+ */
+QString Cube::moveSequence(QString sequence, color colorF, color colorU) {
 
     QStringList moves = sequence.split(' ');
 
@@ -436,22 +443,22 @@ QString Cube::moveSequence(QString sequence, color col1, color col2) {
 
         switch (theMove.toLatin1()) {
         case 'F':
-            facesTurned += F(nbQTurn, col1, col2);
+            facesTurned += F(nbQTurn, colorF, colorU);
             break;
         case 'B':
-            facesTurned += B(nbQTurn, col1, col2);
+            facesTurned += B(nbQTurn, colorF, colorU);
             break;
         case 'L':
-            facesTurned += L(nbQTurn, col1, col2);
+            facesTurned += L(nbQTurn, colorF, colorU);
             break;
         case 'R':
-            facesTurned += R(nbQTurn, col1, col2);
+            facesTurned += R(nbQTurn, colorF, colorU);
             break;
         case 'U':
-            facesTurned += U(nbQTurn, col1, col2);
+            facesTurned += U(nbQTurn, colorF, colorU);
             break;
         case 'D':
-            facesTurned += D(nbQTurn, col1, col2);
+            facesTurned += D(nbQTurn, colorF, colorU);
             break;
         }
     }

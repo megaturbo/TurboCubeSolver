@@ -3,15 +3,8 @@
 MainWidget::MainWidget(QWidget *parent) :
     QWidget(parent)
 {
-    color solvedMatrix[18][3];
 
-    for (int x = 0; x < 18; ++x) {
-        for (int y = 0; y < 3; ++y) {
-            solvedMatrix[x][y] = (color)(x / 3);
-        }
-    }
-
-    displayedCube = new Cube(solvedMatrix);
+    initSolvedCube();
 
     isometricCubeWidget = new IsometricCubeWidget(*displayedCube);
 
@@ -28,6 +21,7 @@ MainWidget::MainWidget(QWidget *parent) :
     // Buttons
     btLayout->addWidget(scramblePB);
     btLayout->addWidget(solvePB);
+    btLayout->addWidget(resetPB);
     btLayout->addWidget(sequenceLE);
     btLayout->addWidget(sequencePB);
 
@@ -38,12 +32,32 @@ MainWidget::MainWidget(QWidget *parent) :
     connect(scramblePB, SIGNAL(clicked()), this, SLOT(scrambleSlot()));
     connect(solvePB, SIGNAL(clicked()), this, SLOT(solveSlot()));
     connect(sequencePB, SIGNAL(clicked()), this, SLOT(sendSequenceSlot()));
+    connect(resetPB, SIGNAL(clicked()), this, SLOT(resetSlot()));
 
     this->setLayout(vLayout);
     this->resize(1000,600);
     this->show();
 
 
+}
+
+void MainWidget::initSolvedCube()
+{
+    color solvedMatrix[18][3];
+
+    for (int x = 0; x < 18; ++x) {
+        for (int y = 0; y < 3; ++y) {
+            solvedMatrix[x][y] = (color)(x / 3);
+        }
+    }
+
+    displayedCube = new Cube(solvedMatrix);
+}
+
+void MainWidget::resetSlot()
+{
+    initSolvedCube();
+    isometricCubeWidget->setCube(*displayedCube);
 }
 
 void MainWidget::scrambleSlot()

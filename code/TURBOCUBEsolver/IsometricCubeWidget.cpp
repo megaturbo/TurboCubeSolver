@@ -74,8 +74,8 @@ void IsometricCubeWidget::paintEvent(QPaintEvent* event)
 
     painter.setFont(QFont(font));
 
-    painter.drawText(isogrid[3][0].rx()+0.3*W,100,"FRONT");
-    painter.drawText(isogrid[4][0].rx()+4*W,100,"BACK");
+    painter.drawText(isogrid[3][0].rx() + 0.3 * W, 100, "FRONT");
+    painter.drawText(isogrid[4][0].rx() + 4 * W, 100, "BACK");
 
     // END TITLES
 
@@ -90,7 +90,7 @@ void IsometricCubeWidget::paintEvent(QPaintEvent* event)
     shadow.append(isogrid[3][3]);
     painter.drawPolygon(shadow);
 
-    shadow.translate(4*W,0);
+    shadow.translate(4 * W, 0);
     //painter.drawPolygon(shadow);
 
     // END SHADOW
