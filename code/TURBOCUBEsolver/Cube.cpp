@@ -7,6 +7,10 @@
 #include <QGlobal.h>
 #include <QTime>
 
+Cube::~Cube(){
+
+}
+
 void Cube::displayCube() {
     QString s = "\n";
     for (int y = 0; y < 3; y++) {
@@ -183,6 +187,7 @@ QList<int> Cube::locateCubie(color c1, color c2, color c3) {
     return cubi;
 }
 
+//return the indices of the stickers of the cubie containing the sticker at (i, j)
 QList<int> Cube::cubie(int i, int j) {
     //not on the cube
     if(i < 0 || i > 17 || j < 0 || j > 3) {
@@ -194,7 +199,7 @@ QList<int> Cube::cubie(int i, int j) {
         int y = j;
         //on this face
         color face = (color) (i /3);
-        //we had the indices to this qlist and we will return it at the end of the method
+        //we add the indices to this qlist and we will return it at the end of the method
         QList<int> ret;
         ret += i;
         ret += j;
@@ -544,15 +549,15 @@ QString Cube::turnFace(int f, int number) {
 //    qDebug() << "Rotating " << face << "face, by " << number << "quarter turns";
     //defining which stickers are on the face
     //those will get spinned
-    number = (number + 4) % 4;
+    number = (number + 8) % 4;
     if(number == 0){
         return "";
     }
-    int* indicesFaceX = new int[8]{face * 3 + 2, face * 3 + 2,
+    int indicesFaceX[] = {face * 3 + 2, face * 3 + 2,
                             face * 3 + 1, face * 3 + 2,
                             face * 3, face * 3,
                             face * 3 + 1, face * 3};
-    int* indicesFaceY = new int[8]{1, 0,
+    int indicesFaceY[] = {1, 0,
                             2, 2,
                             1, 2,
                             0, 0};
@@ -716,6 +721,10 @@ QString Cube::turnFace(int f, int number) {
         qDebug() << "no rotation for " << number << "quarter turns";
         break;
     }
+    delete [] indicesX;
+    delete [] indicesY;
+    indicesX = 0;
+    indicesY = 0;
     s += " ";
     return s;
 }

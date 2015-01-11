@@ -14,6 +14,7 @@ class Cube {
   public:
     Cube(color matrix[18][3]);
     Cube(const Cube &c);
+    ~Cube();
     //returns faces the cubie's on
     QList<int> locateCubie(color c1, color c2);
     QList<int> locateCubie(color c1, color c2, color c3);

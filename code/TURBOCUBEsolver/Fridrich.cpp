@@ -6,14 +6,10 @@
 
 QString Fridrich::solve(Cube *c){
     QString step1 = cross(c);
-    c->displayCube();
     QString step2 = F2L(c);
-    c->displayCube();
     QString step3 = OLL(c);
     step3 += OLL(c);
-    c->displayCube();
     QString step4 = PLL(c);
-    c->displayCube();
     qDebug() << "Cross: " << step1 << step1.count(' ') << " moves.";
     qDebug() << "F2L: " << step2 << step2.count(' ') << " moves.";
     qDebug() << "OLL: " << step3 << step3.count(' ') << " moves.";
@@ -117,19 +113,19 @@ QString Fridrich::F2LPair(Cube *c, int col)
     while((faceWhite != WHITE  || faceCornerCol1 != col1 || faceEdgeCol1!= col1 || faceEdgeCol2!= col2) && k++ < 50){
         //edge cubie on the YELLOW face
         if(faceEdgeCol1 == YELLOW || faceEdgeCol2 == YELLOW){
-            qDebug()<< "edge cubie on the YELLOW face";
+          //  qDebug()<< "edge cubie on the YELLOW face";
             //corner cubie on the YELLOW face
             if(faceWhite == YELLOW || faceCornerCol1 == YELLOW || faceCornerCol2 == YELLOW){
-                qDebug()<< "corner cubie on the YELLOW face";
+             //   qDebug()<< "corner cubie on the YELLOW face";
                 //Corner pointing outward
                 if(faceWhite < 4 && faceWhite > -1){
-                    qDebug()<< "Corner pointing outward";
+                  //  qDebug()<< "Corner pointing outward";
                     //Basic case 1, corner and edge aligned
                     if(faceCornerCol1 == faceEdgeCol1 && faceCornerCol2 == faceEdgeCol2){
-                        qDebug()<< "Basic case 1, corner and edge aligned";
+                       // qDebug()<< "Basic case 1, corner and edge aligned";
                         //WHITE sticker points right
                         if(faceCornerCol1 == YELLOW){
-                            qDebug()<< "WHITE sticker points right";
+                           // qDebug()<< "WHITE sticker points right";
                             facesTurned.append(c->turnFace(YELLOW, col1 - faceEdgeCol2));
                             facesTurned.append(c->turnFace(col2, -1));
                             facesTurned.append(c->turnFace(YELLOW, 1));
@@ -144,10 +140,10 @@ QString Fridrich::F2LPair(Cube *c, int col)
                     //Basic case 2, corner and edge cubie aligned after one R or L'
                     else if(((faceEdgeCol1 == (faceWhite + 3) % 4) || (faceEdgeCol2 == (faceWhite + 1) % 4))
                             && ((faceCornerCol1 == YELLOW && faceEdgeCol2 == YELLOW) || (faceCornerCol2 == YELLOW && faceEdgeCol1 == YELLOW))){
-                        qDebug()<< "Basic case 2, corner and edge cubie aligned after one R or L'";
+                        //qDebug()<< "Basic case 2, corner and edge cubie aligned after one R or L'";
                         //WHITE sticker points right
                         if(faceCornerCol1 == YELLOW){
-                            qDebug()<< "WHITE sticker points right";
+                            //qDebug()<< "WHITE sticker points right";
                             facesTurned.append(c->turnFace(YELLOW, col2 - faceCornerCol2));
                             facesTurned.append(c->turnFace(col1, 1));
                             facesTurned.append(c->turnFace(YELLOW, 1));
@@ -161,10 +157,10 @@ QString Fridrich::F2LPair(Cube *c, int col)
                     }
                     //WHITE sticker and edge col1 sticker are on the same face
                     else if(faceWhite == faceEdgeCol1){
-                        qDebug()<< "WHITE sticker and edge col1 sticker are on the same face";
+                        //qDebug()<< "WHITE sticker and edge col1 sticker are on the same face";
                         //WHITE sticker points right
                         if(faceCornerCol1 == YELLOW){
-                            qDebug()<< "WHITE sticker points right";
+                            //qDebug()<< "WHITE sticker points right";
                             facesTurned.append(c->turnFace(YELLOW, col1 - faceCornerCol2));
                             facesTurned.append(c->turnFace(col1, 1));
                             facesTurned.append(c->turnFace(YELLOW, -1));
@@ -219,10 +215,10 @@ QString Fridrich::F2LPair(Cube *c, int col)
 
                     //WHITE sticker and edge col2 sticker are on the same face
                     else if(faceWhite == faceEdgeCol2){
-                        qDebug()<< "WHITE sticker and edge col2 sticker are on the same face";
+                        //qDebug()<< "WHITE sticker and edge col2 sticker are on the same face";
                         //WHITE sticker points right
                         if(faceCornerCol1 == YELLOW){
-                            qDebug()<< "WHITE sticker points right";
+                            //qDebug()<< "WHITE sticker points right";//
                             facesTurned.append(c->turnFace(YELLOW, col1 - faceWhite));
                             facesTurned.append(c->turnFace(col1, 1));
                             facesTurned.append(c->turnFace(YELLOW, -1));
@@ -236,10 +232,10 @@ QString Fridrich::F2LPair(Cube *c, int col)
                     }
                     //corner and edge aren't adjacent
                     else {
-                        qDebug()<< "corner and edge aren't adjacent";
+                     //   qDebug()<< "corner and edge aren't adjacent";
                         //WHITE sticker points right
                         if(faceCornerCol1 == YELLOW){
-                            qDebug()<< "WHITE sticker points right";
+                           // qDebug()<< "WHITE sticker points right";
                             facesTurned.append(c->turnFace(YELLOW, col2 - faceWhite));
                             //                                facesTurned.append(c->turnFace(YELLOW, col2 - faceEdgeCol2 + 1));
                             cornerPos = c->locateCubie(WHITE, col1, col2); //Locating the corner cubie
@@ -252,7 +248,7 @@ QString Fridrich::F2LPair(Cube *c, int col)
                             facesTurned.append(c->turnFace(col2, -1));
                             //edge and corner similarily aligned
                             if((faceCornerCol1 == YELLOW && faceEdgeCol1 == YELLOW) || (faceCornerCol2 == YELLOW && faceEdgeCol2 == YELLOW)){
-                                qDebug() << "edge and corner similarily aligned";
+                           //     qDebug() << "edge and corner similarily aligned";
                                 facesTurned.append(c->turnFace(YELLOW, faceCornerCol2 - faceEdgeCol2));
                             } else {
                                 facesTurned.append(c->turnFace(YELLOW, col1 - faceEdgeCol1));
@@ -271,7 +267,7 @@ QString Fridrich::F2LPair(Cube *c, int col)
                             facesTurned.append(c->turnFace(col1, 1));
                             //edge and corner similarily aligned
                             if((faceCornerCol1 == YELLOW && faceEdgeCol1 == YELLOW) || (faceCornerCol2 == YELLOW && faceEdgeCol2 == YELLOW)){
-                                qDebug() << "edge and corner similarily aligned";
+                               // qDebug() << "edge and corner similarily aligned";
                                 facesTurned.append(c->turnFace(YELLOW, faceCornerCol1 - faceEdgeCol1));
                             } else {
                                 facesTurned.append(c->turnFace(YELLOW, col2 - faceEdgeCol2));
@@ -282,13 +278,13 @@ QString Fridrich::F2LPair(Cube *c, int col)
                 }
                 //WHITE sticker is on the YELLOW face
                 else {
-                    qDebug()<< "WHITE sticker is on the YELLOW face";
+         //           qDebug()<< "WHITE sticker is on the YELLOW face";
                     //Cubies are adjacent and the col1/col2 stickers from both edge and corner are on the same face
                     if(faceEdgeCol1 == faceCornerCol1 || faceEdgeCol2 == faceCornerCol2){
-                        qDebug()<< "Cubies are adjacent and the col1/col2 stickers from both edge and corner are on the same face";
+         //               qDebug()<< "Cubies are adjacent and the col1/col2 stickers from both edge and corner are on the same face";
                         //edge corner has col1 on the YELLOW face
                         if(faceCornerCol1 == YELLOW) {
-                            qDebug()<< "edge corner has col1 on the YELLOW face";
+        //                    qDebug()<< "edge corner has col1 on the YELLOW face";
                             facesTurned.append(c->turnFace(YELLOW, col2 - faceCornerCol1));
                             facesTurned.append(c->turnFace(col2, -1));
                             facesTurned.append(c->turnFace(YELLOW, -1));
@@ -302,10 +298,10 @@ QString Fridrich::F2LPair(Cube *c, int col)
                     }
                     //Cubies are adjacent and the col1/col2 stickers are not matching
                     if(faceEdgeCol1 == faceCornerCol2 || faceEdgeCol2 == faceCornerCol1){
-                        qDebug()<< "Cubies are adjacent and the col1/col2 stickers are not matching";
+                   //     qDebug()<< "Cubies are adjacent and the col1/col2 stickers are not matching";
                         //edge corner has col1 on the YELLOW face
                         if(faceCornerCol1 == YELLOW) {
-                            qDebug()<< "edge corner has col1 on the YELLOW face";
+           ////                 qDebug()<< "edge corner has col1 on the YELLOW face";
                             facesTurned.append(c->turnFace(YELLOW, col2 - faceCornerCol1));
                             facesTurned.append(c->turnFace(col2, -1));
                             facesTurned.append(c->turnFace(YELLOW, 2));
@@ -319,10 +315,10 @@ QString Fridrich::F2LPair(Cube *c, int col)
                     }
                     //cubies are not adjacent and col1 edge sticker is opposite to col1 corner sticker
                     else if (faceEdgeCol1 == (faceCornerCol1 + 2) % 4 || faceEdgeCol2 == (faceCornerCol2 + 2) % 4) {
-                        qDebug()<< "cubies are not adjacent and col1 edge sticker is opposite to col1 corner sticker";
+             //           qDebug()<< "cubies are not adjacent and col1 edge sticker is opposite to col1 corner sticker";
                         //edge corner has col1 on the YELLOW face
                         if(faceCornerCol1 == YELLOW) {
-                            qDebug()<< "edge corner has col1 on the YELLOW face";
+           //                 qDebug()<< "edge corner has col1 on the YELLOW face";
                             facesTurned.append(c->turnFace(YELLOW, col2 - faceEdgeCol2));
                             facesTurned.append(c->turnFace(col2, -1));
                             facesTurned.append(c->turnFace(YELLOW, 2));
@@ -336,10 +332,10 @@ QString Fridrich::F2LPair(Cube *c, int col)
                     }
                     //Cubies are not adjacent and col1 is opposite to col2
                     else {
-                        qDebug()<< "Cubies are not adjacent and col1 is opposite to col2";
+                //        qDebug()<< "Cubies are not adjacent and col1 is opposite to col2";
                         //edge corner has col1 on the YELLOW face
                         if(faceCornerCol1 == YELLOW) {
-                            qDebug()<< "edge corner has col1 on the YELLOW face";
+          //                  qDebug()<< "edge corner has col1 on the YELLOW face";
                             facesTurned.append(c->turnFace(YELLOW, col2 - faceEdgeCol2));
                             facesTurned.append(c->turnFace(col2, -1));
                             facesTurned.append(c->turnFace(YELLOW, -1));
@@ -355,13 +351,13 @@ QString Fridrich::F2LPair(Cube *c, int col)
             }
             //Corner cubie on the WHITE face
             else {
-                qDebug()<< "Corner cubie on the WHITE face";
+         //       qDebug()<< "Corner cubie on the WHITE face";
                 //WHITE sticker on WHITE face
                 if(faceWhite == WHITE){
-                    qDebug()<< "WHITE sticker on WHITE face";
+         //           qDebug()<< "WHITE sticker on WHITE face";
                     //edge col1 sticker on YELLOW face
                     if(faceEdgeCol1 == YELLOW){
-                        qDebug()<< "edge col1 sticker on YELLOW face";
+        //                qDebug()<< "edge col1 sticker on YELLOW face";
                         facesTurned.append(c->turnFace(YELLOW, faceCornerCol2 - faceEdgeCol2 + 1));
                         facesTurned.append(c->turnFace(faceCornerCol1, 1));
                         facesTurned.append(c->turnFace(YELLOW, - 1));
@@ -375,10 +371,10 @@ QString Fridrich::F2LPair(Cube *c, int col)
                 }
                 //corner col1 sticker on YELLOW face
                 else if(faceCornerCol1 == WHITE){
-                    qDebug()<< "corner col1 sticker on YELLOW face";
+        //            qDebug()<< "corner col1 sticker on YELLOW face";
                     //edge col1 sticker on YELLOW face
                     if(faceEdgeCol1 == YELLOW){
-                        qDebug()<< "edge col1 sticker on YELLOW face";
+    //                    qDebug()<< "edge col1 sticker on YELLOW face";
                         facesTurned.append(c->turnFace(YELLOW, faceWhite - faceEdgeCol2));
                         facesTurned.append(c->turnFace(faceWhite, -1));
                         facesTurned.append(c->turnFace(YELLOW, -1));
@@ -392,10 +388,10 @@ QString Fridrich::F2LPair(Cube *c, int col)
                 }
                 //corner col2 sticker on YELLOW face
                 else {
-                    qDebug()<< "corner col2 sticker on YELLOW face";
+ //                   qDebug()<< "corner col2 sticker on YELLOW face";
                     //edge col1 sticker on YELLOW face
                     if(faceEdgeCol1 == YELLOW){
-                        qDebug()<< "edge col1 sticker on YELLOW face";
+//                        qDebug()<< "edge col1 sticker on YELLOW face";
                         facesTurned.append(c->turnFace(YELLOW, faceCornerCol1 - faceEdgeCol2));
                         facesTurned.append(c->turnFace(faceWhite, 1));
                         facesTurned.append(c->turnFace(YELLOW, 1));
@@ -411,16 +407,16 @@ QString Fridrich::F2LPair(Cube *c, int col)
         }
         //edge cubie not on the YELLOW face
         else {
-            qDebug()<< "edge cubie not on the YELLOW face";
+//            qDebug()<< "edge cubie not on the YELLOW face";
             //corner cubie on the YELLOW face
             if(faceWhite == YELLOW || faceCornerCol1 == YELLOW || faceCornerCol2 == YELLOW){
-                qDebug()<< "corner cubie on the YELLOW face";
+//                qDebug()<< "corner cubie on the YELLOW face";
                 //WHITE sticker on the YELLOW face
                 if(faceWhite == YELLOW){
-                    qDebug()<< "WHITE sticker on the YELLOW face";
+//                    qDebug()<< "WHITE sticker on the YELLOW face";
                     //edge correctly oriented
                     if(faceEdgeCol1 == (faceEdgeCol2 + 3) % 4){
-                        qDebug()<< "edge correctly oriented";
+//                        qDebug()<< "edge correctly oriented";
                         facesTurned.append(c->turnFace(YELLOW, faceEdgeCol1 - faceCornerCol2));
                         facesTurned.append(c->turnFace(faceEdgeCol1, 1));
                         facesTurned.append(c->turnFace(YELLOW, 1));
@@ -435,10 +431,10 @@ QString Fridrich::F2LPair(Cube *c, int col)
                 }
                 //corner col1 sticker on the YELLOW face
                 else if(faceCornerCol1 == YELLOW){
-                    qDebug()<< "corner col1 sticker on the YELLOW face";
+//                    qDebug()<< "corner col1 sticker on the YELLOW face";
                     //edge correctly oriented
                     if(faceEdgeCol1 == (faceEdgeCol2 + 3) % 4){
-                        qDebug()<< "edge correctly oriented";
+//                        qDebug()<< "edge correctly oriented";
                         facesTurned.append(c->turnFace(YELLOW, faceEdgeCol2 - faceWhite));
                         facesTurned.append(c->turnFace(faceEdgeCol2, -1));
                         facesTurned.append(c->turnFace(YELLOW, 1));
@@ -452,10 +448,10 @@ QString Fridrich::F2LPair(Cube *c, int col)
                 }
                 //corner col2 sticker on the YELLOW face
                 else {
-                    qDebug()<< "corner col2 sticker on the YELLOW face";
+//                    qDebug()<< "corner col2 sticker on the YELLOW face";
                     //edge correctly oriented
                     if(faceEdgeCol1 == (faceEdgeCol2 + 3) % 4){
-                        qDebug()<< "edge correctly oriented";
+//                        qDebug()<< "edge correctly oriented";
                         facesTurned.append(c->turnFace(YELLOW, faceEdgeCol1 - faceWhite));
                         facesTurned.append(c->turnFace(faceEdgeCol1, 1));
                         facesTurned.append(c->turnFace(YELLOW, -1));
@@ -470,19 +466,10 @@ QString Fridrich::F2LPair(Cube *c, int col)
             }
             //corner cubie on the WHITE face
             else {
-                //all cases identical except for one
-                qDebug()<< "corner cubie on the WHITE face";
-                //corner col2 is on the WHITE face and the edge is incorrectly oriented
-                //                    if((faceEdgeCol1 == faceWhite || faceEdgeCol1 == faceCornerCol1 || faceEdgeCol1 == faceCornerCol2) &&
-                //                            (faceCornerCol2 == WHITE) && (!(faceEdgeCol1 == (faceEdgeCol2 + 3) % 4))){
-                //                        qDebug()<< "corner col2 is on the WHITE face and the edge is incorrectly oriented";
-                //                        facesTurned.append(c->turnFace(faceEdgeCol1, 1));
-                //                        facesTurned.append(c->turnFace(YELLOW, 1));
-                //                        facesTurned.append(c->turnFace(faceEdgeCol1, -1));
-                //                    } else {
+//                qDebug()<< "corner cubie on the WHITE face";
                 //edge correctly oriented
                 if(faceEdgeCol1 == (faceEdgeCol2 + 3) % 4){
-                    qDebug()<< "edge correctly oriented";
+//                    qDebug()<< "edge correctly oriented";
                     facesTurned.append(c->turnFace(faceEdgeCol1, 1));
                     facesTurned.append(c->turnFace(YELLOW, -1));
                     facesTurned.append(c->turnFace(faceEdgeCol1, -1));
@@ -491,7 +478,6 @@ QString Fridrich::F2LPair(Cube *c, int col)
                     facesTurned.append(c->turnFace(YELLOW, 1));
                     facesTurned.append(c->turnFace(faceEdgeCol1, 1));
                 }
-                //                    }
             }
         }
         cornerPos = c->locateCubie(WHITE, col1, col2); //Locating the corner cubie
@@ -526,6 +512,7 @@ QString Fridrich::cross(Cube *c){
                                 if(facesTurned.count(' ') < facesTurnedMin.count(' ')){
                                     facesTurnedMin = facesTurned;
                                 }
+                                delete testCube;
                             }
                         }
                     }
@@ -557,6 +544,7 @@ QString Fridrich::F2L(Cube *c){
                                 if(facesTurned.count(' ') < facesTurnedMin.count(' ')){
                                     facesTurnedMin = facesTurned;
                                 }
+                                delete testCube;
                             }
                         }
                     }
@@ -583,14 +571,14 @@ QString Fridrich::OLL(Cube *c){
     }
     //is it solved already?
     if(solved){
-        qDebug() << "OLL already solved";
         return "";
     }
     int nBCorner = (matrix[YELLOW * 3 + 0][0] == YELLOW) + (matrix[YELLOW * 3 + 2][2] == YELLOW) + (matrix[YELLOW * 3 + 0][2] == YELLOW) + (matrix[YELLOW * 3 + 2][0] == YELLOW);
-    qDebug() << nBCorner;
-    //the 50+ cases can be seen from all four faces, so the code has to check them all
+    //the 50+ cases can be seen from all four faces, so the program has to check them four
     for (int co = 0; co < 4; ++co) {
+        //Face from which the cube is seen
         color col = (color) co;
+        //The four YELLOW corners
         color topRight;
         color topLeft;
         color botRight;
@@ -623,16 +611,12 @@ QString Fridrich::OLL(Cube *c){
         default:
             break;
         }
-
         //Crosses
         if (matrix[YELLOW * 3 + 1][0] == YELLOW && matrix[YELLOW * 3 + 1][2] == YELLOW && matrix[YELLOW * 3 + 0][1] == YELLOW && matrix[YELLOW * 3 + 2][1] == YELLOW) {
-            qDebug() << "Crosses";
             //No corner
             if(nBCorner == 0) {
-                qDebug() << "No corner";
                 //side YELLOW parallel
                 if(matrix[col * 3 + 0][2] == YELLOW && matrix[col * 3 + 2][2] == YELLOW && matrix[((col + 2) % 4) * 3][2] == YELLOW && matrix[((col + 2) % 4) * 3 + 2][2] == YELLOW) {
-                    qDebug() << "first side YELLOW parallel";
                     return c->moveSequence("R U2 R' U' R U R' U' R U' R'", col, YELLOW);
                 }
                 //first not parallel case both RED corner are YELLOW
@@ -654,7 +638,7 @@ QString Fridrich::OLL(Cube *c){
             //Two corners and diagonal
             else if((matrix[YELLOW * 3 + 0][0] == YELLOW && matrix[YELLOW * 3 + 2][2] == YELLOW) || (matrix[YELLOW * 3 + 2][0] == YELLOW && matrix[YELLOW * 3 + 0][2] == YELLOW)){
                 if(matrix[((col + 1) % 4) * 3][2] == YELLOW) {
-                  return c->moveSequence("R' F' L' F R F' L F", col, YELLOW);
+                    return c->moveSequence("R' F' L' F R F' L F", col, YELLOW);
                 }
             }
             //Two corners
@@ -688,12 +672,31 @@ QString Fridrich::OLL(Cube *c){
             }
         }
     }
+    return "";
 }
 
 QString Fridrich::PLL(Cube *c){
-    QString facesTurned = ""; //string containing the faces we turn to solve this step on the given cube
+    //copying the matrix to simplify the code
+    color matrix[18][3];
+    //this boolean checks if the face is already solved
+    bool solved = true;
+    for (int x = 0; x < 18; ++x) {
+        for (int y = 0; y < 3; ++y) {
+            matrix[x][y] = c->getMatrix()[x][y];
+            if(x < WHITE * 3 && y == 2 && matrix[x][y] != x / 3){
+                solved = false;
+            }
+        }
+    }
+    //is it solved already?
+    if (solved) {
+        return "";
+    }
+    //Again, the 21 cases here can be seen from 4 different angles
+    for (int co = 0; co < 4; ++co) {
+        if (1) {
 
-    c->getMatrix(); //REMOVING WARNINGS LOL))
-
-    return facesTurned;
+        }
+    }
+    return "";
 }
