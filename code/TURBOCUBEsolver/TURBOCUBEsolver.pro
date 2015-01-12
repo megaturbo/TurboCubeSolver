@@ -13,21 +13,21 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-	CubeInput.cpp \
     Cube.cpp \
     Fridrich.cpp \
     TurboCubeSolver.cpp \
     IsometricCubeWidget.cpp \
-    MainWidget.cpp
+    MainWidget.cpp \
+    CubeInputWidget.cpp
 
 HEADERS  += \
     CubeColor.h \
     Cube.h \
     Fridrich.h \
     TurboCubeSolver.h \
-    CubeInput.h \
     IsometricCubeWidget.h \
-    MainWidget.h
+    MainWidget.h \
+    CubeInputWidget.h
 
 FORMS    +=\
     TurboCubeSolver.ui

@@ -12,6 +12,7 @@ MainWidget::MainWidget(QWidget *parent) :
 
     // Menu
     scramblePB = new QPushButton("Scramble", this);
+    cubeInputPB = new QPushButton("Set configuration", this);
     solvePB = new QPushButton("Solve", this);
     resetPB = new QPushButton("Reset", this);
     sequencePB = new QPushButton("Send Sequence", this);
@@ -36,6 +37,7 @@ MainWidget::MainWidget(QWidget *parent) :
     QVBoxLayout *orientationMenuLayout = new QVBoxLayout();
 
     // Layout: Menu
+    menuLayout->addWidget(cubeInputPB);
     menuLayout->addWidget(scramblePB);
     menuLayout->addWidget(solvePB);
     menuLayout->addWidget(resetPB);
@@ -43,6 +45,7 @@ MainWidget::MainWidget(QWidget *parent) :
     menuLayout->addWidget(sequencePB);
     menuLayout->addWidget(reverseSequencePB);
 
+    // Layout: orientation menu
     orientationMenuLayout->addWidget(movesPB[0]);
     orientationMenuLayout->addWidget(movesPB[1]);
     orientationMenuLayout->addWidget(movesPB[2]);
@@ -66,10 +69,18 @@ MainWidget::MainWidget(QWidget *parent) :
     connect(movesPB[1], SIGNAL(clicked()), this, SLOT(turnYSlot()));
     connect(movesPB[2], SIGNAL(clicked()), this, SLOT(turnZSlot()));
 
+    connect(cubeInputPB, SIGNAL(clicked()), this, SLOT(startCubeInput()));
+
     // Display settings
     this->setLayout(MainLayout);
     this->resize(1000,600);
     this->show();
+}
+
+void MainWidget::startCubeInput()
+{
+    cubeInputWidget = new CubeInputWidget();
+    cubeInputWidget->show();
 }
 
 void MainWidget::turnXSlot()

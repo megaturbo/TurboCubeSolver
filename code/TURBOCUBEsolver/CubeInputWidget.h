@@ -3,13 +3,13 @@
 #include <QPushButton>
 #include <QButtonGroup>
 using namespace CubeColor;
-class CubeInput : public QWidget
+class CubeInputWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit CubeInput(QWidget *parent = 0);
-    ~CubeInput();
+    explicit CubeInputWidget(QWidget *parent = 0);
+    ~CubeInputWidget();
 
 private:
     //matrix preset

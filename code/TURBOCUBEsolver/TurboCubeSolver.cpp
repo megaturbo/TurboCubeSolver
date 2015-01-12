@@ -1,6 +1,6 @@
 #include "TurboCubeSolver.h"
 #include "ui_TurboCubeSolver.h"
-#include "CubeInput.h"
+#include "CubeInputWidget.h"
 #include "ui_turbocubesolver.h"
 #include "cube.h"
 #include "qdebug.h"
@@ -21,7 +21,7 @@ TURBOCUBEsolver::~TURBOCUBEsolver()
 
 void TURBOCUBEsolver::on_pushButton_clicked()
 {
-    CubeInput *c = new CubeInput();
+    CubeInputWidget *c = new CubeInputWidget();
     c->show();
 }
 
