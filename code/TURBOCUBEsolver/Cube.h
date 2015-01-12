@@ -21,7 +21,7 @@ class Cube {
     //returns the 2 or 3 colors of the cubie linked to the sticker at (i, j) on matCube
     QList<int> cubie(int i, int j);
 
-    QString scramble();
+    QString scramble(int depth = 25);
     static QString reverseSequence(QString sequence);
 
     QString moveSequence(QString sequence, color col1, color col2);

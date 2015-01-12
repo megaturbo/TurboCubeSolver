@@ -4,27 +4,33 @@ MainWidget::MainWidget(QWidget *parent) :
     QWidget(parent)
 {
 
+    // Set the displayCube solved
     initSolvedCube();
 
+    // Display widget
     isometricCubeWidget = new IsometricCubeWidget(*displayedCube);
 
-    scramblePB = new QPushButton("Scramble");
-    solvePB = new QPushButton("Solve");
-    resetPB = new QPushButton("Reset");
-    sequencePB = new QPushButton("Send Sequence");
-    sequenceLE = new QLineEdit();
+    // Menu
+    scramblePB = new QPushButton("Scramble", this);
+    solvePB = new QPushButton("Solve", this);
+    resetPB = new QPushButton("Reset", this);
+    sequencePB = new QPushButton("Send Sequence", this);
+    sequenceLE = new QLineEdit(this);
+    reverseSequencePB = new QPushButton("R", this);
 
-
+    // Layouts
     QHBoxLayout *btLayout = new QHBoxLayout();
     QVBoxLayout *vLayout = new QVBoxLayout();
 
-    // Buttons
+    // Layout: Menu
     btLayout->addWidget(scramblePB);
     btLayout->addWidget(solvePB);
     btLayout->addWidget(resetPB);
     btLayout->addWidget(sequenceLE);
     btLayout->addWidget(sequencePB);
+    btLayout->addWidget(reverseSequencePB);
 
+    // Layout: Total
     vLayout->addWidget(isometricCubeWidget);
     vLayout->addLayout(btLayout);
 
@@ -33,12 +39,12 @@ MainWidget::MainWidget(QWidget *parent) :
     connect(solvePB, SIGNAL(clicked()), this, SLOT(solveSlot()));
     connect(sequencePB, SIGNAL(clicked()), this, SLOT(sendSequenceSlot()));
     connect(resetPB, SIGNAL(clicked()), this, SLOT(resetSlot()));
+    connect(reverseSequencePB, SIGNAL(clicked()), this, SLOT(reverseSequenceSlot()));
 
+    // Display settings
     this->setLayout(vLayout);
     this->resize(1000,600);
     this->show();
-
-
 }
 
 void MainWidget::initSolvedCube()
@@ -50,8 +56,12 @@ void MainWidget::initSolvedCube()
             solvedMatrix[x][y] = (color)(x / 3);
         }
     }
-
     displayedCube = new Cube(solvedMatrix);
+}
+
+void MainWidget::reverseSequenceSlot()
+{
+    sequenceLE->setText(Cube::reverseSequence(sequenceLE->text()));
 }
 
 void MainWidget::resetSlot()
@@ -62,7 +72,7 @@ void MainWidget::resetSlot()
 
 void MainWidget::scrambleSlot()
 {
-    displayedCube->scramble();
+    sequenceLE->setText(displayedCube->scramble());
     isometricCubeWidget->setCube(*displayedCube);
 }
 
