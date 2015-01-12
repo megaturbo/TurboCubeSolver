@@ -27,14 +27,17 @@ IsometricCubeWidget::IsometricCubeWidget(Cube c, QWidget *parent)
 
 void IsometricCubeWidget::setCube(Cube c)
 {
+    color** mat = c.getMatrix();
     for(int x = 0; x < 18; x++)
     {
         for(int y = 0; y < 3; y++)
         {
-            displayCube[x][y] = c.getMatrix()[x][y];
+            displayCube[x][y] = mat[x][y];
         }
+        delete [] mat[x];
     }
-
+    delete [] mat;
+    mat = 0;
     this->update();
 }
 

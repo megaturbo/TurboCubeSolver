@@ -4,15 +4,15 @@
 #include <cubie.h>
 #include <qdebug.h>
 
-QString Fridrich::solve(Cube *c){
-    QString step1 = cross(c);
-    QString step2 = F2L(c);
-    QString step3 = OLL(c);
-    step3 += OLL(c);
-    QString step4 = PLL(c);
-    step4 += PLL(c);
+QString Fridrich::solve(Cube *cube){
+    QString step1 = cross(cube);
+    QString step2 = F2L(cube);
+    QString step3 = OLL2Look(cube);
+    step3 += OLL2Look(cube); //2-look OLL
+    QString step4 = PLL2Look(cube);
+    step4 += PLL2Look(cube); //2-look PLL
     //positionning the solved YELLOW face
-    step4 += c->turnFace(YELLOW, RED - c->locateCubie(RED, BLUE, YELLOW).at(0) / 3);
+    step4 += cube->turnFace(YELLOW, RED - cube->locateCubie(RED, BLUE, YELLOW).at(0) / 3);
     qDebug() << "Cross: " << step1 << step1.count(' ') << " moves.";
     qDebug() << "F2L: " << step2 << step2.count(' ') << " moves.";
     qDebug() << "OLL: " << step3 << step3.count(' ') << " moves.";
@@ -21,501 +21,419 @@ QString Fridrich::solve(Cube *c){
     return step1 + step2 + step3 + step4;
 }
 
-QString Fridrich::crossEdge(Cube *c, int co)
+QString Fridrich::crossEdge(Cube *cube, int firstEdgeColor)
 {
-    QString facesTurned = "";
-    color col = (color) co;
-    QList<int> pos = c->locateCubie(WHITE, col); //Locating the cubie
-    color faceWhite = (color) (pos.at(0) / 3); //face on which the WHITE sticker is
-    color faceCol = (color) (pos.at(2) / 3); //face on which the col sticker is
+    QString sequenceToSolve = "";
+    color edgeColor = (color) firstEdgeColor;
+    QList<int> cubieIndices = cube->locateCubie(WHITE, edgeColor); //Locating the cubie
+    color faceWhiteSticker = (color) (cubieIndices.at(0) / 3); //face on which the WHITE sticker is
+    color faceColorSticker = (color) (cubieIndices.at(2) / 3); //face on which the col sticker is
     //while the cubie is not at its solved state
-    while(faceWhite != WHITE || faceCol != col){
+    while(faceWhiteSticker != WHITE || faceColorSticker != edgeColor){
         //Depending on where the WHITE sticker is:
-        switch(faceWhite){
+        switch(faceWhiteSticker){
         case YELLOW: //if it's on the YELLOW face
-            facesTurned.append(c->turnFace(YELLOW, col - faceCol));
-            facesTurned.append(c->turnFace(col, 2));
+            sequenceToSolve.append(cube->turnFace(YELLOW, edgeColor - faceColorSticker));
+            sequenceToSolve.append(cube->turnFace(edgeColor, 2));
             //cubie solved
             break;
         case WHITE: //if the WHITE sticker is on the WHITE face but col is not on the right face
             //Turning this cubie on the yellow face to further solve it
-            facesTurned.append(c->turnFace(faceCol, 2));
+            sequenceToSolve.append(cube->turnFace(faceColorSticker, 2));
             break;
         default: //if the WHITE sticker is not on the WHITE or YELLOW
             //if it's just on quarter turn away from being correctly placed
-            if(col == faceCol){
+            if(edgeColor == faceColorSticker){
                 //if it's on the right of the face
-                if(pos.at(2) > faceCol * 3 + 1){
-                    facesTurned.append(c->turnFace(col, -1));
+                if(cubieIndices.at(2) > faceColorSticker * 3 + 1){
+                    sequenceToSolve.append(cube->turnFace(edgeColor, -1));
                 } else {
-                    facesTurned.append(c->turnFace(col, 1));
+                    sequenceToSolve.append(cube->turnFace(edgeColor, 1));
                 }
             }
             //if it is on any of the 4 edges, we turn the face it's on so the white sticker is on the yellow face
-            else if (pos.at(1) == 1){
+            else if (cubieIndices.at(1) == 1){
                 //if it's on the right of the face
-                if(pos.at(2) > faceCol * 3 + 1){
-                    facesTurned.append(c->turnFace(faceCol));
-                    facesTurned.append(c->turnFace(YELLOW, col - faceCol));
-                    facesTurned.append(c->turnFace(faceCol, -1));
+                if(cubieIndices.at(2) > faceColorSticker * 3 + 1){
+                    sequenceToSolve.append(cube->turnFace(faceColorSticker));
+                    sequenceToSolve.append(cube->turnFace(YELLOW, edgeColor - faceColorSticker));
+                    sequenceToSolve.append(cube->turnFace(faceColorSticker, -1));
                 } else {
-                    facesTurned.append(c->turnFace(faceCol, -1));
-                    facesTurned.append(c->turnFace(YELLOW, col - faceCol));
-                    facesTurned.append(c->turnFace(faceCol));
+                    sequenceToSolve.append(cube->turnFace(faceColorSticker, -1));
+                    sequenceToSolve.append(cube->turnFace(YELLOW, edgeColor - faceColorSticker));
+                    sequenceToSolve.append(cube->turnFace(faceColorSticker));
                 }
             }
             //if the col sticker is on WHITE
-            else if (faceCol == WHITE){
+            else if (faceColorSticker == WHITE){
                 //if the WHITE sticker is on col
-                if(faceWhite == col){
+                if(faceWhiteSticker == edgeColor){
                     //we do the corresponding algorithm
-                    facesTurned.append(c->turnFace(faceWhite));
-                    facesTurned.append(c->turnFace(WHITE, -1));
-                    facesTurned.append(c->turnFace((faceWhite + 1) % 4, 1));
-                    facesTurned.append(c->turnFace(WHITE));
+                    sequenceToSolve.append(cube->turnFace(faceWhiteSticker));
+                    sequenceToSolve.append(cube->turnFace(WHITE, -1));
+                    sequenceToSolve.append(cube->turnFace((faceWhiteSticker + 1) % 4, 1));
+                    sequenceToSolve.append(cube->turnFace(WHITE));
                 }
                 else {
                     //we put the white sticker on yellow
-                    facesTurned.append(c->turnFace(faceWhite, 1));
-                    facesTurned.append(c->turnFace((faceWhite + 1) % 4, -1));
-                    facesTurned.append(c->turnFace(YELLOW, -1));
-                    facesTurned.append(c->turnFace((faceWhite + 1) % 4, 1));
+                    sequenceToSolve.append(cube->turnFace(faceWhiteSticker, 1));
+                    sequenceToSolve.append(cube->turnFace((faceWhiteSticker + 1) % 4, -1));
+                    sequenceToSolve.append(cube->turnFace(YELLOW, -1));
+                    sequenceToSolve.append(cube->turnFace((faceWhiteSticker + 1) % 4, 1));
                 }
             }
             //col sticker is on YELLOW
             else {
-                facesTurned.append(c->turnFace(YELLOW, col - faceWhite + 1));
-                facesTurned.append(c->turnFace((col + 1) % 4, 1));
-                facesTurned.append(c->turnFace(col, -1));
-                facesTurned.append(c->turnFace((col + 1) % 4, -1));
+                sequenceToSolve.append(cube->turnFace(YELLOW, edgeColor - faceWhiteSticker + 1));
+                sequenceToSolve.append(cube->turnFace((edgeColor + 1) % 4, 1));
+                sequenceToSolve.append(cube->turnFace(edgeColor, -1));
+                sequenceToSolve.append(cube->turnFace((edgeColor + 1) % 4, -1));
             }
             break;
         }
-        pos = c->locateCubie(WHITE, col);
-        faceWhite = (color) (pos.at(0) / 3);
-        faceCol = (color) (pos.at(2) / 3);
+        cubieIndices = cube->locateCubie(WHITE, edgeColor);
+        faceWhiteSticker = (color) (cubieIndices.at(0) / 3);
+        faceColorSticker = (color) (cubieIndices.at(2) / 3);
     }
-    return facesTurned;
+    return sequenceToSolve;
 }
 
-QString Fridrich::F2LPair(Cube *c, int col)
+QString Fridrich::F2LPair(Cube *cube, int firstCornerColor)
 {
-    QString facesTurned;
-    color col1 = (color) col;
-    color col2 = (color)((col1 + 1) % 4);
-    QList<int> cornerPos = c->locateCubie(WHITE, col1, col2); //Locating the corner cubie
-    QList<int> edgePos = c->locateCubie(col1, col2);
-    color faceWhite = (color) (cornerPos.at(0) / 3); //face on which the WHITE sticker is
-    color faceCornerCol1 = (color) (cornerPos.at(2) / 3); //face on which the col1 sticker is
-    color faceCornerCol2 = (color) (cornerPos.at(4) / 3); //face on which the col2 sticker is
-    color faceEdgeCol1 = (color) (edgePos.at(0) / 3);
-    color faceEdgeCol2 = (color) (edgePos.at(2) / 3);
+    QString sequenceToSolve;
+    color firstEdgeColor = (color) firstCornerColor;
+    color secondEdgeColor = (color)((firstEdgeColor + 1) % 4);
+    QList<int> cornerIndices = cube->locateCubie(WHITE, firstEdgeColor, secondEdgeColor); //Locating the corner cubie
+    QList<int> edgeIndices = cube->locateCubie(firstEdgeColor, secondEdgeColor);
+    color faceWhiteSticker = (color) (cornerIndices.at(0) / 3); //face on which the WHITE sticker is
+    color faceFirstCorner= (color) (cornerIndices.at(2) / 3); //face on which the col1 sticker is
+    color faceSecondCorner = (color) (cornerIndices.at(4) / 3); //face on which the col2 sticker is
+    color faceFirstEdge = (color) (edgeIndices.at(0) / 3);
+    color faceSecondEdge = (color) (edgeIndices.at(2) / 3);
     //while the pair of cubies is not at its solved state. The loop is useful
     //because we can reduce complex cases to simpler ones and let the program solve them
-    int k = 0;
-    while((faceWhite != WHITE  || faceCornerCol1 != col1 || faceEdgeCol1!= col1 || faceEdgeCol2!= col2) && k++ < 50){
+    int loopCounter = 0;
+    while((faceWhiteSticker != WHITE  || faceFirstCorner != firstEdgeColor || faceFirstEdge!= firstEdgeColor || faceSecondEdge!= secondEdgeColor) && loopCounter++ < 50){
         //edge cubie on the YELLOW face
-        if(faceEdgeCol1 == YELLOW || faceEdgeCol2 == YELLOW){
-          //  qDebug()<< "edge cubie on the YELLOW face";
+        if(faceFirstEdge == YELLOW || faceSecondEdge == YELLOW){
             //corner cubie on the YELLOW face
-            if(faceWhite == YELLOW || faceCornerCol1 == YELLOW || faceCornerCol2 == YELLOW){
-             //   qDebug()<< "corner cubie on the YELLOW face";
+            if(faceWhiteSticker == YELLOW || faceFirstCorner == YELLOW || faceSecondCorner == YELLOW){
                 //Corner pointing outward
-                if(faceWhite < 4 && faceWhite > -1){
-                  //  qDebug()<< "Corner pointing outward";
+                if(faceWhiteSticker < 4 && faceWhiteSticker > -1){
                     //Basic case 1, corner and edge aligned
-                    if(faceCornerCol1 == faceEdgeCol1 && faceCornerCol2 == faceEdgeCol2){
-                       // qDebug()<< "Basic case 1, corner and edge aligned";
+                    if(faceFirstCorner == faceFirstEdge && faceSecondCorner == faceSecondEdge){
                         //WHITE sticker points right
-                        if(faceCornerCol1 == YELLOW){
-                           // qDebug()<< "WHITE sticker points right";
-                            facesTurned.append(c->turnFace(YELLOW, col1 - faceEdgeCol2));
-                            facesTurned.append(c->turnFace(col2, -1));
-                            facesTurned.append(c->turnFace(YELLOW, 1));
-                            facesTurned.append(c->turnFace(col2, 1));
+                        if(faceFirstCorner == YELLOW){
+                            sequenceToSolve.append(cube->turnFace(YELLOW, firstEdgeColor - faceSecondEdge));
+                            sequenceToSolve.append(cube->turnFace(secondEdgeColor, -1));
+                            sequenceToSolve.append(cube->turnFace(YELLOW, 1));
+                            sequenceToSolve.append(cube->turnFace(secondEdgeColor, 1));
                         } else {
-                            facesTurned.append(c->turnFace(YELLOW, col2 - faceEdgeCol1));
-                            facesTurned.append(c->turnFace(col1, 1));
-                            facesTurned.append(c->turnFace(YELLOW, -1));
-                            facesTurned.append(c->turnFace(col1, -1));
+                            sequenceToSolve.append(cube->turnFace(YELLOW, secondEdgeColor - faceFirstEdge));
+                            sequenceToSolve.append(cube->turnFace(firstEdgeColor, 1));
+                            sequenceToSolve.append(cube->turnFace(YELLOW, -1));
+                            sequenceToSolve.append(cube->turnFace(firstEdgeColor, -1));
                         }
                     }
                     //Basic case 2, corner and edge cubie aligned after one R or L'
-                    else if(((faceEdgeCol1 == (faceWhite + 3) % 4) || (faceEdgeCol2 == (faceWhite + 1) % 4))
-                            && ((faceCornerCol1 == YELLOW && faceEdgeCol2 == YELLOW) || (faceCornerCol2 == YELLOW && faceEdgeCol1 == YELLOW))){
-                        //qDebug()<< "Basic case 2, corner and edge cubie aligned after one R or L'";
+                    else if(((faceFirstEdge == (faceWhiteSticker + 3) % 4) || (faceSecondEdge == (faceWhiteSticker + 1) % 4))
+                            && ((faceFirstCorner == YELLOW && faceSecondEdge == YELLOW) || (faceSecondCorner == YELLOW && faceFirstEdge == YELLOW))){
                         //WHITE sticker points right
-                        if(faceCornerCol1 == YELLOW){
-                            //qDebug()<< "WHITE sticker points right";
-                            facesTurned.append(c->turnFace(YELLOW, col2 - faceCornerCol2));
-                            facesTurned.append(c->turnFace(col1, 1));
-                            facesTurned.append(c->turnFace(YELLOW, 1));
-                            facesTurned.append(c->turnFace(col1, -1));
+                        if(faceFirstCorner == YELLOW){
+                            sequenceToSolve.append(cube->turnFace(YELLOW, secondEdgeColor - faceSecondCorner));
+                            sequenceToSolve.append(cube->turnFace(firstEdgeColor, 1));
+                            sequenceToSolve.append(cube->turnFace(YELLOW, 1));
+                            sequenceToSolve.append(cube->turnFace(firstEdgeColor, -1));
                         } else {
-                            facesTurned.append(c->turnFace(YELLOW, col1 - faceCornerCol1));
-                            facesTurned.append(c->turnFace(col2, -1));
-                            facesTurned.append(c->turnFace(YELLOW, -1));
-                            facesTurned.append(c->turnFace(col2, 1));
+                            sequenceToSolve.append(cube->turnFace(YELLOW, firstEdgeColor - faceFirstCorner));
+                            sequenceToSolve.append(cube->turnFace(secondEdgeColor, -1));
+                            sequenceToSolve.append(cube->turnFace(YELLOW, -1));
+                            sequenceToSolve.append(cube->turnFace(secondEdgeColor, 1));
                         }
                     }
                     //WHITE sticker and edge col1 sticker are on the same face
-                    else if(faceWhite == faceEdgeCol1){
-                        //qDebug()<< "WHITE sticker and edge col1 sticker are on the same face";
+                    else if(faceWhiteSticker == faceFirstEdge){
                         //WHITE sticker points right
-                        if(faceCornerCol1 == YELLOW){
-                            //qDebug()<< "WHITE sticker points right";
-                            facesTurned.append(c->turnFace(YELLOW, col1 - faceCornerCol2));
-                            facesTurned.append(c->turnFace(col1, 1));
-                            facesTurned.append(c->turnFace(YELLOW, -1));
-                            facesTurned.append(c->turnFace(col1, -1));
+                        if(faceFirstCorner == YELLOW){
+                            sequenceToSolve.append(cube->turnFace(YELLOW, firstEdgeColor - faceSecondCorner));
+                            sequenceToSolve.append(cube->turnFace(firstEdgeColor, 1));
+                            sequenceToSolve.append(cube->turnFace(YELLOW, -1));
+                            sequenceToSolve.append(cube->turnFace(firstEdgeColor, -1));
                         } else {
-                            facesTurned.append(c->turnFace(YELLOW, col2 - faceCornerCol1));
-                            facesTurned.append(c->turnFace(col2, -1));
-                            facesTurned.append(c->turnFace(YELLOW, 1));
-                            facesTurned.append(c->turnFace(col2, 1));
+                            sequenceToSolve.append(cube->turnFace(YELLOW, secondEdgeColor - faceFirstCorner));
+                            sequenceToSolve.append(cube->turnFace(secondEdgeColor, -1));
+                            sequenceToSolve.append(cube->turnFace(YELLOW, 1));
+                            sequenceToSolve.append(cube->turnFace(secondEdgeColor, 1));
                         }
                     }
-
-                    //                        //WHITE sticker and edge col1 sticker are on opposite faces
-                    //                        else if((faceWhite == (faceEdgeCol1 + 2) % 4) && faceEdgeCol2 == YELLOW && faceCornerCol2 == YELLOW/* || (faceWhite == (faceEdgeCol2 + 2) % 4)*/){
-                    //                            qDebug()<< "WHITE sticker and edge col1 sticker are on opposite faces";
-                    //                            //WHITE sticker points right
-                    //                            if(faceCornerCol1 == YELLOW){
-                    //                                qDebug()<< "WHITE sticker points right";
-                    //                                facesTurned.append(c->turnFace(YELLOW, col1 - faceCornerCol2));
-                    //                                facesTurned.append(c->turnFace(col1, 1));
-                    //                                facesTurned.append(c->turnFace(YELLOW, 1));
-                    //                                facesTurned.append(c->turnFace(col1, -1));
-                    //                            } else {
-                    ////                                facesTurned.append(c->turnFace(YELLOW, col2 - faceCornerCol1));
-                    ////                                facesTurned.append(c->turnFace(col2, -1));
-                    ////                                facesTurned.append(c->turnFace(YELLOW, -1));
-                    ////                                facesTurned.append(c->turnFace(col2, 1));
-                    //                                facesTurned.append(c->turnFace(YELLOW, col1 - faceWhite));
-                    //                                facesTurned.append(c->turnFace(col1, 1));
-                    //                                facesTurned.append(c->turnFace(YELLOW, 1));
-                    //                                facesTurned.append(c->turnFace(col1, -1));
-
-                    //                            }
-                    //                        }
-                    //                        //corner and edge cubie are aligned but the colors aren't matching
-                    //                        else if(faceEdgeCol1 == faceCornerCol2 && faceEdgeCol2 == faceCornerCol1){
-                    //                            qDebug()<< "corner and edge cubie are aligned but the colors aren't matching";
-                    //                            //WHITE sticker points right
-                    //                            if(faceCornerCol1 == YELLOW){
-                    //                                qDebug()<< "WHITE sticker points right";
-                    //                                facesTurned.append(c->turnFace(YELLOW, col2 - faceWhite));
-                    //                                facesTurned.append(c->turnFace(col2, -1));
-                    //                                facesTurned.append(c->turnFace(YELLOW, 2));
-                    //                                facesTurned.append(c->turnFace(col2, 1));
-                    //                            } else {
-                    //                                facesTurned.append(c->turnFace(YELLOW, col1 - faceWhite));
-                    //                                facesTurned.append(c->turnFace(col1, 1));
-                    //                                facesTurned.append(c->turnFace(YELLOW, 2));
-                    //                                facesTurned.append(c->turnFace(col1, -1));
-                    //                            }
-                    //                        }
-
                     //WHITE sticker and edge col2 sticker are on the same face
-                    else if(faceWhite == faceEdgeCol2){
-                        //qDebug()<< "WHITE sticker and edge col2 sticker are on the same face";
+                    else if(faceWhiteSticker == faceSecondEdge){
                         //WHITE sticker points right
-                        if(faceCornerCol1 == YELLOW){
-                            //qDebug()<< "WHITE sticker points right";//
-                            facesTurned.append(c->turnFace(YELLOW, col1 - faceWhite));
-                            facesTurned.append(c->turnFace(col1, 1));
-                            facesTurned.append(c->turnFace(YELLOW, -1));
-                            facesTurned.append(c->turnFace(col1, -1));
+                        if(faceFirstCorner == YELLOW){
+                            sequenceToSolve.append(cube->turnFace(YELLOW, firstEdgeColor - faceWhiteSticker));
+                            sequenceToSolve.append(cube->turnFace(firstEdgeColor, 1));
+                            sequenceToSolve.append(cube->turnFace(YELLOW, -1));
+                            sequenceToSolve.append(cube->turnFace(firstEdgeColor, -1));
                         } else {
-                            facesTurned.append(c->turnFace(YELLOW, col2 - faceWhite));
-                            facesTurned.append(c->turnFace(col2, -1));
-                            facesTurned.append(c->turnFace(YELLOW, 1));
-                            facesTurned.append(c->turnFace(col2, 1));
+                            sequenceToSolve.append(cube->turnFace(YELLOW, secondEdgeColor - faceWhiteSticker));
+                            sequenceToSolve.append(cube->turnFace(secondEdgeColor, -1));
+                            sequenceToSolve.append(cube->turnFace(YELLOW, 1));
+                            sequenceToSolve.append(cube->turnFace(secondEdgeColor, 1));
                         }
                     }
                     //corner and edge aren't adjacent
                     else {
-                     //   qDebug()<< "corner and edge aren't adjacent";
                         //WHITE sticker points right
-                        if(faceCornerCol1 == YELLOW){
-                           // qDebug()<< "WHITE sticker points right";
-                            facesTurned.append(c->turnFace(YELLOW, col2 - faceWhite));
-                            //                                facesTurned.append(c->turnFace(YELLOW, col2 - faceEdgeCol2 + 1));
-                            cornerPos = c->locateCubie(WHITE, col1, col2); //Locating the corner cubie
-                            edgePos = c->locateCubie(col1, col2);
-                            faceWhite = (color) (cornerPos.at(0) / 3); //face on which the WHITE sticker is
-                            faceCornerCol1 = (color) (cornerPos.at(2) / 3); //face on which the col1 sticker is
-                            faceCornerCol2 = (color) (cornerPos.at(4) / 3); //face on which the col2 sticker is
-                            faceEdgeCol1 = (color) (edgePos.at(0) / 3);
-                            faceEdgeCol2 = (color) (edgePos.at(2) / 3);
-                            facesTurned.append(c->turnFace(col2, -1));
+                        if(faceFirstCorner == YELLOW){
+                            sequenceToSolve.append(cube->turnFace(YELLOW, secondEdgeColor - faceWhiteSticker));
+                            cornerIndices = cube->locateCubie(WHITE, firstEdgeColor, secondEdgeColor); //Locating the corner cubie
+                            edgeIndices = cube->locateCubie(firstEdgeColor, secondEdgeColor);
+                            faceWhiteSticker = (color) (cornerIndices.at(0) / 3); //face on which the WHITE sticker is
+                            faceFirstCorner = (color) (cornerIndices.at(2) / 3); //face on which the col1 sticker is
+                            faceSecondCorner = (color) (cornerIndices.at(4) / 3); //face on which the col2 sticker is
+                            faceFirstEdge = (color) (edgeIndices.at(0) / 3);
+                            faceSecondEdge = (color) (edgeIndices.at(2) / 3);
+                            sequenceToSolve.append(cube->turnFace(secondEdgeColor, -1));
                             //edge and corner similarily aligned
-                            if((faceCornerCol1 == YELLOW && faceEdgeCol1 == YELLOW) || (faceCornerCol2 == YELLOW && faceEdgeCol2 == YELLOW)){
-                           //     qDebug() << "edge and corner similarily aligned";
-                                facesTurned.append(c->turnFace(YELLOW, faceCornerCol2 - faceEdgeCol2));
+                            if((faceFirstCorner == YELLOW && faceFirstEdge == YELLOW) || (faceSecondCorner == YELLOW && faceSecondEdge == YELLOW)){
+                                sequenceToSolve.append(cube->turnFace(YELLOW, faceSecondCorner - faceSecondEdge));
                             } else {
-                                facesTurned.append(c->turnFace(YELLOW, col1 - faceEdgeCol1));
+                                sequenceToSolve.append(cube->turnFace(YELLOW, firstEdgeColor - faceFirstEdge));
                             }
-                            facesTurned.append(c->turnFace(col2, 1));
+                            sequenceToSolve.append(cube->turnFace(secondEdgeColor, 1));
                         } else {
-                            facesTurned.append(c->turnFace(YELLOW, col1 - faceWhite));
-                            //                                facesTurned.append(c->turnFace(YELLOW, col1 - faceEdgeCol1 +3));
-                            cornerPos = c->locateCubie(WHITE, col1, col2); //Locating the corner cubie
-                            edgePos = c->locateCubie(col1, col2);
-                            faceWhite = (color) (cornerPos.at(0) / 3); //face on which the WHITE sticker is
-                            faceCornerCol1 = (color) (cornerPos.at(2) / 3); //face on which the col1 sticker is
-                            faceCornerCol2 = (color) (cornerPos.at(4) / 3); //face on which the col2 sticker is
-                            faceEdgeCol1 = (color) (edgePos.at(0) / 3);
-                            faceEdgeCol2 = (color) (edgePos.at(2) / 3);
-                            facesTurned.append(c->turnFace(col1, 1));
+                            sequenceToSolve.append(cube->turnFace(YELLOW, firstEdgeColor - faceWhiteSticker));
+                            cornerIndices = cube->locateCubie(WHITE, firstEdgeColor, secondEdgeColor); //Locating the corner cubie
+                            edgeIndices = cube->locateCubie(firstEdgeColor, secondEdgeColor);
+                            faceWhiteSticker = (color) (cornerIndices.at(0) / 3); //face on which the WHITE sticker is
+                            faceFirstCorner = (color) (cornerIndices.at(2) / 3); //face on which the col1 sticker is
+                            faceSecondCorner = (color) (cornerIndices.at(4) / 3); //face on which the col2 sticker is
+                            faceFirstEdge = (color) (edgeIndices.at(0) / 3);
+                            faceSecondEdge = (color) (edgeIndices.at(2) / 3);
+                            sequenceToSolve.append(cube->turnFace(firstEdgeColor, 1));
                             //edge and corner similarily aligned
-                            if((faceCornerCol1 == YELLOW && faceEdgeCol1 == YELLOW) || (faceCornerCol2 == YELLOW && faceEdgeCol2 == YELLOW)){
-                               // qDebug() << "edge and corner similarily aligned";
-                                facesTurned.append(c->turnFace(YELLOW, faceCornerCol1 - faceEdgeCol1));
+                            if((faceFirstCorner == YELLOW && faceFirstEdge == YELLOW) || (faceSecondCorner == YELLOW && faceSecondEdge == YELLOW)){
+                                sequenceToSolve.append(cube->turnFace(YELLOW, faceFirstCorner - faceFirstEdge));
                             } else {
-                                facesTurned.append(c->turnFace(YELLOW, col2 - faceEdgeCol2));
+                                sequenceToSolve.append(cube->turnFace(YELLOW, secondEdgeColor - faceSecondEdge));
                             }
-                            facesTurned.append(c->turnFace(col1, -1));
+                            sequenceToSolve.append(cube->turnFace(firstEdgeColor, -1));
                         }
                     }
                 }
                 //WHITE sticker is on the YELLOW face
                 else {
-         //           qDebug()<< "WHITE sticker is on the YELLOW face";
                     //Cubies are adjacent and the col1/col2 stickers from both edge and corner are on the same face
-                    if(faceEdgeCol1 == faceCornerCol1 || faceEdgeCol2 == faceCornerCol2){
-         //               qDebug()<< "Cubies are adjacent and the col1/col2 stickers from both edge and corner are on the same face";
+                    if(faceFirstEdge == faceFirstCorner || faceSecondEdge == faceSecondCorner){
                         //edge corner has col1 on the YELLOW face
-                        if(faceCornerCol1 == YELLOW) {
-        //                    qDebug()<< "edge corner has col1 on the YELLOW face";
-                            facesTurned.append(c->turnFace(YELLOW, col2 - faceCornerCol1));
-                            facesTurned.append(c->turnFace(col2, -1));
-                            facesTurned.append(c->turnFace(YELLOW, -1));
-                            facesTurned.append(c->turnFace(col2, 1));
+                        if(faceFirstCorner == YELLOW) {
+                            sequenceToSolve.append(cube->turnFace(YELLOW, secondEdgeColor - faceFirstCorner));
+                            sequenceToSolve.append(cube->turnFace(secondEdgeColor, -1));
+                            sequenceToSolve.append(cube->turnFace(YELLOW, -1));
+                            sequenceToSolve.append(cube->turnFace(secondEdgeColor, 1));
                         } else {
-                            facesTurned.append(c->turnFace(YELLOW, col2 - faceCornerCol1));
-                            facesTurned.append(c->turnFace(col1, 1));
-                            facesTurned.append(c->turnFace(YELLOW, 1));
-                            facesTurned.append(c->turnFace(col1, -1));
+                            sequenceToSolve.append(cube->turnFace(YELLOW, secondEdgeColor - faceFirstCorner));
+                            sequenceToSolve.append(cube->turnFace(firstEdgeColor, 1));
+                            sequenceToSolve.append(cube->turnFace(YELLOW, 1));
+                            sequenceToSolve.append(cube->turnFace(firstEdgeColor, -1));
                         }
                     }
                     //Cubies are adjacent and the col1/col2 stickers are not matching
-                    if(faceEdgeCol1 == faceCornerCol2 || faceEdgeCol2 == faceCornerCol1){
-                   //     qDebug()<< "Cubies are adjacent and the col1/col2 stickers are not matching";
+                    if(faceFirstEdge == faceSecondCorner || faceSecondEdge == faceFirstCorner){
                         //edge corner has col1 on the YELLOW face
-                        if(faceCornerCol1 == YELLOW) {
-           ////                 qDebug()<< "edge corner has col1 on the YELLOW face";
-                            facesTurned.append(c->turnFace(YELLOW, col2 - faceCornerCol1));
-                            facesTurned.append(c->turnFace(col2, -1));
-                            facesTurned.append(c->turnFace(YELLOW, 2));
-                            facesTurned.append(c->turnFace(col2, 1));
+                        if(faceFirstCorner == YELLOW) {
+                            sequenceToSolve.append(cube->turnFace(YELLOW, secondEdgeColor - faceFirstCorner));
+                            sequenceToSolve.append(cube->turnFace(secondEdgeColor, -1));
+                            sequenceToSolve.append(cube->turnFace(YELLOW, 2));
+                            sequenceToSolve.append(cube->turnFace(secondEdgeColor, 1));
                         } else {
-                            facesTurned.append(c->turnFace(YELLOW, col2 - faceCornerCol1));
-                            facesTurned.append(c->turnFace(col1, 1));
-                            facesTurned.append(c->turnFace(YELLOW, 2));
-                            facesTurned.append(c->turnFace(col1, -1));
+                            sequenceToSolve.append(cube->turnFace(YELLOW, secondEdgeColor - faceFirstCorner));
+                            sequenceToSolve.append(cube->turnFace(firstEdgeColor, 1));
+                            sequenceToSolve.append(cube->turnFace(YELLOW, 2));
+                            sequenceToSolve.append(cube->turnFace(firstEdgeColor, -1));
                         }
                     }
                     //cubies are not adjacent and col1 edge sticker is opposite to col1 corner sticker
-                    else if (faceEdgeCol1 == (faceCornerCol1 + 2) % 4 || faceEdgeCol2 == (faceCornerCol2 + 2) % 4) {
-             //           qDebug()<< "cubies are not adjacent and col1 edge sticker is opposite to col1 corner sticker";
+                    else if (faceFirstEdge == (faceFirstCorner + 2) % 4 || faceSecondEdge == (faceSecondCorner + 2) % 4) {
                         //edge corner has col1 on the YELLOW face
-                        if(faceCornerCol1 == YELLOW) {
-           //                 qDebug()<< "edge corner has col1 on the YELLOW face";
-                            facesTurned.append(c->turnFace(YELLOW, col2 - faceEdgeCol2));
-                            facesTurned.append(c->turnFace(col2, -1));
-                            facesTurned.append(c->turnFace(YELLOW, 2));
-                            facesTurned.append(c->turnFace(col2, 1));
+                        if(faceFirstCorner == YELLOW) {
+                            sequenceToSolve.append(cube->turnFace(YELLOW, secondEdgeColor - faceSecondEdge));
+                            sequenceToSolve.append(cube->turnFace(secondEdgeColor, -1));
+                            sequenceToSolve.append(cube->turnFace(YELLOW, 2));
+                            sequenceToSolve.append(cube->turnFace(secondEdgeColor, 1));
                         } else {
-                            facesTurned.append(c->turnFace(YELLOW, col1 - faceEdgeCol1));
-                            facesTurned.append(c->turnFace(col1, 1));
-                            facesTurned.append(c->turnFace(YELLOW, 2));
-                            facesTurned.append(c->turnFace(col1, -1));
+                            sequenceToSolve.append(cube->turnFace(YELLOW, firstEdgeColor - faceFirstEdge));
+                            sequenceToSolve.append(cube->turnFace(firstEdgeColor, 1));
+                            sequenceToSolve.append(cube->turnFace(YELLOW, 2));
+                            sequenceToSolve.append(cube->turnFace(firstEdgeColor, -1));
                         }
                     }
                     //Cubies are not adjacent and col1 is opposite to col2
                     else {
-                //        qDebug()<< "Cubies are not adjacent and col1 is opposite to col2";
                         //edge corner has col1 on the YELLOW face
-                        if(faceCornerCol1 == YELLOW) {
-          //                  qDebug()<< "edge corner has col1 on the YELLOW face";
-                            facesTurned.append(c->turnFace(YELLOW, col2 - faceEdgeCol2));
-                            facesTurned.append(c->turnFace(col2, -1));
-                            facesTurned.append(c->turnFace(YELLOW, -1));
-                            facesTurned.append(c->turnFace(col2, 1));
+                        if(faceFirstCorner == YELLOW) {
+                            sequenceToSolve.append(cube->turnFace(YELLOW, secondEdgeColor - faceSecondEdge));
+                            sequenceToSolve.append(cube->turnFace(secondEdgeColor, -1));
+                            sequenceToSolve.append(cube->turnFace(YELLOW, -1));
+                            sequenceToSolve.append(cube->turnFace(secondEdgeColor, 1));
                         } else {
-                            facesTurned.append(c->turnFace(YELLOW, col1 - faceEdgeCol1));
-                            facesTurned.append(c->turnFace(col1, 1));
-                            facesTurned.append(c->turnFace(YELLOW, 1));
-                            facesTurned.append(c->turnFace(col1, -1));
+                            sequenceToSolve.append(cube->turnFace(YELLOW, firstEdgeColor - faceFirstEdge));
+                            sequenceToSolve.append(cube->turnFace(firstEdgeColor, 1));
+                            sequenceToSolve.append(cube->turnFace(YELLOW, 1));
+                            sequenceToSolve.append(cube->turnFace(firstEdgeColor, -1));
                         }
                     }
                 }
             }
             //Corner cubie on the WHITE face
             else {
-         //       qDebug()<< "Corner cubie on the WHITE face";
                 //WHITE sticker on WHITE face
-                if(faceWhite == WHITE){
-         //           qDebug()<< "WHITE sticker on WHITE face";
+                if(faceWhiteSticker == WHITE){
                     //edge col1 sticker on YELLOW face
-                    if(faceEdgeCol1 == YELLOW){
-        //                qDebug()<< "edge col1 sticker on YELLOW face";
-                        facesTurned.append(c->turnFace(YELLOW, faceCornerCol2 - faceEdgeCol2 + 1));
-                        facesTurned.append(c->turnFace(faceCornerCol1, 1));
-                        facesTurned.append(c->turnFace(YELLOW, - 1));
-                        facesTurned.append(c->turnFace(faceCornerCol1, -1));
+                    if(faceFirstEdge == YELLOW){
+                        sequenceToSolve.append(cube->turnFace(YELLOW, faceSecondCorner - faceSecondEdge + 1));
+                        sequenceToSolve.append(cube->turnFace(faceFirstCorner, 1));
+                        sequenceToSolve.append(cube->turnFace(YELLOW, - 1));
+                        sequenceToSolve.append(cube->turnFace(faceFirstCorner, -1));
                     } else {
-                        facesTurned.append(c->turnFace(YELLOW, faceCornerCol1 - faceEdgeCol1 + 3));
-                        facesTurned.append(c->turnFace(faceCornerCol2, -1));
-                        facesTurned.append(c->turnFace(YELLOW, 1));
-                        facesTurned.append(c->turnFace(faceCornerCol2, 1));
+                        sequenceToSolve.append(cube->turnFace(YELLOW, faceFirstCorner - faceFirstEdge + 3));
+                        sequenceToSolve.append(cube->turnFace(faceSecondCorner, -1));
+                        sequenceToSolve.append(cube->turnFace(YELLOW, 1));
+                        sequenceToSolve.append(cube->turnFace(faceSecondCorner, 1));
                     }
                 }
                 //corner col1 sticker on YELLOW face
-                else if(faceCornerCol1 == WHITE){
-        //            qDebug()<< "corner col1 sticker on YELLOW face";
+                else if(faceFirstCorner == WHITE){
                     //edge col1 sticker on YELLOW face
-                    if(faceEdgeCol1 == YELLOW){
-    //                    qDebug()<< "edge col1 sticker on YELLOW face";
-                        facesTurned.append(c->turnFace(YELLOW, faceWhite - faceEdgeCol2));
-                        facesTurned.append(c->turnFace(faceWhite, -1));
-                        facesTurned.append(c->turnFace(YELLOW, -1));
-                        facesTurned.append(c->turnFace(faceWhite, 1));
+                    if(faceFirstEdge == YELLOW){
+                        sequenceToSolve.append(cube->turnFace(YELLOW, faceWhiteSticker - faceSecondEdge));
+                        sequenceToSolve.append(cube->turnFace(faceWhiteSticker, -1));
+                        sequenceToSolve.append(cube->turnFace(YELLOW, -1));
+                        sequenceToSolve.append(cube->turnFace(faceWhiteSticker, 1));
                     } else {
-                        facesTurned.append(c->turnFace(YELLOW, faceCornerCol2 - faceEdgeCol1));
-                        facesTurned.append(c->turnFace(faceWhite, -1));
-                        facesTurned.append(c->turnFace(YELLOW, -1));
-                        facesTurned.append(c->turnFace(faceWhite, 1));
+                        sequenceToSolve.append(cube->turnFace(YELLOW, faceSecondCorner - faceFirstEdge));
+                        sequenceToSolve.append(cube->turnFace(faceWhiteSticker, -1));
+                        sequenceToSolve.append(cube->turnFace(YELLOW, -1));
+                        sequenceToSolve.append(cube->turnFace(faceWhiteSticker, 1));
                     }
                 }
                 //corner col2 sticker on YELLOW face
                 else {
- //                   qDebug()<< "corner col2 sticker on YELLOW face";
                     //edge col1 sticker on YELLOW face
-                    if(faceEdgeCol1 == YELLOW){
-//                        qDebug()<< "edge col1 sticker on YELLOW face";
-                        facesTurned.append(c->turnFace(YELLOW, faceCornerCol1 - faceEdgeCol2));
-                        facesTurned.append(c->turnFace(faceWhite, 1));
-                        facesTurned.append(c->turnFace(YELLOW, 1));
-                        facesTurned.append(c->turnFace(faceWhite, -1));
+                    if(faceFirstEdge == YELLOW){
+                        sequenceToSolve.append(cube->turnFace(YELLOW, faceFirstCorner - faceSecondEdge));
+                        sequenceToSolve.append(cube->turnFace(faceWhiteSticker, 1));
+                        sequenceToSolve.append(cube->turnFace(YELLOW, 1));
+                        sequenceToSolve.append(cube->turnFace(faceWhiteSticker, -1));
                     } else {
-                        facesTurned.append(c->turnFace(YELLOW, faceWhite - faceEdgeCol1));
-                        facesTurned.append(c->turnFace(faceWhite, 1));
-                        facesTurned.append(c->turnFace(YELLOW, 1));
-                        facesTurned.append(c->turnFace(faceWhite, -1));
+                        sequenceToSolve.append(cube->turnFace(YELLOW, faceWhiteSticker - faceFirstEdge));
+                        sequenceToSolve.append(cube->turnFace(faceWhiteSticker, 1));
+                        sequenceToSolve.append(cube->turnFace(YELLOW, 1));
+                        sequenceToSolve.append(cube->turnFace(faceWhiteSticker, -1));
                     }
                 }
             }
         }
         //edge cubie not on the YELLOW face
         else {
-//            qDebug()<< "edge cubie not on the YELLOW face";
             //corner cubie on the YELLOW face
-            if(faceWhite == YELLOW || faceCornerCol1 == YELLOW || faceCornerCol2 == YELLOW){
-//                qDebug()<< "corner cubie on the YELLOW face";
+            if(faceWhiteSticker == YELLOW || faceFirstCorner == YELLOW || faceSecondCorner == YELLOW){
                 //WHITE sticker on the YELLOW face
-                if(faceWhite == YELLOW){
-//                    qDebug()<< "WHITE sticker on the YELLOW face";
+                if(faceWhiteSticker == YELLOW){
                     //edge correctly oriented
-                    if(faceEdgeCol1 == (faceEdgeCol2 + 3) % 4){
-//                        qDebug()<< "edge correctly oriented";
-                        facesTurned.append(c->turnFace(YELLOW, faceEdgeCol1 - faceCornerCol2));
-                        facesTurned.append(c->turnFace(faceEdgeCol1, 1));
-                        facesTurned.append(c->turnFace(YELLOW, 1));
-                        facesTurned.append(c->turnFace(faceEdgeCol1, -1));
-                        facesTurned.append(c->turnFace(YELLOW, -1));
+                    if(faceFirstEdge == (faceSecondEdge + 3) % 4){
+                        sequenceToSolve.append(cube->turnFace(YELLOW, faceFirstEdge - faceSecondCorner));
+                        sequenceToSolve.append(cube->turnFace(faceFirstEdge, 1));
+                        sequenceToSolve.append(cube->turnFace(YELLOW, 1));
+                        sequenceToSolve.append(cube->turnFace(faceFirstEdge, -1));
+                        sequenceToSolve.append(cube->turnFace(YELLOW, -1));
                     } else {
-                        facesTurned.append(c->turnFace(YELLOW, faceEdgeCol1 - faceCornerCol1));
-                        facesTurned.append(c->turnFace(faceEdgeCol1, -1));
-                        facesTurned.append(c->turnFace(YELLOW, 1));
-                        facesTurned.append(c->turnFace(faceEdgeCol1, 1));
+                        sequenceToSolve.append(cube->turnFace(YELLOW, faceFirstEdge - faceFirstCorner));
+                        sequenceToSolve.append(cube->turnFace(faceFirstEdge, -1));
+                        sequenceToSolve.append(cube->turnFace(YELLOW, 1));
+                        sequenceToSolve.append(cube->turnFace(faceFirstEdge, 1));
                     }
                 }
                 //corner col1 sticker on the YELLOW face
-                else if(faceCornerCol1 == YELLOW){
-//                    qDebug()<< "corner col1 sticker on the YELLOW face";
+                else if(faceFirstCorner == YELLOW){
                     //edge correctly oriented
-                    if(faceEdgeCol1 == (faceEdgeCol2 + 3) % 4){
-//                        qDebug()<< "edge correctly oriented";
-                        facesTurned.append(c->turnFace(YELLOW, faceEdgeCol2 - faceWhite));
-                        facesTurned.append(c->turnFace(faceEdgeCol2, -1));
-                        facesTurned.append(c->turnFace(YELLOW, 1));
-                        facesTurned.append(c->turnFace(faceEdgeCol2, 1));
+                    if(faceFirstEdge == (faceSecondEdge + 3) % 4){
+                        sequenceToSolve.append(cube->turnFace(YELLOW, faceSecondEdge - faceWhiteSticker));
+                        sequenceToSolve.append(cube->turnFace(faceSecondEdge, -1));
+                        sequenceToSolve.append(cube->turnFace(YELLOW, 1));
+                        sequenceToSolve.append(cube->turnFace(faceSecondEdge, 1));
                     } else {
-                        facesTurned.append(c->turnFace(YELLOW, faceEdgeCol1 - faceWhite));
-                        facesTurned.append(c->turnFace(faceEdgeCol1, -1));
-                        facesTurned.append(c->turnFace(YELLOW, -1));
-                        facesTurned.append(c->turnFace(faceEdgeCol1, 1));
+                        sequenceToSolve.append(cube->turnFace(YELLOW, faceFirstEdge - faceWhiteSticker));
+                        sequenceToSolve.append(cube->turnFace(faceFirstEdge, -1));
+                        sequenceToSolve.append(cube->turnFace(YELLOW, -1));
+                        sequenceToSolve.append(cube->turnFace(faceFirstEdge, 1));
                     }
                 }
                 //corner col2 sticker on the YELLOW face
                 else {
-//                    qDebug()<< "corner col2 sticker on the YELLOW face";
                     //edge correctly oriented
-                    if(faceEdgeCol1 == (faceEdgeCol2 + 3) % 4){
-//                        qDebug()<< "edge correctly oriented";
-                        facesTurned.append(c->turnFace(YELLOW, faceEdgeCol1 - faceWhite));
-                        facesTurned.append(c->turnFace(faceEdgeCol1, 1));
-                        facesTurned.append(c->turnFace(YELLOW, -1));
-                        facesTurned.append(c->turnFace(faceEdgeCol1, -1));
+                    if(faceFirstEdge == (faceSecondEdge + 3) % 4){
+                        sequenceToSolve.append(cube->turnFace(YELLOW, faceFirstEdge - faceWhiteSticker));
+                        sequenceToSolve.append(cube->turnFace(faceFirstEdge, 1));
+                        sequenceToSolve.append(cube->turnFace(YELLOW, -1));
+                        sequenceToSolve.append(cube->turnFace(faceFirstEdge, -1));
                     } else {
-                        facesTurned.append(c->turnFace(YELLOW, faceEdgeCol2 - faceWhite));
-                        facesTurned.append(c->turnFace(faceEdgeCol2, 1));
-                        facesTurned.append(c->turnFace(YELLOW, 1));
-                        facesTurned.append(c->turnFace(faceEdgeCol2, -1));
+                        sequenceToSolve.append(cube->turnFace(YELLOW, faceSecondEdge - faceWhiteSticker));
+                        sequenceToSolve.append(cube->turnFace(faceSecondEdge, 1));
+                        sequenceToSolve.append(cube->turnFace(YELLOW, 1));
+                        sequenceToSolve.append(cube->turnFace(faceSecondEdge, -1));
                     }
                 }
             }
             //corner cubie on the WHITE face
             else {
-//                qDebug()<< "corner cubie on the WHITE face";
                 //edge correctly oriented
-                if(faceEdgeCol1 == (faceEdgeCol2 + 3) % 4){
-//                    qDebug()<< "edge correctly oriented";
-                    facesTurned.append(c->turnFace(faceEdgeCol1, 1));
-                    facesTurned.append(c->turnFace(YELLOW, -1));
-                    facesTurned.append(c->turnFace(faceEdgeCol1, -1));
+                if(faceFirstEdge == (faceSecondEdge + 3) % 4){
+                    sequenceToSolve.append(cube->turnFace(faceFirstEdge, 1));
+                    sequenceToSolve.append(cube->turnFace(YELLOW, -1));
+                    sequenceToSolve.append(cube->turnFace(faceFirstEdge, -1));
                 } else {
-                    facesTurned.append(c->turnFace(faceEdgeCol1, -1));
-                    facesTurned.append(c->turnFace(YELLOW, 1));
-                    facesTurned.append(c->turnFace(faceEdgeCol1, 1));
+                    sequenceToSolve.append(cube->turnFace(faceFirstEdge, -1));
+                    sequenceToSolve.append(cube->turnFace(YELLOW, 1));
+                    sequenceToSolve.append(cube->turnFace(faceFirstEdge, 1));
                 }
             }
         }
-        cornerPos = c->locateCubie(WHITE, col1, col2); //Locating the corner cubie
-        edgePos = c->locateCubie(col1, col2);
-        faceWhite = (color) (cornerPos.at(0) / 3); //face on which the WHITE sticker is
-        faceCornerCol1 = (color) (cornerPos.at(2) / 3); //face on which the col1 sticker is
-        faceCornerCol2 = (color) (cornerPos.at(4) / 3); //face on which the col2 sticker is
-        faceEdgeCol1 = (color) (edgePos.at(0) / 3);
-        faceEdgeCol2 = (color) (edgePos.at(2) / 3);
+        cornerIndices = cube->locateCubie(WHITE, firstEdgeColor, secondEdgeColor); //Locating the corner cubie
+        edgeIndices = cube->locateCubie(firstEdgeColor, secondEdgeColor);
+        faceWhiteSticker = (color) (cornerIndices.at(0) / 3); //face on which the WHITE sticker is
+        faceFirstCorner = (color) (cornerIndices.at(2) / 3); //face on which the col1 sticker is
+        faceSecondCorner = (color) (cornerIndices.at(4) / 3); //face on which the col2 sticker is
+        faceFirstEdge = (color) (edgeIndices.at(0) / 3);
+        faceSecondEdge = (color) (edgeIndices.at(2) / 3);
     }
-    if (k > 50){
-        qDebug() << "Failure for pair " << col1 << col2;
+    if (loopCounter > 50){
+        qDebug() << "Failure for pair " << firstEdgeColor << secondEdgeColor;
     }
-    return facesTurned;
+    return sequenceToSolve;
 }
 
-QString Fridrich::cross(Cube *c){
-    QString facesTurnedMin = "U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U ";
-    for (int col1 = 0; col1 < 4; col1++) { //Solving the 4 cubies {WHITE, RED}, {WHITE, ORANGE}, {WHITE, GREEN}, {WHITE, BLUE}
-        for (int col2 = 0; col2 < 4; ++col2) {
-            if(col2 != col1){
-                for (int col3 = 0; col3 < 4; ++col3){
-                    if(col3 != col2 && col3 != col1){
-                        for (int col4 = 0; col4 < 4; ++col4) {
-                            if(col4 != col3 && col4 != col2 && col4 != col1){
-                                Cube *testCube = new Cube(*c);
-                                QString facesTurned = "";
-                                facesTurned += crossEdge(testCube, col1);
-                                facesTurned += crossEdge(testCube, col2);
-                                facesTurned += crossEdge(testCube, col3);
-                                facesTurned += crossEdge(testCube, col4);
-                                if(facesTurned.count(' ') < facesTurnedMin.count(' ')){
-                                    facesTurnedMin = facesTurned;
+QString Fridrich::cross(Cube *cube){
+    QString fewestMovesSequence = "U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U U ";
+    //Solving the 4 cubies {WHITE, RED}, {WHITE, ORANGE}, {WHITE, GREEN}, {WHITE, BLUE} in every possible order
+    for (int color1 = 0; color1 < 4; color1++) {
+        for (int color2 = 0; color2 < 4; ++color2) {
+            if(color2 != color1){
+                for (int color3 = 0; color3 < 4; ++color3){
+                    if(color3 != color2 && color3 != color1){
+                        for (int color4 = 0; color4 < 4; ++color4) {
+                            if(color4 != color3 && color4 != color2 && color4 != color1){
+                                Cube *tempCube = new Cube(*cube);
+                                QString sequence = "";
+                                sequence += crossEdge(tempCube, color1);
+                                sequence += crossEdge(tempCube, color2);
+                                sequence += crossEdge(tempCube, color3);
+                                sequence += crossEdge(tempCube, color4);
+                                if(sequence.count(' ') < fewestMovesSequence.count(' ')){
+                                    fewestMovesSequence = sequence;
                                 }
-                                delete testCube;
+                                delete tempCube;
+                                tempCube = 0;
                             }
                         }
                     }
@@ -523,31 +441,32 @@ QString Fridrich::cross(Cube *c){
             }
         }
     }
-    c->moveSequence(facesTurnedMin, RED, YELLOW);
-    return facesTurnedMin;
+    cube->moveSequence(fewestMovesSequence, RED, YELLOW);
+    return fewestMovesSequence;
 }
 
-QString Fridrich::F2L(Cube *c){
-    QString facesTurnedMin = "F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L ";
-    for (int col1 = 0; col1 < 4; col1++) { //Solving the 4 pairs of cubies {{WHITE, RED, BLUE}, {RED BLUE}},
+QString Fridrich::F2L(Cube *cube){
+    QString fewestMovesSequence = "F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L ";
+    for (int color1 = 0; color1 < 4; color1++) { //Solving the 4 pairs of cubies {{WHITE, RED, BLUE}, {RED BLUE}},
         //{{WHITE, BLUE, ORANGE}, {BLUE, ORANGE}}, {{WHITE, ORANGE, GREEN}, {ORANGE, GREEN}},
         //{{WHITE, GREEN, RED}, {GREEN, RED}}
-        for (int col2 = 0; col2 < 4; ++col2) {
-            if(col2 != col1){
-                for (int col3 = 0; col3 < 4; ++col3){
-                    if(col3 != col2 && col3 != col1){
-                        for (int col4 = 0; col4 < 4; ++col4) {
-                            if(col4 != col3 && col4 != col2 && col4 != col1){
-                                Cube *testCube = new Cube(*c);
-                                QString facesTurned = "";
-                                facesTurned += F2LPair(testCube, col1);
-                                facesTurned += F2LPair(testCube, col2);
-                                facesTurned += F2LPair(testCube, col3);
-                                facesTurned += F2LPair(testCube, col4);
-                                if(facesTurned.count(' ') < facesTurnedMin.count(' ')){
-                                    facesTurnedMin = facesTurned;
+        for (int color2 = 0; color2 < 4; ++color2) {
+            if(color2 != color1){
+                for (int color3 = 0; color3 < 4; ++color3){
+                    if(color3 != color2 && color3 != color1){
+                        for (int color4 = 0; color4 < 4; ++color4) {
+                            if(color4 != color3 && color4 != color2 && color4 != color1){
+                                Cube *tempCube = new Cube(*cube);
+                                QString sequence= "";
+                                sequence += F2LPair(tempCube, color1);
+                                sequence += F2LPair(tempCube, color2);
+                                sequence += F2LPair(tempCube, color3);
+                                sequence += F2LPair(tempCube, color4);
+                                if(sequence.count(' ') < fewestMovesSequence.count(' ')){
+                                    fewestMovesSequence = sequence;
                                 }
-                                delete testCube;
+                                delete tempCube;
+                                tempCube = 0;
                             }
                         }
                     }
@@ -555,182 +474,191 @@ QString Fridrich::F2L(Cube *c){
             }
         }
     }
-    c->moveSequence(facesTurnedMin, RED, YELLOW);
-    return facesTurnedMin;
+    cube->moveSequence(fewestMovesSequence, RED, YELLOW);
+    return fewestMovesSequence;
 }
 
-QString Fridrich::OLL(Cube *c){
-    //copying the matrix to simplify the code
-    color matrix[18][3];
-    //this boolean checks if the face is already solved
+QString Fridrich::OLL2Look(Cube *cube){
+    //copying the matrix
+    color cubeMatrix[18][3];
+    //this boolean checks if this step is already solved
     bool solved = true;
+    color** tempMatrix = cube->getMatrix();
     for (int x = 0; x < 18; ++x) {
         for (int y = 0; y < 3; ++y) {
-            matrix[x][y] = c->getMatrix()[x][y];
-            if(x >= YELLOW * 3 && matrix[x][y] != YELLOW){
+            cubeMatrix[x][y] = tempMatrix[x][y];
+            //if x and y are on the YELLOW face and are not YELLOW, this step isn't solved yet
+            if(x >= YELLOW * 3 && cubeMatrix[x][y] != YELLOW){
                 solved = false;
             }
         }
+        delete [] tempMatrix[x];
     }
-    //is it solved already?
+    delete [] tempMatrix;
+    //is it solved yet?
     if(solved){
         return "";
     }
-    int nBCorner = (matrix[YELLOW * 3 + 0][0] == YELLOW) + (matrix[YELLOW * 3 + 2][2] == YELLOW) + (matrix[YELLOW * 3 + 0][2] == YELLOW) + (matrix[YELLOW * 3 + 2][0] == YELLOW);
-    //the 50+ cases can be seen from all four faces, so the program has to check them four
-    for (int co = 0; co < 4; ++co) {
+    //counting the number of solved corners to check the state of the cube
+    int nBCorner = (cubeMatrix[YELLOW * 3 + 0][0] == YELLOW) + (cubeMatrix[YELLOW * 3 + 2][2] == YELLOW) + (cubeMatrix[YELLOW * 3 + 0][2] == YELLOW) + (cubeMatrix[YELLOW * 3 + 2][0] == YELLOW);
+    //the different cases can be seen from all four faces, so the program has to check them four
+    for (int col = 0; col < 4; ++col) {
         //Face from which the cube is seen
-        color col = (color) co;
-        //The four YELLOW corners
+        color face = (color) col;
+        //The four YELLOW corners, seen from the face we are now evaluating (they aren't all used in the 2-look OLL)
         color topRight;
         color topLeft;
         color botRight;
         color botLeft;
-        switch(col){
+        switch(face){
         case RED:
-            topRight = matrix[YELLOW * 3][0];
-            topLeft = matrix[YELLOW * 3 + 2][0];
-            botRight = matrix[YELLOW * 3][2];
-            botLeft = matrix[YELLOW * 3 + 2][2];
+            topRight = cubeMatrix[YELLOW * 3][0];
+            topLeft = cubeMatrix[YELLOW * 3 + 2][0];
+            botRight = cubeMatrix[YELLOW * 3][2];
+            botLeft = cubeMatrix[YELLOW * 3 + 2][2];
             break;
         case BLUE:
-            topRight = matrix[YELLOW * 3 + 2][0];
-            topLeft = matrix[YELLOW * 3 + 2][2];
-            botRight = matrix[YELLOW * 3][0];
-            botLeft = matrix[YELLOW * 3][2];
+            topRight = cubeMatrix[YELLOW * 3 + 2][0];
+            topLeft = cubeMatrix[YELLOW * 3 + 2][2];
+            botRight = cubeMatrix[YELLOW * 3][0];
+            botLeft = cubeMatrix[YELLOW * 3][2];
             break;
         case ORANGE:
-            topRight = matrix[YELLOW * 3 + 2][2];
-            topLeft = matrix[YELLOW * 3][2];
-            botRight = matrix[YELLOW * 3 + 2][0];
-            botLeft = matrix[YELLOW * 3][0];
+            topRight = cubeMatrix[YELLOW * 3 + 2][2];
+            topLeft = cubeMatrix[YELLOW * 3][2];
+            botRight = cubeMatrix[YELLOW * 3 + 2][0];
+            botLeft = cubeMatrix[YELLOW * 3][0];
             break;
         case GREEN:
-            topRight = matrix[YELLOW * 3][2];
-            topLeft = matrix[YELLOW * 3][0];
-            botRight = matrix[YELLOW * 3 + 2][2];
-            botLeft = matrix[YELLOW * 3 + 2][0];
+            topRight = cubeMatrix[YELLOW * 3][2];
+            topLeft = cubeMatrix[YELLOW * 3][0];
+            botRight = cubeMatrix[YELLOW * 3 + 2][2];
+            botLeft = cubeMatrix[YELLOW * 3 + 2][0];
             break;
         default:
             break;
         }
-        //Crosses
-        if (matrix[YELLOW * 3 + 1][0] == YELLOW && matrix[YELLOW * 3 + 1][2] == YELLOW && matrix[YELLOW * 3 + 0][1] == YELLOW && matrix[YELLOW * 3 + 2][1] == YELLOW) {
-            //No corner
+        //The YELLOW face edges are all solved and form a cross
+        if (cubeMatrix[YELLOW * 3 + 1][0] == YELLOW && cubeMatrix[YELLOW * 3 + 1][2] == YELLOW && cubeMatrix[YELLOW * 3][1] == YELLOW && cubeMatrix[YELLOW * 3 + 2][1] == YELLOW) {
+            //No corner solved yet
             if(nBCorner == 0) {
-                //side YELLOW parallel
-                if(matrix[col * 3 + 0][2] == YELLOW && matrix[col * 3 + 2][2] == YELLOW && matrix[((col + 2) % 4) * 3][2] == YELLOW && matrix[((col + 2) % 4) * 3 + 2][2] == YELLOW) {
-                    return c->moveSequence("R U2 R' U' R U R' U' R U' R'", col, YELLOW);
+                //The YELLOW stickers on the corners are parallel
+                if(cubeMatrix[face * 3 + 0][2] == YELLOW && cubeMatrix[face * 3 + 2][2] == YELLOW && cubeMatrix[((face + 2) % 4) * 3][2] == YELLOW && cubeMatrix[((face + 2) % 4) * 3 + 2][2] == YELLOW) {
+                    return cube->moveSequence("R U2 R' U' R U R' U' R U' R'", face, YELLOW);
                 }
-                //first not parallel case both RED corner are YELLOW
-                else if (matrix[col * 3 + 2][2] == YELLOW && matrix[((col + 2) % 4) * 3][2] == YELLOW && matrix[((col + 3) % 4) * 3][2] == YELLOW && matrix[((col + 3) % 4) * 3 + 2][2] == YELLOW) {
-                    return c->moveSequence("L U' R' U L' U R U R' U R", col, YELLOW);
+                //The YELLOW stickers on the corners are not parallel
+                else if (cubeMatrix[face * 3 + 2][2] == YELLOW && cubeMatrix[((face + 2) % 4) * 3][2] == YELLOW && cubeMatrix[((face + 3) % 4) * 3][2] == YELLOW && cubeMatrix[((face + 3) % 4) * 3 + 2][2] == YELLOW) {
+                    return cube->moveSequence("L U' R' U L' U R U R' U R", face, YELLOW);
                 }
             }
-            //One corner
+            //One corner solved
             else if (nBCorner == 1){
-                //algorithm to right
-                if(botLeft == YELLOW && matrix[col * 3 + 2][2] != YELLOW) {
-                    return c->moveSequence("R' U2 R U R' U R", col, YELLOW);
+                //the bottom left corner on the YELLOW face points right
+                if(botLeft == YELLOW && cubeMatrix[face * 3 + 2][2] != YELLOW) {
+                    return cube->moveSequence("R' U2 R U R' U R", face, YELLOW);
                 }
-                //algorithm to left
-                else if (botLeft == YELLOW && matrix[col * 3 + 2][2] == YELLOW) {
-                    return c->moveSequence("L' U R U' L U R'", col, YELLOW);
-                }
-            }
-            //Two corners and diagonal
-            else if((matrix[YELLOW * 3 + 0][0] == YELLOW && matrix[YELLOW * 3 + 2][2] == YELLOW) || (matrix[YELLOW * 3 + 2][0] == YELLOW && matrix[YELLOW * 3 + 0][2] == YELLOW)){
-                if(matrix[((col + 1) % 4) * 3][2] == YELLOW) {
-                    return c->moveSequence("R' F' L' F R F' L F", col, YELLOW);
+                //the bottom left corner on the YELLOW face points the evaluated face
+                else if (botLeft == YELLOW && cubeMatrix[face * 3 + 2][2] == YELLOW) {
+                    return cube->moveSequence("L' U R U' L U R'", face, YELLOW);
                 }
             }
-            //Two corners
+            //Two corners solved and diagonal
+            else if((cubeMatrix[YELLOW * 3 + 0][0] == YELLOW && cubeMatrix[YELLOW * 3 + 2][2] == YELLOW) || (cubeMatrix[YELLOW * 3 + 2][0] == YELLOW && cubeMatrix[YELLOW * 3 + 0][2] == YELLOW)){
+                if(cubeMatrix[((face + 1) % 4) * 3][2] == YELLOW) {
+                    return cube->moveSequence("R' F' L' F R F' L F", face, YELLOW);
+                }
+            }
+            //Two corners solved not diagonal
             else if(nBCorner == 2) {
-                //YELLOW on the same side face
-                if (matrix[col * 3][2] == YELLOW && matrix[col * 3 + 2][2] == YELLOW) {
-                    return c->moveSequence("R2 D R' U2 R D' R' U2 R'", col, YELLOW);
+                //YELLOW stickers are on the evaluated face
+                if (cubeMatrix[face * 3][2] == YELLOW && cubeMatrix[face * 3 + 2][2] == YELLOW) {
+                    return cube->moveSequence("R2 D R' U2 R D' R' U2 R'", face, YELLOW);
                 }
-                //YELLOW opposite
-                else if (matrix[col * 3][2] == YELLOW) {
-                    return c->moveSequence("R' F' L F R F' L' F", col, YELLOW);
+                //one YELLOW sticker is on the evaluated face, and the other one is opposite to it
+                else if (cubeMatrix[face * 3][2] == YELLOW) {
+                    return cube->moveSequence("R' F' L F R F' L' F", face, YELLOW);
                 }
             }
         }
-        //dots
-        else if (matrix[YELLOW * 3 + 1][0] != YELLOW && matrix[YELLOW * 3 + 1][2] != YELLOW && matrix[YELLOW * 3 + 0][1] != YELLOW && matrix[YELLOW * 3 + 2][1] != YELLOW) {
-            return c->moveSequence("R U R' U R' F R F' U2 R' F R F'", col, YELLOW);
+        //No YELLOW sticker on the YELLOW face
+        else if (cubeMatrix[YELLOW * 3 + 1][0] != YELLOW && cubeMatrix[YELLOW * 3 + 1][2] != YELLOW && cubeMatrix[YELLOW * 3 + 0][1] != YELLOW && cubeMatrix[YELLOW * 3 + 2][1] != YELLOW) {
+            return cube->moveSequence("R U R' U R' F R F' U2 R' F R F'", face, YELLOW);
         }
-        //lines
-        else if ((matrix[YELLOW * 3 + 1][0] == YELLOW && matrix[YELLOW * 3 + 1][2] == YELLOW) || (matrix[YELLOW * 3 + 0][1] == YELLOW && matrix[YELLOW * 3 + 2][1] == YELLOW)) {
+        //the edge stickers form a YELLOW line on the YELLOW face
+        else if ((cubeMatrix[YELLOW * 3 + 1][0] == YELLOW && cubeMatrix[YELLOW * 3 + 1][2] == YELLOW) || (cubeMatrix[YELLOW * 3 + 0][1] == YELLOW && cubeMatrix[YELLOW * 3 + 2][1] == YELLOW)) {
             //horizontal line
-            if(matrix[col * 3 + 1][2] == YELLOW){
-                return c->moveSequence("L' B' L U' R' U R U' R' U R L' B L", col, YELLOW);
+            if(cubeMatrix[face * 3 + 1][2] == YELLOW){
+                return cube->moveSequence("L' B' L U' R' U R U' R' U R L' B L", face, YELLOW);
             }
         }
-        //others
+        //other cases
         else {
             //little L yellow left and up
-            if (matrix[col * 3 + 1][2] == YELLOW && matrix[((col + 1) % 4) * 3 + 1][2] != YELLOW){
-                return c->moveSequence("F R U R' U' R U R' U' F'", col, YELLOW);
+            if (cubeMatrix[face * 3 + 1][2] == YELLOW && cubeMatrix[((face + 1) % 4) * 3 + 1][2] != YELLOW){
+                return cube->moveSequence("F R U R' U' R U R' U' F'", face, YELLOW);
             }
         }
     }
     return "";
 }
 
-QString Fridrich::PLL(Cube *c){
-    //copying the matrix to simplify the code
-    color matrix[18][3];
-    //this boolean checks if the face is already solved
+QString Fridrich::PLL2Look(Cube *c){
+    //copying the matrix
+    color cubeMatrix[18][3];
+    //this boolean checks if this step is already solved
     bool solved = true;
-    c->displayCube();
+    color** tempMatrix = c->getMatrix();
     for (int x = 0; x < 18; ++x) {
         for (int y = 0; y < 3; ++y) {
-            matrix[x][y] = c->getMatrix()[x][y];
-            if(x < 12 && x % 3 == 0 && y == 2 && (matrix[x][y] != matrix[x + 1][y] || matrix[x][y] != matrix[x + 2][y])){
+            cubeMatrix[x][y] = tempMatrix[x][y];
+            //if the adjacent faces don't all have the same color, this step isn't solved yet
+            if(x < 12 && x % 3 == 0 && y == 2 && (cubeMatrix[x][y] != cubeMatrix[x + 1][y] || cubeMatrix[x][y] != cubeMatrix[x + 2][y])){
                 solved = false;
             }
         }
+        delete [] tempMatrix[x];
     }
-    //is it solved already?
+    delete [] tempMatrix;
+    tempMatrix = 0;
+    //is it solved yet?
     if (solved) {
         return "";
     }
-    //Again, the 21 cases here can be seen from 4 different angles
-    for (int co = 0; co < 4; ++co) {
-        color col = (color) co;
-        //2 corners already correct
-        if (matrix[col * 3][2] == matrix[col * 3 + 2][2]) {
-            //4 corners correct
-            if (matrix[((col + 2) % 4) * 3][2] == matrix[((col + 2) % 4) * 3 + 2][2]) {
-                //1 edge correct
-                if (matrix[col * 3 + 1][2] == matrix[col * 3][2]) {
-                    //right edge must go on left
-                    if (matrix[((col + 2) % 4) * 3][2] == matrix[((col + 1) % 4) * 3 + 1][2]) {
-                        return c->moveSequence("R' U R' U' R' U' R' U R U R2", col, YELLOW);
+    //Again, the different cases here can be seen from 4 different angles
+    for (int col = 0; col < 4; ++col) {
+        color face = (color) col;
+        //2 corners are the same color on the evaluated face
+        if (cubeMatrix[face * 3][2] == cubeMatrix[face * 3 + 2][2]) {
+            //the 4 corners are solved relatively to each others
+            if (cubeMatrix[((face + 2) % 4) * 3][2] == cubeMatrix[((face + 2) % 4) * 3 + 2][2]) {
+                //1 edge is solved respectively to its adjacent corners
+                if (cubeMatrix[face * 3 + 1][2] == cubeMatrix[face * 3][2]) {
+                    //the edge on the right and YELLOW face must go on the left face
+                    if (cubeMatrix[((face + 2) % 4) * 3][2] == cubeMatrix[((face + 1) % 4) * 3 + 1][2]) {
+                        return c->moveSequence("R' U R' U' R' U' R' U R U R2", face, YELLOW);
                     }
-                    //left edge must go on right
-                    else if (matrix[((col + 2) % 4) * 3][2] == matrix[((col + 3) % 4) * 3 + 1][2]) {
-                        return c->moveSequence("R2 U' R' U' R U R U R U' R", col, YELLOW);
+                    //the edge on the left and YELLOW face must go on the right face
+                    else if (cubeMatrix[((face + 2) % 4) * 3][2] == cubeMatrix[((face + 3) % 4) * 3 + 1][2]) {
+                        return c->moveSequence("R2 U' R' U' R U R U R U' R", face, YELLOW);
                     }
                 }
-                //edges opposite to their faces
-                else if (matrix[col * 3 + 1][2] == matrix[((col + 2) % 4) * 3][2] && matrix[col * 3][2] == matrix[((col + 2) % 4) * 3  + 1][2]) {
-                    return c->moveSequence("R2 L2 D R2 L2 U2 R2 L2 D R2 L2", col, YELLOW);
+                //the 4 edges are on the face opposite to the one they belong to
+                else if (cubeMatrix[face * 3 + 1][2] == cubeMatrix[((face + 2) % 4) * 3][2] && cubeMatrix[face * 3][2] == cubeMatrix[((face + 2) % 4) * 3  + 1][2]) {
+                    return c->moveSequence("R2 L2 D R2 L2 U2 R2 L2 D R2 L2", face, YELLOW);
                 }
-                //edges diagonally inverted
-                else if (matrix[((col + 3) % 4) * 3 + 1][2] == matrix[col* 3][2] && matrix[((col + 3) % 4) * 3][2] == matrix[col * 3 + 1][2]) {
-                    return c->moveSequence("R' U' R2 U R U R' U' R U R U' R U' R' U2", col, YELLOW);
+                //the 4 edges are diagonally swapped
+                else if (cubeMatrix[((face + 3) % 4) * 3 + 1][2] == cubeMatrix[face* 3][2] && cubeMatrix[((face + 3) % 4) * 3][2] == cubeMatrix[face * 3 + 1][2]) {
+                    return c->moveSequence("R' U' R2 U R U R' U' R U R U' R U' R' U2", face, YELLOW);
                 }
             }
-            //
-            else if ((int)matrix[((col + 2) % 4) * 3][2] == (matrix[((col + 2) % 4) * 3 + 2][2] + 2) % 4) {
-                return c->moveSequence("R U R' U' R' F R2 U' R' U' R U R' F'", (color)((col + 3) % 4), YELLOW);
+            //2 corners are inverted
+            else if ((int)cubeMatrix[((face + 2) % 4) * 3][2] == (cubeMatrix[((face + 2) % 4) * 3 + 2][2] + 2) % 4) {
+                return c->moveSequence("R U R' U' R' F R2 U' R' U' R U R' F'", (color)((face + 3) % 4), YELLOW);
             }
         }
         //no corners correct
-        else if ((int)matrix[col * 3][2] == (matrix[col * 3 + 2][2] + 2) % 4 && (int)matrix[((col + 1) % 4) * 3][2] == (matrix[((col + 1) % 4) * 3 + 2][2] + 2) % 4) {
-            return c->moveSequence("R' U R' U' B' D B' D' B2 R' B' R B R", col, YELLOW);
+        else if ((int)cubeMatrix[face * 3][2] == (cubeMatrix[face * 3 + 2][2] + 2) % 4 && (int)cubeMatrix[((face + 1) % 4) * 3][2] == (cubeMatrix[((face + 1) % 4) * 3 + 2][2] + 2) % 4) {
+            return c->moveSequence("R' U R' U' B' D B' D' B2 R' B' R B R", face, YELLOW);
         }
     }
     return "";
