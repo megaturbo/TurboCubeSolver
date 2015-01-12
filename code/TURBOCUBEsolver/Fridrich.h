@@ -9,17 +9,17 @@ using namespace CubeColor;
 class Fridrich
 {
 public:
-    static QString solve(Cube *c);
+    static QString solve(Cube *cube);
 
 private:
     //Secondary steps
-    static QString crossEdge(Cube *c, int co);
-    static QString F2LPair(Cube *c, int col);
+    static QString crossEdge(Cube *cube, int firstEdgeColor);
+    static QString F2LPair(Cube *cube, int firstCornerColor);
     //Main steps
-    static QString cross(Cube *c);
-    static QString F2L(Cube *c);
-    static QString OLL(Cube *c);
-    static QString PLL(Cube *c);
+    static QString cross(Cube *cube);
+    static QString F2L(Cube *cube);
+    static QString OLL2Look(Cube *cube);
+    static QString PLL2Look(Cube *cube);
 };
 
 #endif // FRIDRICH_H

@@ -11,7 +11,7 @@ Cube::~Cube(){
 
 }
 
-void Cube::displayCube() {
+void Cube::qDebugDisplay() {
     QString s = "\n";
     for (int y = 0; y < 3; y++) {
         for (int x = 0; x < 18; x++) {
@@ -114,7 +114,7 @@ Cube::Cube(color matrix[18][3])
 Cube::Cube(const Cube &c){
     for (int x = 0; x < 18; ++x) {
         for (int y = 0; y < 3; ++y) {
-            matCube[x][y] = c.getMatrix()[x][y];
+            matCube[x][y] = c.matCube[x][y];
         }
     }
 }
@@ -123,160 +123,164 @@ Cube::Cube(const Cube &c){
 
 //returns indices of the cubie's stickers
 //ordered by colors
-QList<int> Cube::locateCubie(color c1, color c2) {
-    //we're testing 3 cubies on 4 faces, it will cover the entire cube
-    QList<int> cubi;
+QList<int> Cube::locateCubie(color firstColor, color secondColor) {
+    //storing the stickers indices on the matrix in this list
+    QList<int> indices;
+    //we're testing 3 edge cubies on 4 faces, it will cover the entire cube
     for (int face = 0; face < 4; ++face) {
-        cubi = cubie(face * 3 + 1, 0);
-        if (cubieEqual(cubi, c1, c2)) {
-            if (matCube[cubi.at(0)][cubi.at(1)] == c1) {
-                return cubi;
+        indices = linkedStickers(face * 3 + 1, 0);
+        if (cubieEqual(indices, firstColor, secondColor)) {
+            if (matCube[indices.at(0)][indices.at(1)] == firstColor) {
+                return indices;
             } else {
-                QList<int> ret;
-                ret += cubi.at(2);
-                ret += cubi.at(3);
-                ret += cubi.at(0);
-                ret += cubi.at(1);
-                return ret;
+                QList<int> sortedIndices;
+                sortedIndices += indices.at(2);
+                sortedIndices += indices.at(3);
+                sortedIndices += indices.at(0);
+                sortedIndices += indices.at(1);
+                return sortedIndices;
             }
         }
-        cubi = cubie(face * 3 + 1, 2);
-        if (cubieEqual(cubi, c1, c2)) {
-            if (matCube[cubi.at(0)][cubi.at(1)] == c1) {
-                return cubi;
+        indices = linkedStickers(face * 3 + 1, 2);
+        if (cubieEqual(indices, firstColor, secondColor)) {
+            if (matCube[indices.at(0)][indices.at(1)] == firstColor) {
+                return indices;
             } else {
-                QList<int> ret;
-                ret += cubi.at(2);
-                ret += cubi.at(3);
-                ret += cubi.at(0);
-                ret += cubi.at(1);
-                return ret;
+                QList<int> sortedIndices;
+                sortedIndices += indices.at(2);
+                sortedIndices += indices.at(3);
+                sortedIndices += indices.at(0);
+                sortedIndices += indices.at(1);
+                return sortedIndices;
             }
         }
-        cubi = cubie(face * 3, 1);
-        if (cubieEqual(cubi, c1, c2)) {
-            if (matCube[cubi.at(0)][cubi.at(1)] == c1) {
-                return cubi;
+        indices = linkedStickers(face * 3, 1);
+        if (cubieEqual(indices, firstColor, secondColor)) {
+            if (matCube[indices.at(0)][indices.at(1)] == firstColor) {
+                return indices;
             } else {
-                QList<int> ret;
-                ret += cubi.at(2);
-                ret += cubi.at(3);
-                ret += cubi.at(0);
-                ret += cubi.at(1);
-                return ret;
+                QList<int> sortedIndices;
+                sortedIndices += indices.at(2);
+                sortedIndices += indices.at(3);
+                sortedIndices += indices.at(0);
+                sortedIndices += indices.at(1);
+                return sortedIndices;
             }
         }
     }
-    return cubi;
+    return indices;
 }
 
 //returns indices of the cubie's stickers
 //ordered by colors
-QList<int> Cube::locateCubie(color c1, color c2, color c3) {
-    //we're testing 2 cubies on 4 faces, it will cover the entire cube
-    QList<int> cubi;
+QList<int> Cube::locateCubie(color firstColor, color secondColor, color thirdColor) {
+    QList<int> indices;
+    //we're testing 2 corner cubies on 4 faces, it will cover the entire cube
     for (int face = 0; face < 4; ++face) {
-        cubi = cubie(face * 3, 0);
-        if(cubieEqual(cubi, c1, c2, c3)) {
-            QList<int> ret;
+        //checking first corner
+        //getting the indices of this corner
+        indices = linkedStickers(face * 3, 0);
+        //if this corner is the one we are looking for, we return the indices of its stickers
+        if(cubieEqual(indices, firstColor, secondColor, thirdColor)) {
+            QList<int> sortedIndices;
             for (int i = 0; i < 6; i+=2) {
-                if (matCube[cubi.at(i)][cubi.at(i + 1)] == c1) {
-                    ret += cubi.at(i);
-                    ret += cubi.at(i + 1);
+                if (matCube[indices.at(i)][indices.at(i + 1)] == firstColor) {
+                    sortedIndices += indices.at(i);
+                    sortedIndices += indices.at(i + 1);
                 }
             }
             for (int i = 0; i < 6; i+=2) {
-                if (matCube[cubi.at(i)][cubi.at(i + 1)] == c2) {
-                    ret += cubi.at(i);
-                    ret += cubi.at(i + 1);
+                if (matCube[indices.at(i)][indices.at(i + 1)] == secondColor) {
+                    sortedIndices += indices.at(i);
+                    sortedIndices += indices.at(i + 1);
                 }
             }
             for (int i = 0; i < 6; i+=2) {
-                if (matCube[cubi.at(i)][cubi.at(i + 1)] == c3) {
-                    ret += cubi.at(i);
-                    ret += cubi.at(i + 1);
+                if (matCube[indices.at(i)][indices.at(i + 1)] == thirdColor) {
+                    sortedIndices += indices.at(i);
+                    sortedIndices += indices.at(i + 1);
                 }
             }
-            return ret;
+            return sortedIndices;
         }
-        cubi = cubie(face * 3, 2);
-        if(cubieEqual(cubi, c1, c2, c3)) {
-            QList<int> ret;
+        //checking second corner
+        indices = linkedStickers(face * 3, 2);
+        if(cubieEqual(indices, firstColor, secondColor, thirdColor)) {
+            QList<int> sortedIndices;
             for (int i = 0; i < 6; i+=2) {
-                if (matCube[cubi.at(i)][cubi.at(i + 1)] == c1) {
-                    ret += cubi.at(i);
-                    ret += cubi.at(i + 1);
+                if (matCube[indices.at(i)][indices.at(i + 1)] == firstColor) {
+                    sortedIndices += indices.at(i);
+                    sortedIndices += indices.at(i + 1);
                 }
             }
             for (int i = 0; i < 6; i+=2) {
-                if (matCube[cubi.at(i)][cubi.at(i + 1)] == c2) {
-                    ret += cubi.at(i);
-                    ret += cubi.at(i + 1);
+                if (matCube[indices.at(i)][indices.at(i + 1)] == secondColor) {
+                    sortedIndices += indices.at(i);
+                    sortedIndices += indices.at(i + 1);
                 }
             }
             for (int i = 0; i < 6; i+=2) {
-                if (matCube[cubi.at(i)][cubi.at(i + 1)] == c3) {
-                    ret += cubi.at(i);
-                    ret += cubi.at(i + 1);
+                if (matCube[indices.at(i)][indices.at(i + 1)] == thirdColor) {
+                    sortedIndices += indices.at(i);
+                    sortedIndices += indices.at(i + 1);
                 }
             }
-            return ret;
+            return sortedIndices;
         }
     }
-    return cubi;
+    return indices;
 }
 
 //return the indices of the stickers of the cubie containing the sticker at (i, j)
-QList<int> Cube::cubie(int i, int j) {
+QList<int> Cube::linkedStickers(int i, int j) {
+    //we add the indices to this qlist and we will return it at the end of the method
+    QList<int> indices;
     //not on the cube
     if(i < 0 || i > 17 || j < 0 || j > 3) {
-        QList<int> ret;
-        return ret;
+        return indices;
     } else {
         //indices on the face
         int x = i % 3;
         int y = j;
-        //on this face
+        //face on which the (i, j) sticker is
         color face = (color) (i /3);
-        //we add the indices to this qlist and we will return it at the end of the method
-        QList<int> ret;
-        ret += i;
-        ret += j;
+        indices += i;
+        indices += j;
         //if x = y = 1, it's a center
         if (x == 1 && y == 1) {
-            return ret;
+            return indices;
         }
         //if face is RED, BLUE, ORANGE OR GREEN
         else if (face < 4) {
             //if the sticker is adjacent to another RED, BLUE, ORANGE OR GREEN face
             //if the sticker is on the left of the face, return the sticker to the left of it
             if(x == 0){
-                ret += (i + 11) % 12;
-                ret += y;
+                indices += (i + 11) % 12;
+                indices += y;
             }
             //if the sticker is on the right of the face, return the sticker to the right of it
             if (x == 2) {
-                ret += (i + 1) % 12;
-                ret += y;
+                indices += (i + 1) % 12;
+                indices += y;
             }
             //if the sticker is adjacent to the WHITE face
             if (y == 0){
                 switch(face){
                 case RED:
-                    ret += WHITE * 3 + x;
-                    ret += 2;
+                    indices += WHITE * 3 + x;
+                    indices += 2;
                     break;
                 case BLUE:
-                    ret += WHITE * 3 + 2;
-                    ret += 2 - x;
+                    indices += WHITE * 3 + 2;
+                    indices += 2 - x;
                     break;
                 case ORANGE:
-                    ret += WHITE * 3 + 2 - x;
-                    ret += 0;
+                    indices += WHITE * 3 + 2 - x;
+                    indices += 0;
                     break;
                 case GREEN:
-                    ret += WHITE * 3;
-                    ret += x;
+                    indices += WHITE * 3;
+                    indices += x;
                     break;
                 default:
                     //should not happen
@@ -287,20 +291,20 @@ QList<int> Cube::cubie(int i, int j) {
             if (y == 2){
                 switch(face){
                 case RED:
-                    ret += YELLOW * 3 + 2 - x;
-                    ret += 2;
+                    indices += YELLOW * 3 + 2 - x;
+                    indices += 2;
                     break;
                 case BLUE:
-                    ret += YELLOW * 3;
-                    ret += 2 - x;
+                    indices += YELLOW * 3;
+                    indices += 2 - x;
                     break;
                 case ORANGE:
-                    ret += YELLOW * 3 + x;
-                    ret += 0;
+                    indices += YELLOW * 3 + x;
+                    indices += 0;
                     break;
                 case GREEN:
-                    ret += YELLOW * 3 + 2;
-                    ret += x;
+                    indices += YELLOW * 3 + 2;
+                    indices += x;
                     break;
                 default:
                     //should not happen
@@ -312,49 +316,49 @@ QList<int> Cube::cubie(int i, int j) {
         else if (face == WHITE){
             //if the face is adjacent to RED
             if (y == 2) {
-                ret += RED * 3 + x;
-                ret += 0;
+                indices += RED * 3 + x;
+                indices += 0;
             }
             //if the face is adjacent to BLUE
             if (x == 2) {
-                ret += BLUE * 3 + 2 - y;
-                ret += 0;
+                indices += BLUE * 3 + 2 - y;
+                indices += 0;
             }
             //if the face is adjacent to ORANGE
             if (y == 0) {
-                ret += ORANGE * 3 + 2 - x;
-                ret += 0;
+                indices += ORANGE * 3 + 2 - x;
+                indices += 0;
             }
             //if the face is adjacent to GREEN
             if (x == 0) {
-                ret += GREEN * 3 + y;
-                ret += 0;
+                indices += GREEN * 3 + y;
+                indices += 0;
             }
         }
         //else face is YELLOW
         else {
             //if the face is adjacent to RED
             if (y == 2) {
-                ret += RED * 3 + 2 - x;
-                ret += 2;
+                indices += RED * 3 + 2 - x;
+                indices += 2;
             }
             //if the face is adjacent to BLUE
             if (x == 0) {
-                ret += BLUE * 3 + 2 - y;
-                ret += 2;
+                indices += BLUE * 3 + 2 - y;
+                indices += 2;
             }
             //if the face is adjacent to ORANGE
             if (y == 0) {
-                ret += ORANGE * 3 + x;
-                ret += 2;
+                indices += ORANGE * 3 + x;
+                indices += 2;
             }
             //if the face is adjacent to GREEN
             if (x == 2) {
-                ret += GREEN * 3 + y;
-                ret += 2;
+                indices += GREEN * 3 + y;
+                indices += 2;
             }
         }
-        return ret;
+        return indices;
     }
 }
 
@@ -462,7 +466,7 @@ QString Cube::reverseSequence(QString sequence)
  * @param colorU The color on the Up
  * @return The actual sequence did
  */
-QString Cube::moveSequence(QString sequence, color colorF, color colorU) {
+QString Cube::moveSequence(QString sequence, color colorFront, color colorUp) {
 
     QStringList moves = sequence.split(' ');
 
@@ -489,22 +493,22 @@ QString Cube::moveSequence(QString sequence, color colorF, color colorU) {
 
         switch (theMove.toLatin1()) {
         case 'F':
-            facesTurned += F(nbQTurn, colorF, colorU);
+            facesTurned += F(nbQTurn, colorFront, colorUp);
             break;
         case 'B':
-            facesTurned += B(nbQTurn, colorF, colorU);
+            facesTurned += B(nbQTurn, colorFront, colorUp);
             break;
         case 'L':
-            facesTurned += L(nbQTurn, colorF, colorU);
+            facesTurned += L(nbQTurn, colorFront, colorUp);
             break;
         case 'R':
-            facesTurned += R(nbQTurn, colorF, colorU);
+            facesTurned += R(nbQTurn, colorFront, colorUp);
             break;
         case 'U':
-            facesTurned += U(nbQTurn, colorF, colorU);
+            facesTurned += U(nbQTurn, colorFront, colorUp);
             break;
         case 'D':
-            facesTurned += D(nbQTurn, colorF, colorU);
+            facesTurned += D(nbQTurn, colorFront, colorUp);
             break;
         }
     }
@@ -513,13 +517,13 @@ QString Cube::moveSequence(QString sequence, color colorF, color colorU) {
 
 //matrix rotation per face
 //TODO: turn faces relatively
-QString Cube::U(int nbQuarterTurn, color col1, color col2) {
-    return turnFace(col2, nbQuarterTurn);
+QString Cube::U(int nbQuarterTurn, color colorFront, color colorUp) {
+    return turnFace(colorUp, nbQuarterTurn);
 }
 
-QString Cube::D(int nbQuarterTurn, color col1, color col2) {
+QString Cube::D(int nbQuarterTurn, color colorFront, color colorUp) {
     color face;
-    switch(col2){
+    switch(colorUp){
     case YELLOW:
         face = WHITE;
         break;
@@ -527,15 +531,15 @@ QString Cube::D(int nbQuarterTurn, color col1, color col2) {
         face = YELLOW;
         break;
     default:
-        face = (color) ((col2 + 2) % 4);
+        face = (color) ((colorUp + 2) % 4);
         break;
     }
     return turnFace(face, nbQuarterTurn);
 }
 
-QString Cube::B(int nbQuarterTurn, color col1, color col2) {
+QString Cube::B(int nbQuarterTurn, color colorFront, color colorUp) {
     color face;
-    switch(col1){
+    switch(colorFront){
     case YELLOW:
         face = WHITE;
         break;
@@ -543,55 +547,54 @@ QString Cube::B(int nbQuarterTurn, color col1, color col2) {
         face = YELLOW;
         break;
     default:
-        face = (color) ((col1 + 2) % 4);
+        face = (color) ((colorFront + 2) % 4);
         break;
     }
     return turnFace(face, nbQuarterTurn);
 }
 
-QString Cube::F(int nbQuarterTurn, color col1, color col2) {
-    return turnFace(col1, nbQuarterTurn);
+QString Cube::F(int nbQuarterTurn, color colorFront, color colorUp) {
+    return turnFace(colorFront, nbQuarterTurn);
 }
 
-QString Cube::R(int nbQuarterTurn, color col1, color col2) {
+QString Cube::R(int nbQuarterTurn, color colorFront, color colorUp) {
     color face;
-    switch(col1){
+    switch(colorFront){
     case YELLOW:
-        face = (color) ((col2 + 1) % 4);
+        face = (color) ((colorUp + 1) % 4);
         break;
     case WHITE:
-        face = (color) ((col2 + 3) % 4);
+        face = (color) ((colorUp + 3) % 4);
         break;
     default:
-        face = (color) ((col1 + 3) % 4);
+        face = (color) ((colorFront + 3) % 4);
         break;
     }
     return turnFace(face, nbQuarterTurn);
 }
 
-QString Cube::L(int nbQuarterTurn, color col1, color col2) {
+QString Cube::L(int nbQuarterTurn, color colorFront, color colorUp) {
     color face;
-    switch(col1){
+    switch(colorFront){
     case YELLOW:
-        face = (color) ((col2 + 3) % 4);
+        face = (color) ((colorUp + 3) % 4);
     case WHITE:
-        face = (color) ((col2 + 1) % 4);
+        face = (color) ((colorUp + 1) % 4);
         break;
     default:
-        face = (color) ((col1 + 1) % 4);
+        face = (color) ((colorFront + 1) % 4);
         break;
     }
     return turnFace(face, nbQuarterTurn);
 }
 
-QString Cube::turnFace(int f, int number) {
-    color face = (color) f;
+QString Cube::turnFace(int faceToTurn, int nbQuarterTurns) {
+    color face = (color) faceToTurn;
     QString s = "";
-//    qDebug() << "Rotating " << face << "face, by " << number << "quarter turns";
     //defining which stickers are on the face
     //those will get spinned
-    number = (number + 8) % 4;
-    if(number == 0){
+    nbQuarterTurns = (nbQuarterTurns + 8) % 4;
+    if(nbQuarterTurns == 0){
         return "";
     }
     int indicesFaceX[] = {face * 3 + 2, face * 3 + 2,
@@ -680,13 +683,14 @@ QString Cube::turnFace(int f, int number) {
         indicesY = new int[12]{2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2};
         break;
     default:
+        return "should not happen";
         break;
     }
 
     color saveFace[4];
     color saveAdjacent[6];
     //Rotating the face -1, 1 or 2 quarter turns clock wise
-    switch(number){
+    switch(nbQuarterTurns){
     case 1:
         //turning the face
         saveFace[0] = matCube[indicesFaceX[6]][indicesFaceY[6]];
@@ -759,7 +763,7 @@ QString Cube::turnFace(int f, int number) {
         matCube[indicesX[11]][indicesY[11]] = saveAdjacent[2];
         break;
     default:
-        qDebug() << "no rotation for " << number << "quarter turns";
+        return "";
         break;
     }
     delete [] indicesX;
@@ -770,15 +774,15 @@ QString Cube::turnFace(int f, int number) {
     return s;
 }
 
-bool Cube::cubieEqual(QList<int> cubi, color c1, color c2) {
-    return ((matCube[cubi.at(0)][cubi.at(1)] == c1 && matCube[cubi.at(2)][cubi.at(3)] == c2)
-         || (matCube[cubi.at(0)][cubi.at(1)] == c2 && matCube[cubi.at(2)][cubi.at(3)] == c1));
+bool Cube::cubieEqual(QList<int> indices, color firstColor, color secondColor) {
+    return ((matCube[indices.at(0)][indices.at(1)] == firstColor && matCube[indices.at(2)][indices.at(3)] == secondColor)
+         || (matCube[indices.at(0)][indices.at(1)] == secondColor && matCube[indices.at(2)][indices.at(3)] == firstColor));
 
 }
 
-bool Cube::cubieEqual(QList<int> cubi, color c1, color c2, color c3) {
-    return((matCube[cubi.at(4)][cubi.at(5)] == c1 && cubieEqual(cubi, c2, c3))
-        || (matCube[cubi.at(4)][cubi.at(5)] == c2 && cubieEqual(cubi, c1, c3))
-        || (matCube[cubi.at(4)][cubi.at(5)] == c3 && cubieEqual(cubi, c1, c2)));
+bool Cube::cubieEqual(QList<int> indices, color firstColor, color secondColor, color thirdColor) {
+    return((matCube[indices.at(4)][indices.at(5)] == firstColor && cubieEqual(indices, secondColor, thirdColor))
+        || (matCube[indices.at(4)][indices.at(5)] == secondColor && cubieEqual(indices, firstColor, thirdColor))
+        || (matCube[indices.at(4)][indices.at(5)] == thirdColor && cubieEqual(indices, firstColor, secondColor)));
 }
 
