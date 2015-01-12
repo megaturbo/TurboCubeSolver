@@ -1,4 +1,4 @@
-#include "CubeInput.h"
+#include "CubeInputWidget.h"
 
 CubeInputWidget::CubeInputWidget(QWidget *parent) :
     QWidget(parent)
