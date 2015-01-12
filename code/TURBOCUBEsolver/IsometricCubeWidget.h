@@ -18,9 +18,16 @@ public:
     void setCubeMatrix(int matrix[18][3]);
     void setOrientation(QChar axe, int nbQ);
 
+    color getFront();
+    color getUp();
+
 private:
     color colU;
     color colF;
+    color colB;
+    color colR;
+    color colL;
+    color colD;
 
     Cube *cube;
     QPoint isogrid[7][7];

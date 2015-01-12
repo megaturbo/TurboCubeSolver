@@ -39,7 +39,9 @@ public slots:
     void sendSequenceSlot();
     void resetSlot();
     void reverseSequenceSlot();
+    void turnXSlot();
     void turnYSlot();
+    void turnZSlot();
 
 };
 
