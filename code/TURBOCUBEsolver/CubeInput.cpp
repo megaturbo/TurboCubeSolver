@@ -3,28 +3,19 @@
 CubeInput::CubeInput(QWidget *parent) :
     QWidget(parent)
 {
-
+    //set window size
     this->setFixedSize(931,450);
 
+    //Reset matrix
+    setMatrix(cubeInputMatrix);
 
     //rectangle mold for button geometry
     QRect *rectMold = new QRect();
     QIcon *controlIcon = new QIcon("..\\..\\Pictures\\input\\arrow Up.PNG");
 
-    //topline
-    QPushButton *pbTop0 = new QPushButton(this);
-    QPushButton *pbTop1 = new QPushButton(this);
-    QPushButton *pbTop2 = new QPushButton(this);
-
-    //central
-    QPushButton *pbMid0 = new QPushButton(this);
-    QPushButton *pbMid1 = new QPushButton(this);
-    QPushButton *pbMid2 = new QPushButton(this);
-
-    //bottom
-    QPushButton *pbBot0 = new QPushButton(this);
-    QPushButton *pbBot1 = new QPushButton(this);
-    QPushButton *pbBot2 = new QPushButton(this);
+    for(int y = 0;y<3;y++)
+        for(int x = 0;x<3;x++)
+            pbGroup[x][y]=new QPushButton(this);
 
     //control
     QPushButton *pbUp = new QPushButton(this);
@@ -35,41 +26,21 @@ CubeInput::CubeInput(QWidget *parent) :
     //-----------------------------------------------------------------------------------------//
 
     //set button grid
-    rectMold->setRect(931/4-150,450/2-115,75,75);
-
-    pbTop0->setGeometry(*rectMold);
-    rectMold->translate(76,0);
-    pbTop1->setGeometry(*rectMold);
-    rectMold->translate(76,0);
-    pbTop2->setGeometry(*rectMold);
-
-    rectMold->translate(-152,76);
-    pbMid0->setGeometry(*rectMold);
-    rectMold->translate(76,0);
-    pbMid1->setGeometry(*rectMold);
-    rectMold->translate(76,0);
-    pbMid2->setGeometry(*rectMold);
-
-    rectMold->translate(-152,76);
-    pbBot0->setGeometry(*rectMold);
-    rectMold->translate(76,0);
-    pbBot1->setGeometry(*rectMold);
-    rectMold->translate(76,0);
-    pbBot2->setGeometry(*rectMold);
+    for(int y = 0;y<3;y++){
+        for(int x = 0;x<3;x++){
+            pbGroup[x][y]->setGeometry(*rectMold);
+            rectMold->setRect(83+x*76,110+y*76,75,75);}}
 
     //set button base colors
-    pbTop0->setStyleSheet("background-color: gray");
-    pbTop1->setStyleSheet("background-color: gray");
-    pbTop2->setStyleSheet("background-color: gray");
+    for(int y = 0;y<3;y++){
+        for(int x = 0;x<3;x++){
+            pbGroup[x][y]->setStyleSheet("background-color: gray");}}
 
-    pbMid0->setStyleSheet("background-color: gray");
-    pbMid1->setStyleSheet("background-color: gray");
-    pbMid2->setStyleSheet("background-color: gray");
+    //SIGNAL->SLOT for face buttons
 
-    pbBot0->setStyleSheet("background-color: gray");
-    pbBot1->setStyleSheet("background-color: gray");
-    pbBot2->setStyleSheet("background-color: gray");
-
+    for(int y = 0;y<3;y++){
+        for(int x = 0;x<3;x++){
+            connect(pbGroup[x][y],SIGNAL(clicked()),this,SLOT(changeSquare()));}}
 
     //set control buttons
     rectMold->setRect(164, 43,64,64);
@@ -98,6 +69,58 @@ CubeInput::CubeInput(QWidget *parent) :
     pbRight->setIcon(*controlIcon);
     controlIcon->addFile("..\\..\\Pictures\\input\\arrow left.PNG");
     pbLeft->setIcon(*controlIcon);
+
+    //SIGNAL->SLOT for control buttons
+    connect(pbUp,SIGNAL(clicked()),this,SLOT(changeFaceUp()));
+    connect(pbDown,SIGNAL(clicked()),this,SLOT(changeFaceDown()));
+    connect(pbRight,SIGNAL(clicked()),this,SLOT(changeFaceRight()));
+    connect(pbLeft,SIGNAL(clicked()),this,SLOT(changeFaceLeft()));
+}
+
+void CubeInput::setMatrix(color cubeInputMatrix[18][3])
+{
+    //set matrix
+    for(int i = 0;i<18;i++)
+    {
+        for(int j = 0;j<3;j++)
+        {
+            cubeInputMatrix[i][j] = UNDEFINED;
+        }
+    }
+
+    //set CubeMatrix center colors
+    cubeInputMatrix[1][1] = RED;
+    cubeInputMatrix[1][4] = BLUE;
+    cubeInputMatrix[1][7] = ORANGE;
+    cubeInputMatrix[1][10] = GREEN;
+    cubeInputMatrix[1][13] = WHITE;
+    cubeInputMatrix[1][16] = YELLOW;
+}
+
+void CubeInput::changeSquare()
+{
+    QObject *sndr = sender();
+
+}
+
+void CubeInput::changeFaceRight()
+{
+
+}
+
+void CubeInput::changeFaceLeft()
+{
+
+}
+
+void CubeInput::changeFaceUp()
+{
+
+}
+
+void CubeInput::changeFaceDown()
+{
+
 }
 
 CubeInput::~CubeInput()
