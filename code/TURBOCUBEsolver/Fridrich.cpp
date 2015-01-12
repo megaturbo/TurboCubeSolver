@@ -10,6 +10,9 @@ QString Fridrich::solve(Cube *c){
     QString step3 = OLL(c);
     step3 += OLL(c);
     QString step4 = PLL(c);
+    step4 += PLL(c);
+    //positionning the solved YELLOW face
+    step4 += c->turnFace(YELLOW, RED - c->locateCubie(RED, BLUE, YELLOW).at(0) / 3);
     qDebug() << "Cross: " << step1 << step1.count(' ') << " moves.";
     qDebug() << "F2L: " << step2 << step2.count(' ') << " moves.";
     qDebug() << "OLL: " << step3 << step3.count(' ') << " moves.";
@@ -680,10 +683,11 @@ QString Fridrich::PLL(Cube *c){
     color matrix[18][3];
     //this boolean checks if the face is already solved
     bool solved = true;
+    c->displayCube();
     for (int x = 0; x < 18; ++x) {
         for (int y = 0; y < 3; ++y) {
             matrix[x][y] = c->getMatrix()[x][y];
-            if(x < WHITE * 3 && y == 2 && matrix[x][y] != x / 3){
+            if(x < 12 && x % 3 == 0 && y == 2 && (matrix[x][y] != matrix[x + 1][y] || matrix[x][y] != matrix[x + 2][y])){
                 solved = false;
             }
         }
@@ -694,8 +698,39 @@ QString Fridrich::PLL(Cube *c){
     }
     //Again, the 21 cases here can be seen from 4 different angles
     for (int co = 0; co < 4; ++co) {
-        if (1) {
-
+        color col = (color) co;
+        //2 corners already correct
+        if (matrix[col * 3][2] == matrix[col * 3 + 2][2]) {
+            //4 corners correct
+            if (matrix[((col + 2) % 4) * 3][2] == matrix[((col + 2) % 4) * 3 + 2][2]) {
+                //1 edge correct
+                if (matrix[col * 3 + 1][2] == matrix[col * 3][2]) {
+                    //right edge must go on left
+                    if (matrix[((col + 2) % 4) * 3][2] == matrix[((col + 1) % 4) * 3 + 1][2]) {
+                        return c->moveSequence("R' U R' U' R' U' R' U R U R2", col, YELLOW);
+                    }
+                    //left edge must go on right
+                    else if (matrix[((col + 2) % 4) * 3][2] == matrix[((col + 3) % 4) * 3 + 1][2]) {
+                        return c->moveSequence("R2 U' R' U' R U R U R U' R", col, YELLOW);
+                    }
+                }
+                //edges opposite to their faces
+                else if (matrix[col * 3 + 1][2] == matrix[((col + 2) % 4) * 3][2] && matrix[col * 3][2] == matrix[((col + 2) % 4) * 3  + 1][2]) {
+                    return c->moveSequence("R2 L2 D R2 L2 U2 R2 L2 D R2 L2", col, YELLOW);
+                }
+                //edges diagonally inverted
+                else if (matrix[((col + 3) % 4) * 3 + 1][2] == matrix[col* 3][2] && matrix[((col + 3) % 4) * 3][2] == matrix[col * 3 + 1][2]) {
+                    return c->moveSequence("R' U' R2 U R U R' U' R U R U' R U' R' U2", col, YELLOW);
+                }
+            }
+            //
+            else if ((int)matrix[((col + 2) % 4) * 3][2] == (matrix[((col + 2) % 4) * 3 + 2][2] + 2) % 4) {
+                return c->moveSequence("R U R' U' R' F R2 U' R' U' R U R' F'", (color)((col + 3) % 4), YELLOW);
+            }
+        }
+        //no corners correct
+        else if ((int)matrix[col * 3][2] == (matrix[col * 3 + 2][2] + 2) % 4 && (int)matrix[((col + 1) % 4) * 3][2] == (matrix[((col + 1) % 4) * 3 + 2][2] + 2) % 4) {
+            return c->moveSequence("R' U R' U' B' D B' D' B2 R' B' R B R", col, YELLOW);
         }
     }
     return "";
