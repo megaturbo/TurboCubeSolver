@@ -31,6 +31,7 @@ class Cube {
 
     void setMatrix(color matrix[18][3]);
     color** getMatrix() const;
+    color** getFaceMatrix(QChar face) const;
 
 public slots:
 

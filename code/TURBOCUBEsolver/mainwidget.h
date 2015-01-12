@@ -25,7 +25,7 @@ private:
     QLineEdit *sequenceLE;
 
     // Orientation menu
-    QPushButton *movesPB[3];
+    QPushButton **movesPB;
 
     Cube *displayedCube;
 
@@ -39,6 +39,7 @@ public slots:
     void sendSequenceSlot();
     void resetSlot();
     void reverseSequenceSlot();
+    void turnYSlot();
 
 };
 

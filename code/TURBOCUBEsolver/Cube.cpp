@@ -56,6 +56,45 @@ void Cube::setMatrix(color matrix[18][3])
     }
 }
 
+color** Cube::getFaceMatrix(QChar face) const{
+
+    int firstID;
+    color** faceMatrix;
+
+    switch(face.toLatin1())
+    {
+        case 'F':
+            firstID = 0;
+            break;
+        case 'R':
+            firstID = 3;
+            break;
+        case 'B':
+            firstID = 6;
+            break;
+        case 'L':
+            firstID = 9;
+            break;
+        case 'U':
+            firstID = 12;
+            break;
+        case 'D':
+            firstID = 15;
+            break;
+    }
+
+    for(int x = firstID; x < firstID + 3; x++)
+    {
+        for(int y = 0; y < 3; y++)
+        {
+            faceMatrix[x][y] = matCube[x][y];
+        }
+    }
+
+    return faceMatrix;
+
+}
+
 color** Cube::getMatrix() const{
     color** mat = new color*[18];
     for (int i = 0; i < 18; ++i) {

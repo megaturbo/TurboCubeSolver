@@ -19,9 +19,15 @@ MainWidget::MainWidget(QWidget *parent) :
     reverseSequencePB = new QPushButton("R", this);
 
     // Menu: orientation
+    movesPB = new QPushButton*[3]();
+
     movesPB[0] = new QPushButton("x", this);
     movesPB[1] = new QPushButton("y", this);
     movesPB[2] = new QPushButton("z", this);
+
+    movesPB[0]->setMaximumWidth(40);
+    movesPB[1]->setMaximumWidth(40);
+    movesPB[2]->setMaximumWidth(40);
 
     // Layouts
     QHBoxLayout *menuLayout = new QHBoxLayout();
@@ -37,12 +43,13 @@ MainWidget::MainWidget(QWidget *parent) :
     menuLayout->addWidget(sequencePB);
     menuLayout->addWidget(reverseSequencePB);
 
-    //orientationMenuLayout->addWidget(movesPB[0]);
-    //orientationMenuLayout->addWidget(movesPB[1]);
-    //orientationMenuLayout->addWidget(movesPB[2]);
+    orientationMenuLayout->addWidget(movesPB[0]);
+    orientationMenuLayout->addWidget(movesPB[1]);
+    orientationMenuLayout->addWidget(movesPB[2]);
 
+    isometricCubeWidget->setMinimumHeight(600);
     topLayout->addWidget(isometricCubeWidget);
-    //topLayout->addLayout(orientationMenuLayout);
+    topLayout->addLayout(orientationMenuLayout);
 
     // Layout: Total
     MainLayout->addLayout(topLayout);
@@ -55,10 +62,17 @@ MainWidget::MainWidget(QWidget *parent) :
     connect(resetPB, SIGNAL(clicked()), this, SLOT(resetSlot()));
     connect(reverseSequencePB, SIGNAL(clicked()), this, SLOT(reverseSequenceSlot()));
 
+    connect(movesPB[1], SIGNAL(clicked()), this, SLOT(turnYSlot()));
+
     // Display settings
     this->setLayout(MainLayout);
     this->resize(1000,600);
     this->show();
+}
+
+void MainWidget::turnYSlot()
+{
+    isometricCubeWidget->setOrientation('y', 1);
 }
 
 void MainWidget::initSolvedCube()
@@ -98,6 +112,6 @@ void MainWidget::solveSlot()
 
 void MainWidget::sendSequenceSlot()
 {
-    displayedCube->moveSequence(sequenceLE->text(), RED, WHITE);
+    displayedCube->moveSequence(sequenceLE->text(), RED, YELLOW);
     isometricCubeWidget->setCube(*displayedCube);
 }

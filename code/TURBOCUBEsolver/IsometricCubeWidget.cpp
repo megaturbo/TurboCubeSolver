@@ -33,27 +33,47 @@ IsometricCubeWidget::IsometricCubeWidget(Cube c, QWidget *parent)
 void IsometricCubeWidget::setOrientation(QChar axe, int nbQ)
 {
     int tmpMatrix[18][3];
+    color **uFace;
+    color **dFace;
+    color **fFace;
+    color **bFace;
+    color **lFace;
+    color **rFace;
 
-    if(axe == 'y')
-    {
+    uFace = cube->getFaceMatrix('U');
+    dFace = cube->getFaceMatrix('D');
+    fFace = cube->getFaceMatrix('F');
+    bFace = cube->getFaceMatrix('B');
+    lFace = cube->getFaceMatrix('L');
+    rFace = cube->getFaceMatrix('R');
 
-        for(int x = 0; x < 12; x++)
-        {
-            for(int y = 0; y < 3; y++)
-            {
-                tmpMatrix[x][x] = displayCube[(x+3)%12][y];
-            }
-        }
-    }
+
+    setCubeMatrix(tmpMatrix);
+
+    this->update();
 }
 
 void IsometricCubeWidget::setCube(Cube c)
+{
+    cube = new Cube(c);
+    for(int x = 0; x < 18; x++)
+    {
+        for(int y = 0; y < 3; y++)
+        {
+            displayCube[x][y] = cube->getMatrix()[x][y];
+        }
+    }
+
+    this->update();
+}
+
+void IsometricCubeWidget::setCubeMatrix(int matrix[18][3])
 {
     for(int x = 0; x < 18; x++)
     {
         for(int y = 0; y < 3; y++)
         {
-            displayCube[x][y] = c.getMatrix()[x][y];
+            displayCube[x][y] = matrix[x][y];
         }
     }
 
