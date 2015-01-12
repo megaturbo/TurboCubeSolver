@@ -1,8 +1,8 @@
-
+#include <CubeColor.h>
 #include <QWidget>
 #include <QPushButton>
 #include <QButtonGroup>
-
+using namespace CubeColor;
 class CubeInput : public QWidget
 {
     Q_OBJECT
@@ -12,20 +12,15 @@ public:
     ~CubeInput();
 
 private:
-    //top
-    QPushButton *pbTop0 ;
-    QPushButton *pbTop1 ;
-    QPushButton *pbTop2 ;
+    //matrix preset
+    void setMatrix(color cubeInputMatrix[18][3]);
 
-    //central
-    QPushButton *pbMid0 ;
-    QPushButton *pbMid1 ;
-    QPushButton *pbMid2 ;
+    //matrix attribute
+    color cubeInputMatrix[18][3];
 
-    //bottom
-    QPushButton *pbBot0 ;
-    QPushButton *pbBot1 ;
-    QPushButton *pbBot2 ;
+    //button array
+    QPushButton ***pbGroup;
+
 
     //control
     QPushButton *pbUp;
@@ -36,6 +31,15 @@ private:
     //mold
     QRect *rectMold;
 
-    void setButtonGrid();
+public slots:
+    //control slots
+    void changeFaceRight();
+    void changeFaceLeft();
+    void changeFaceUp();
+    void changeFaceDown();
+
+    //face slot
+    void changeSquare();
+
 };
 

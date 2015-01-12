@@ -319,7 +319,7 @@ QList<int> Cube::cubie(int i, int j) {
     }
 }
 
-QString Cube::scramble()
+QString Cube::scramble(int depth)
 {
     QString scrambling;
     int lastMove = -1;
@@ -330,7 +330,7 @@ QString Cube::scramble()
 
     qsrand(QDateTime::currentDateTime ().toTime_t ());
 
-    for(int i = 0; i < 20; i++)
+    for(int i = 0; i < depth; i++)
     {
 
         do{
@@ -407,7 +407,6 @@ QString Cube::reverseSequence(QString sequence)
                 tmp = tmp.at(0);
             }
         }
-
         reversed += tmp + " ";
     }
 

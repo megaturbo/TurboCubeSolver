@@ -21,6 +21,7 @@ private:
     QPushButton *solvePB;
     QPushButton *resetPB;
     QPushButton *sequencePB;
+    QPushButton *reverseSequencePB;
     QLineEdit *sequenceLE;
 
     Cube *displayedCube;
@@ -34,6 +35,7 @@ public slots:
     void solveSlot();
     void sendSequenceSlot();
     void resetSlot();
+    void reverseSequenceSlot();
 
 };
 
