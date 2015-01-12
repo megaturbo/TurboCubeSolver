@@ -24,6 +24,9 @@ private:
     QPushButton *reverseSequencePB;
     QLineEdit *sequenceLE;
 
+    // Orientation menu
+    QPushButton *movesPB[3];
+
     Cube *displayedCube;
 
     void initSolvedCube();

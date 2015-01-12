@@ -21,8 +21,30 @@ IsometricCubeWidget::IsometricCubeWidget(Cube c, QWidget *parent)
     // init isometric grid, used to create polygons
     initIsoGrid();
 
+    // Set orientation
+    colU = YELLOW;
+    colF = RED;
+
     // Use the right cube
     this->setCube(c);
+}
+
+
+void IsometricCubeWidget::setOrientation(QChar axe, int nbQ)
+{
+    int tmpMatrix[18][3];
+
+    if(axe == 'y')
+    {
+
+        for(int x = 0; x < 12; x++)
+        {
+            for(int y = 0; y < 3; y++)
+            {
+                tmpMatrix[x][x] = displayCube[(x+3)%12][y];
+            }
+        }
+    }
 }
 
 void IsometricCubeWidget::setCube(Cube c)

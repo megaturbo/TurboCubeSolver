@@ -18,21 +18,35 @@ MainWidget::MainWidget(QWidget *parent) :
     sequenceLE = new QLineEdit(this);
     reverseSequencePB = new QPushButton("R", this);
 
+    // Menu: orientation
+    movesPB[0] = new QPushButton("x", this);
+    movesPB[1] = new QPushButton("y", this);
+    movesPB[2] = new QPushButton("z", this);
+
     // Layouts
-    QHBoxLayout *btLayout = new QHBoxLayout();
-    QVBoxLayout *vLayout = new QVBoxLayout();
+    QHBoxLayout *menuLayout = new QHBoxLayout();
+    QHBoxLayout *topLayout = new QHBoxLayout();
+    QVBoxLayout *MainLayout = new QVBoxLayout();
+    QVBoxLayout *orientationMenuLayout = new QVBoxLayout();
 
     // Layout: Menu
-    btLayout->addWidget(scramblePB);
-    btLayout->addWidget(solvePB);
-    btLayout->addWidget(resetPB);
-    btLayout->addWidget(sequenceLE);
-    btLayout->addWidget(sequencePB);
-    btLayout->addWidget(reverseSequencePB);
+    menuLayout->addWidget(scramblePB);
+    menuLayout->addWidget(solvePB);
+    menuLayout->addWidget(resetPB);
+    menuLayout->addWidget(sequenceLE);
+    menuLayout->addWidget(sequencePB);
+    menuLayout->addWidget(reverseSequencePB);
+
+    //orientationMenuLayout->addWidget(movesPB[0]);
+    //orientationMenuLayout->addWidget(movesPB[1]);
+    //orientationMenuLayout->addWidget(movesPB[2]);
+
+    topLayout->addWidget(isometricCubeWidget);
+    //topLayout->addLayout(orientationMenuLayout);
 
     // Layout: Total
-    vLayout->addWidget(isometricCubeWidget);
-    vLayout->addLayout(btLayout);
+    MainLayout->addLayout(topLayout);
+    MainLayout->addLayout(menuLayout);
 
     // CONNECT
     connect(scramblePB, SIGNAL(clicked()), this, SLOT(scrambleSlot()));
@@ -42,7 +56,7 @@ MainWidget::MainWidget(QWidget *parent) :
     connect(reverseSequencePB, SIGNAL(clicked()), this, SLOT(reverseSequenceSlot()));
 
     // Display settings
-    this->setLayout(vLayout);
+    this->setLayout(MainLayout);
     this->resize(1000,600);
     this->show();
 }
@@ -84,6 +98,6 @@ void MainWidget::solveSlot()
 
 void MainWidget::sendSequenceSlot()
 {
-    displayedCube->moveSequence(sequenceLE->text(), RED, YELLOW);
+    displayedCube->moveSequence(sequenceLE->text(), RED, WHITE);
     isometricCubeWidget->setCube(*displayedCube);
 }
