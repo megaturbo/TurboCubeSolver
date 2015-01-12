@@ -411,7 +411,10 @@ QString Cube::reverseSequence(QString sequence)
                 tmp = tmp.at(0);
             }
         }
-        reversed += tmp + " ";
+        if(tmp.length()>0)
+        {
+            reversed += tmp + " ";
+        }
     }
 
     return reversed;

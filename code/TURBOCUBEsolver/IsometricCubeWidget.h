@@ -15,8 +15,12 @@ public:
     IsometricCubeWidget(Cube c, QWidget *parent = 0);
     void paintEvent(QPaintEvent*);
     void setCube(Cube c);
+    void setOrientation(QChar axe, int nbQ);
 
 private:
+    color colU;
+    color colF;
+
     QPoint isogrid[7][7];
     int displayCube[18][3];
 
