@@ -3,7 +3,7 @@
 
 #include <QWidget>
 #include <QtWidgets>
-#include "CubeInput.h"
+#include "CubeInputWidget.h"
 #include "IsometricCubeWidget.h"
 #include "Cube.h"
 #include "Fridrich.h"
@@ -42,7 +42,9 @@ public slots:
     void sendSequenceSlot();
     void resetSlot();
     void reverseSequenceSlot();
+    void turnXSlot();
     void turnYSlot();
+    void turnZSlot();
     void startCubeInput();
 
 };

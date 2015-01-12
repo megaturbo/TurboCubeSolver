@@ -65,7 +65,9 @@ MainWidget::MainWidget(QWidget *parent) :
     connect(resetPB, SIGNAL(clicked()), this, SLOT(resetSlot()));
     connect(reverseSequencePB, SIGNAL(clicked()), this, SLOT(reverseSequenceSlot()));
 
+    connect(movesPB[0], SIGNAL(clicked()), this, SLOT(turnXSlot()));
     connect(movesPB[1], SIGNAL(clicked()), this, SLOT(turnYSlot()));
+    connect(movesPB[2], SIGNAL(clicked()), this, SLOT(turnZSlot()));
 
     connect(cubeInputPB, SIGNAL(clicked()), this, SLOT(startCubeInput()));
 
@@ -81,9 +83,19 @@ void MainWidget::startCubeInput()
     cubeInputWidget->show();
 }
 
+void MainWidget::turnXSlot()
+{
+    isometricCubeWidget->setOrientation('x', 1);
+}
+
 void MainWidget::turnYSlot()
 {
     isometricCubeWidget->setOrientation('y', 1);
+}
+
+void MainWidget::turnZSlot()
+{
+    isometricCubeWidget->setOrientation('z', 1);
 }
 
 void MainWidget::initSolvedCube()
@@ -123,6 +135,6 @@ void MainWidget::solveSlot()
 
 void MainWidget::sendSequenceSlot()
 {
-    displayedCube->moveSequence(sequenceLE->text(), RED, YELLOW);
+    displayedCube->moveSequence(sequenceLE->text(), isometricCubeWidget->getFront(), isometricCubeWidget->getUp());
     isometricCubeWidget->setCube(*displayedCube);
 }

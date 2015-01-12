@@ -1,6 +1,6 @@
 #include "TurboCubeSolver.h"
 #include "ui_TurboCubeSolver.h"
-#include "CubeInput.h"
+#include "CubeInputWidget.h"
 #include "ui_turbocubesolver.h"
 #include "cube.h"
 #include "qdebug.h"

@@ -13,6 +13,7 @@ using namespace CubeColor;
 class Cube {
   public:
     Cube(color matrix[18][3]);
+    Cube(int matrix[18][3]);
     Cube(const Cube &c);
     ~Cube();
     //returns faces the cubie's on
@@ -30,6 +31,7 @@ class Cube {
     void qDebugDisplay();
 
     void setMatrix(color matrix[18][3]);
+    void setMatrix(int matrix[18][3]);
     color** getMatrix() const;
     color** getFaceMatrix(QChar face) const;
 
