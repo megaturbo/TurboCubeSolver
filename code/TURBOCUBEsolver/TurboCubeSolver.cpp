@@ -21,7 +21,7 @@ TURBOCUBEsolver::~TURBOCUBEsolver()
 
 void TURBOCUBEsolver::on_pushButton_clicked()
 {
-    CubeInput *c = new CubeInput();
+    CubeInputWidget *c = new CubeInputWidget();
     c->show();
 }
 

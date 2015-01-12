@@ -1,6 +1,5 @@
 #include "turbocubesolver.h"
 #include <QApplication>
-#include "CubeInput.h"
 #include <qdebug.h>
 #include <Cube.h>
 #include <QList>

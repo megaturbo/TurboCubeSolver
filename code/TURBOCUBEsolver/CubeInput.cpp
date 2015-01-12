@@ -1,6 +1,6 @@
 #include "CubeInput.h"
 
-CubeInput::CubeInput(QWidget *parent) :
+CubeInputWidget::CubeInputWidget(QWidget *parent) :
     QWidget(parent)
 {
     //set window size
@@ -13,9 +13,13 @@ CubeInput::CubeInput(QWidget *parent) :
     QRect *rectMold = new QRect();
     QIcon *controlIcon = new QIcon("..\\..\\Pictures\\input\\arrow Up.PNG");
 
-    for(int y = 0;y<3;y++)
-        for(int x = 0;x<3;x++)
+    for(int y = 0; y < 3; y++)
+    {
+        for(int x = 0; x < 3; x++)
+        {
             pbGroup[x][y]=new QPushButton(this);
+        }
+    }
 
     //control
     QPushButton *pbUp = new QPushButton(this);
@@ -77,7 +81,7 @@ CubeInput::CubeInput(QWidget *parent) :
     connect(pbLeft,SIGNAL(clicked()),this,SLOT(changeFaceLeft()));
 }
 
-void CubeInput::setMatrix(color cubeInputMatrix[18][3])
+void CubeInputWidget::setMatrix(color cubeInputMatrix[18][3])
 {
     //set matrix
     for(int i = 0;i<18;i++)
@@ -97,33 +101,33 @@ void CubeInput::setMatrix(color cubeInputMatrix[18][3])
     cubeInputMatrix[1][16] = YELLOW;
 }
 
-void CubeInput::changeSquare()
+void CubeInputWidget::changeSquare()
 {
     QObject *sndr = sender();
 
 }
 
-void CubeInput::changeFaceRight()
+void CubeInputWidget::changeFaceRight()
 {
 
 }
 
-void CubeInput::changeFaceLeft()
+void CubeInputWidget::changeFaceLeft()
 {
 
 }
 
-void CubeInput::changeFaceUp()
+void CubeInputWidget::changeFaceUp()
 {
 
 }
 
-void CubeInput::changeFaceDown()
+void CubeInputWidget::changeFaceDown()
 {
 
 }
 
-CubeInput::~CubeInput()
+CubeInputWidget::~CubeInputWidget()
 {
 
 }

@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QtWidgets>
+#include "CubeInput.h"
 #include "IsometricCubeWidget.h"
 #include "Cube.h"
 #include "Fridrich.h"
@@ -14,6 +15,7 @@ public:
     explicit MainWidget(QWidget *parent = 0);
 
 private:
+    CubeInputWidget *cubeInputWidget;
     IsometricCubeWidget *isometricCubeWidget;
 
     // Menu
@@ -22,6 +24,7 @@ private:
     QPushButton *resetPB;
     QPushButton *sequencePB;
     QPushButton *reverseSequencePB;
+    QPushButton *cubeInputPB;
     QLineEdit *sequenceLE;
 
     // Orientation menu
@@ -40,6 +43,7 @@ public slots:
     void resetSlot();
     void reverseSequenceSlot();
     void turnYSlot();
+    void startCubeInput();
 
 };
 
