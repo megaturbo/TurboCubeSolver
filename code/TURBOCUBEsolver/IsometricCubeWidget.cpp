@@ -42,7 +42,7 @@ void IsometricCubeWidget::setOrientation(QChar axe, int nbQ)
     case 'x':
         if(nbQ == 1){
             Cube easyToSpin(displayCube);
-            easyToSpin.moveSequence("R' L ", RED, WHITE);
+            easyToSpin.moveSequence("R' L ", colF, colU);
             color** mat = easyToSpin.getMatrix();
             for (int x = 0; x < 18; ++x) {
                 for (int y = 0; y < 3; ++y) {
@@ -57,10 +57,10 @@ void IsometricCubeWidget::setOrientation(QChar axe, int nbQ)
             colD = colB;
             colB = colSave;
             indicesX = new int[12]{1, 1, 1, 13, 13, 13, 7, 7, 7, 16, 16, 16};
-            indicesY = new int[12]{0, 1, 2, 0, 1, 2, 0, 1, 2, 2, 1, 0};
+            indicesY = new int[12]{0, 1, 2, 0, 1, 2, 2, 1, 0, 2, 1, 0};
         } else {
             Cube easyToSpin(displayCube);
-            easyToSpin.moveSequence("R L' ", RED, WHITE);
+            easyToSpin.moveSequence("R L' ", colF, colU);
             color** mat = easyToSpin.getMatrix();
             for (int x = 0; x < 18; ++x) {
                 for (int y = 0; y < 3; ++y) {
@@ -75,13 +75,13 @@ void IsometricCubeWidget::setOrientation(QChar axe, int nbQ)
             colD = colF;
             colF = colSave;
             indicesX = new int[12]{1, 1, 1, 16, 16, 16, 7, 7, 7, 13, 13, 13};
-            indicesY = new int[12]{0, 1, 2, 2, 1, 0, 0, 1, 2, 0, 1, 2};
+            indicesY = new int[12]{0, 1, 2, 0, 1, 2, 2, 1, 0, 2, 1, 0};
         }
         break;
     case 'y':
         if(nbQ == 1){
             Cube easyToSpin(displayCube);
-            easyToSpin.moveSequence("U D' ", RED, WHITE);
+            easyToSpin.moveSequence("U D' ", colF, colU);
             color** mat = easyToSpin.getMatrix();
             for (int x = 0; x < 18; ++x) {
                 for (int y = 0; y < 3; ++y) {
@@ -99,7 +99,7 @@ void IsometricCubeWidget::setOrientation(QChar axe, int nbQ)
             indicesY = new int[12]{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
         } else {
             Cube easyToSpin(displayCube);
-            easyToSpin.moveSequence("U' D ", RED, WHITE);
+            easyToSpin.moveSequence("U' D ", colF, colU);
             color** mat = easyToSpin.getMatrix();
             for (int x = 0; x < 18; ++x) {
                 for (int y = 0; y < 3; ++y) {
@@ -120,7 +120,7 @@ void IsometricCubeWidget::setOrientation(QChar axe, int nbQ)
     case 'z':
         if(nbQ == 1){
             Cube easyToSpin(displayCube);
-            easyToSpin.moveSequence("B' F ", RED, WHITE);
+            easyToSpin.moveSequence("B' F ", colF, colU);
             color** mat = easyToSpin.getMatrix();
             for (int x = 0; x < 18; ++x) {
                 for (int y = 0; y < 3; ++y) {
@@ -138,7 +138,7 @@ void IsometricCubeWidget::setOrientation(QChar axe, int nbQ)
             indicesY = new int[12]{0, 1, 2, 1, 1, 1, 2, 1, 0, 1, 1, 1};
         } else {
             Cube easyToSpin(displayCube);
-            easyToSpin.moveSequence("B F' ", RED, WHITE);
+            easyToSpin.moveSequence("B F' ", colF, colU);
             color** mat = easyToSpin.getMatrix();
             for (int x = 0; x < 18; ++x) {
                 for (int y = 0; y < 3; ++y) {
