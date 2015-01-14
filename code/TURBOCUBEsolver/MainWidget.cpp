@@ -123,7 +123,7 @@ void MainWidget::resetSlot()
 
 void MainWidget::scrambleSlot()
 {
-    sequenceLE->setText(displayedCube->scramble());
+    sequenceLE->setText(displayedCube->scramble(5));
     isometricCubeWidget->setCube(*displayedCube);
 }
 
