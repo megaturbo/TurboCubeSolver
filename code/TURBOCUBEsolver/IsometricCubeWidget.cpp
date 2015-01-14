@@ -38,10 +38,11 @@ void IsometricCubeWidget::setOrientation(QChar axe, int nbQ)
 {
     int* indicesX;
     int* indicesY;
+    Cube easyToSpin(displayCube);
+
     switch(axe.toLatin1()){
     case 'x':
         if(nbQ == 1){
-            Cube easyToSpin(displayCube);
             easyToSpin.moveSequence("R' L ", colF, colU);
             color** mat = easyToSpin.getMatrix();
             for (int x = 0; x < 18; ++x) {
@@ -59,7 +60,6 @@ void IsometricCubeWidget::setOrientation(QChar axe, int nbQ)
             indicesX = new int[12]{1, 1, 1, 13, 13, 13, 7, 7, 7, 16, 16, 16};
             indicesY = new int[12]{0, 1, 2, 0, 1, 2, 2, 1, 0, 2, 1, 0};
         } else {
-            Cube easyToSpin(displayCube);
             easyToSpin.moveSequence("R L' ", colF, colU);
             color** mat = easyToSpin.getMatrix();
             for (int x = 0; x < 18; ++x) {
@@ -80,7 +80,6 @@ void IsometricCubeWidget::setOrientation(QChar axe, int nbQ)
         break;
     case 'y':
         if(nbQ == 1){
-            Cube easyToSpin(displayCube);
             easyToSpin.moveSequence("U D' ", colF, colU);
             color** mat = easyToSpin.getMatrix();
             for (int x = 0; x < 18; ++x) {
@@ -98,7 +97,6 @@ void IsometricCubeWidget::setOrientation(QChar axe, int nbQ)
             indicesX = new int[12]{0, 1, 2, 9, 10, 11, 6, 7, 8, 3, 4, 5};
             indicesY = new int[12]{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
         } else {
-            Cube easyToSpin(displayCube);
             easyToSpin.moveSequence("U' D ", colF, colU);
             color** mat = easyToSpin.getMatrix();
             for (int x = 0; x < 18; ++x) {
@@ -119,7 +117,6 @@ void IsometricCubeWidget::setOrientation(QChar axe, int nbQ)
         break;
     case 'z':
         if(nbQ == 1){
-            Cube easyToSpin(displayCube);
             easyToSpin.moveSequence("B' F ", colF, colU);
             color** mat = easyToSpin.getMatrix();
             for (int x = 0; x < 18; ++x) {
@@ -137,7 +134,6 @@ void IsometricCubeWidget::setOrientation(QChar axe, int nbQ)
             indicesX = new int[12]{4, 4, 4, 15, 16, 17, 10, 10, 10, 12, 13, 14};
             indicesY = new int[12]{0, 1, 2, 1, 1, 1, 2, 1, 0, 1, 1, 1};
         } else {
-            Cube easyToSpin(displayCube);
             easyToSpin.moveSequence("B F' ", colF, colU);
             color** mat = easyToSpin.getMatrix();
             for (int x = 0; x < 18; ++x) {
