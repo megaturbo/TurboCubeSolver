@@ -1,4 +1,5 @@
 #include "CubeInputWidget.h"
+#include <QDebug>
 
 CubeInputWidget::CubeInputWidget(QWidget *parent) :
     QWidget(parent)
@@ -8,14 +9,22 @@ CubeInputWidget::CubeInputWidget(QWidget *parent) :
 
     //Reset matrix
     setMatrix(cubeInputMatrix);
+    picker = new ColorPicker();
 
     //rectangle mold for button geometry
     QRect *rectMold = new QRect();
     QIcon *controlIcon = new QIcon("..\\..\\Pictures\\input\\arrow Up.PNG");
 
-    for(int y = 0; y < 3; y++)
+    //space allocation
+    pbGroup = new QPushButton**[3]();
+    for(int y = 0;y<3;y++)
     {
-        for(int x = 0; x < 3; x++)
+        pbGroup[y] = new QPushButton*[3]();
+    }
+
+    for(int y = 0;y<3;y++)
+    {
+        for(int x = 0;x<3;x++)
         {
             pbGroup[x][y]=new QPushButton(this);
         }
@@ -29,22 +38,34 @@ CubeInputWidget::CubeInputWidget(QWidget *parent) :
 
     //-----------------------------------------------------------------------------------------//
 
-    //set button grid
-    for(int y = 0;y<3;y++){
-        for(int x = 0;x<3;x++){
-            pbGroup[x][y]->setGeometry(*rectMold);
-            rectMold->setRect(83+x*76,110+y*76,75,75);}}
 
-    //set button base colors
-    for(int y = 0;y<3;y++){
-        for(int x = 0;x<3;x++){
-            pbGroup[x][y]->setStyleSheet("background-color: gray");}}
+    //set button grid
+    for(int y = 0;y<3;y++)
+    {
+        for(int x = 0;x<3;x++)
+        {
+            rectMold->setRect(83+x*76,110+y*76,75,75);
+            pbGroup[x][y]->setGeometry(*rectMold);
+            if(x==1&&y==1)
+            {
+                pbGroup[1][1]->setStyleSheet("background-color: red");
+            }
+            else
+            {
+                pbGroup[x][y]->setStyleSheet("background-color: gray");
+            }
+        }
+    }
+
 
     //SIGNAL->SLOT for face buttons
-
-    for(int y = 0;y<3;y++){
-        for(int x = 0;x<3;x++){
-            connect(pbGroup[x][y],SIGNAL(clicked()),this,SLOT(changeSquare()));}}
+    for(int y = 0;y<3;y++)
+    {
+        for(int x = 0;x<3;x++)
+        {
+            connect(pbGroup[x][y],SIGNAL(clicked()),this,SLOT(showPicker()));
+        }
+    }
 
     //set control buttons
     rectMold->setRect(164, 43,64,64);
@@ -79,6 +100,7 @@ CubeInputWidget::CubeInputWidget(QWidget *parent) :
     connect(pbDown,SIGNAL(clicked()),this,SLOT(changeFaceDown()));
     connect(pbRight,SIGNAL(clicked()),this,SLOT(changeFaceRight()));
     connect(pbLeft,SIGNAL(clicked()),this,SLOT(changeFaceLeft()));
+
 }
 
 void CubeInputWidget::setMatrix(color cubeInputMatrix[18][3])
@@ -101,10 +123,18 @@ void CubeInputWidget::setMatrix(color cubeInputMatrix[18][3])
     cubeInputMatrix[1][16] = YELLOW;
 }
 
-void CubeInputWidget::changeSquare()
+void CubeInputWidget::showPicker()
 {
-    QObject *sndr = sender();
+    picker->setMatrix(cubeInputMatrix);
+    picker->show();
+    picker->raise();
+    connect(picker, SIGNAL(colorSendSignal(color)), this, SLOT(changeColor(color)));
+}
 
+void CubeInputWidget::changeColor(color c)
+{
+    picker->hide();
+    qDebug() << c;
 }
 
 void CubeInputWidget::changeFaceRight()
