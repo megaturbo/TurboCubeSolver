@@ -379,7 +379,8 @@ QList<int> Cube::linkedStickers(int i, int j) {
 QString Cube::scramble(int depth)
 {
     QString scrambling;
-    int lastMove = -1;
+    int firstLastMove = -1;
+    int secondLastMove = -1;
     int nextMove;
     int nbQ;
     QString cMove;
@@ -392,7 +393,7 @@ QString Cube::scramble(int depth)
 
         do{
             nextMove = qrand() % 6;
-        }while(nextMove == lastMove);
+        }while(nextMove == firstLastMove || nextMove == secondLastMove);
 
         // Get move
         switch (nextMove) {
@@ -434,7 +435,8 @@ QString Cube::scramble(int depth)
         // add to scramble
         scrambling += cMove + cQ + ' ';
 
-        lastMove = nextMove;
+        secondLastMove = firstLastMove;
+        firstLastMove = nextMove;
     }
 
     qDebug() << scrambling;

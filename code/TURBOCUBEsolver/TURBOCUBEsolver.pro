@@ -18,6 +18,7 @@ SOURCES += main.cpp\
     TurboCubeSolver.cpp \
     IsometricCubeWidget.cpp \
     MainWidget.cpp \
+    ColorPicker.cpp \
     CubeInputWidget.cpp
 
 HEADERS  += \
@@ -27,6 +28,7 @@ HEADERS  += \
     TurboCubeSolver.h \
     IsometricCubeWidget.h \
     MainWidget.h \
+    ColorPicker.h \
     CubeInputWidget.h
 
 FORMS    +=\
