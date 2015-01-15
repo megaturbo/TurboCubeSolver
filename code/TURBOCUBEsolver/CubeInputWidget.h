@@ -2,6 +2,7 @@
 #include <QWidget>
 #include <QPushButton>
 #include <QButtonGroup>
+#include <colorpicker.h>
 using namespace CubeColor;
 class CubeInputWidget : public QWidget
 {
@@ -14,13 +15,12 @@ public:
 private:
     //matrix preset
     void setMatrix(color cubeInputMatrix[18][3]);
-
+    ColorPicker *picker;
     //matrix attribute
     color cubeInputMatrix[18][3];
 
     //button array
     QPushButton ***pbGroup;
-
 
     //control
     QPushButton *pbUp;
@@ -39,7 +39,11 @@ public slots:
     void changeFaceDown();
 
     //face slot
-    void changeSquare();
+    void showPicker();
+    void changeColor(color c);
+
+    //slot for color emit from colorpicker widget
+    //void colorReceptionSlot(color c);
 
 };
 
