@@ -33,144 +33,58 @@ IsometricCubeWidget::IsometricCubeWidget(Cube c, QWidget *parent)
     this->setCube(c);
 }
 
-
 void IsometricCubeWidget::setOrientation(QChar axe, int nbQ)
 {
-    int* indicesX;
-    int* indicesY;
-    Cube easyToSpin(displayCube);
-
     switch(axe.toLatin1()){
     case 'x':
         if(nbQ == 1){
-            easyToSpin.moveSequence("R' L ", colF, colU);
-            color** mat = easyToSpin.getMatrix();
-            for (int x = 0; x < 18; ++x) {
-                for (int y = 0; y < 3; ++y) {
-                    displayCube[x][y] = mat[x][y];
-                }
-                delete [] mat[x];
-            }
-            delete [] mat;
             color colSave = colU;
             colU = colF;
             colF = colD;
             colD = colB;
             colB = colSave;
-            indicesX = new int[12]{1, 1, 1, 13, 13, 13, 7, 7, 7, 16, 16, 16};
-            indicesY = new int[12]{0, 1, 2, 0, 1, 2, 2, 1, 0, 2, 1, 0};
         } else {
-            easyToSpin.moveSequence("R L' ", colF, colU);
-            color** mat = easyToSpin.getMatrix();
-            for (int x = 0; x < 18; ++x) {
-                for (int y = 0; y < 3; ++y) {
-                    displayCube[x][y] = mat[x][y];
-                }
-                delete [] mat[x];
-            }
-            delete [] mat;
             color colSave = colU;
             colU = colB;
             colB = colD;
             colD = colF;
             colF = colSave;
-            indicesX = new int[12]{1, 1, 1, 16, 16, 16, 7, 7, 7, 13, 13, 13};
-            indicesY = new int[12]{0, 1, 2, 0, 1, 2, 2, 1, 0, 2, 1, 0};
         }
         break;
     case 'y':
         if(nbQ == 1){
-            easyToSpin.moveSequence("U D' ", colF, colU);
-            color** mat = easyToSpin.getMatrix();
-            for (int x = 0; x < 18; ++x) {
-                for (int y = 0; y < 3; ++y) {
-                    displayCube[x][y] = mat[x][y];
-                }
-                delete [] mat[x];
-            }
-            delete [] mat;
-            color colSave = colU;
-            colU = colB;
-            colB = colD;
-            colD = colF;
-            colF = colSave;
-            indicesX = new int[12]{0, 1, 2, 9, 10, 11, 6, 7, 8, 3, 4, 5};
-            indicesY = new int[12]{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
-        } else {
-            easyToSpin.moveSequence("U' D ", colF, colU);
-            color** mat = easyToSpin.getMatrix();
-            for (int x = 0; x < 18; ++x) {
-                for (int y = 0; y < 3; ++y) {
-                    displayCube[x][y] = mat[x][y];
-                }
-                delete [] mat[x];
-            }
-            delete [] mat;
             color colSave = colF;
             colF = colR;
             colR = colB;
             colB = colL;
             colL = colSave;
-            indicesX = new int[12]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
-            indicesY = new int[12]{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+        } else {
+            color colSave = colF;
+            colF = colL;
+            colL = colB;
+            colB = colR;
+            colR = colSave;
         }
         break;
     case 'z':
         if(nbQ == 1){
-            easyToSpin.moveSequence("B' F ", colF, colU);
-            color** mat = easyToSpin.getMatrix();
-            for (int x = 0; x < 18; ++x) {
-                for (int y = 0; y < 3; ++y) {
-                    displayCube[x][y] = mat[x][y];
-                }
-                delete [] mat[x];
-            }
-            delete [] mat;
             color colSave = colU;
-            colU = colF;
-            colF = colD;
-            colD = colB;
-            colB = colSave;
-            indicesX = new int[12]{4, 4, 4, 15, 16, 17, 10, 10, 10, 12, 13, 14};
-            indicesY = new int[12]{0, 1, 2, 1, 1, 1, 2, 1, 0, 1, 1, 1};
+            colU = colL;
+            colL = colD;
+            colD = colR;
+            colR = colSave;
         } else {
-            easyToSpin.moveSequence("B F' ", colF, colU);
-            color** mat = easyToSpin.getMatrix();
-            for (int x = 0; x < 18; ++x) {
-                for (int y = 0; y < 3; ++y) {
-                    displayCube[x][y] = mat[x][y];
-                }
-                delete [] mat[x];
-            }
-            delete [] mat;
             color colSave = colU;
-            colU = colB;
-            colB = colD;
-            colD = colF;
-            colF = colSave;
-            indicesX = new int[12]{4, 4, 4, 12, 13, 14, 10, 10, 10, 15, 16, 17};
-            indicesY = new int[12]{0, 1, 2, 1, 1, 1, 2, 1, 0, 1, 1, 1};
+            colU = colR;
+            colR = colD;
+            colD = colL;
+            colL = colSave;
         }
         break;
     default:
         break;
     }
-    int saveAdjacent[3];
-    for (int i = 0; i < 3; ++i) {
-        saveAdjacent[i] = displayCube[indicesX[i + 9]][indicesY[i + 9]];
-    }
-    for (int i = 11; i > 3; i-=3) {
-        displayCube[indicesX[i]][indicesY[i]] = displayCube[indicesX[i - 3]][indicesY[i - 3]];
-        displayCube[indicesX[i - 1]][indicesY[i - 1]] = displayCube[indicesX[i - 4]][indicesY[i - 4]];
-        displayCube[indicesX[i - 2]][indicesY[i - 2]] = displayCube[indicesX[i - 5]][indicesY[i - 5]];
-    }
-    displayCube[indicesX[0]][indicesY[0]] = saveAdjacent[0];
-    displayCube[indicesX[1]][indicesY[1]] = saveAdjacent[1];
-    displayCube[indicesX[2]][indicesY[2]] = saveAdjacent[2];
-    delete [] indicesX;
-    delete [] indicesY;
-    indicesX = 0;
-    indicesY = 0;
+
     this->update();
 }
 
@@ -313,35 +227,70 @@ void IsometricCubeWidget::paintEvent(QPaintEvent* event)
             // ### ALPHA 255
 
             // FRONT FACE
-            painter.setBrush(getQColorFromValue(displayCube[x][y]));
+            painter.setBrush(getDaCola('F', x, y));
             painter.drawPolygon(plgnFront);
 
             // RIGHT FACE
-            painter.setBrush(getQColorFromValue(displayCube[x+3][y]));
+            painter.setBrush(getDaCola('R', x, y));
             painter.drawPolygon(plgnRight);
 
             // BACK FACE
-            painter.setBrush(getQColorFromValue(displayCube[x+6][y]));
+            painter.setBrush(getDaCola('B', x, y));
             painter.drawPolygon(plgnBack);
 
             // LEFT FACE
-            painter.setBrush(getQColorFromValue(displayCube[x+9][y]));
+            painter.setBrush(getDaCola('L', x, y));
             painter.drawPolygon(plgnLeft);
 
             // UP FACE
-            painter.setBrush(getQColorFromValue(displayCube[x+12][y]));
+            painter.setBrush(getDaCola('U', x, y));
             painter.drawPolygon(plgnUp);
 
             // DOWN FACE
-            // y and x reversed, and y decrease instead of increasing
-            // cuz the down and up face are drawn in opposed positions
-            painter.setBrush(getQColorFromValue(displayCube[17-y][x]));
+            painter.setBrush(getDaCola('D', x, y));
             painter.drawPolygon(plgnDown);
 
 
 
         }
     }
+
+}
+
+QColor IsometricCubeWidget::getDaCola(QChar face, int x, int y)
+{
+    return getQColorFromValue(getValueFromFace(face, x , y));
+}
+
+int IsometricCubeWidget::getValueFromFace(QChar face, int x, int y)
+{
+    int value;
+
+    switch(face.toLatin1())
+    {
+        case 'U':
+            value = displayCube[x+colU*3][y];
+            break;
+        case 'D':
+            // y and x reversed, and y decrease instead of increasing
+            // cuz the down and up face are drawn in opposed positions
+            value = displayCube[y+colD*3][x];
+            break;
+        case 'L':
+            value = displayCube[x+colL*3][y];
+            break;
+        case 'R':
+            value = displayCube[x+colR*3][y];
+            break;
+        case 'F':
+            value = displayCube[x+colF*3][y];
+            break;
+        case 'B':
+            value = displayCube[x+colB*3][y];
+            break;
+    }
+
+    return value;
 
 }
 

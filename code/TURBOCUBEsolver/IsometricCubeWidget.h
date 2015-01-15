@@ -32,7 +32,8 @@ private:
     Cube *cube;
     QPoint isogrid[7][7];
     int displayCube[18][3];
-
+    QColor getDaCola(QChar face, int x, int y);
+    int getValueFromFace(QChar face, int x, int y);
     QColor getQColorFromValue(int color, int alpha = 255);
     void initIsoGrid();
 };
