@@ -53,37 +53,38 @@ void IsometricCubeWidget::setOrientation(QChar axe, int nbQ)
         break;
     case 'y':
         if(nbQ == 1){
-            color colSave = colU;
-            colU = colB;
-            colB = colD;
-            colD = colF;
-            colF = colSave;
-        } else {
             color colSave = colF;
             colF = colR;
             colR = colB;
             colB = colL;
             colL = colSave;
+        } else {
+            color colSave = colF;
+            colF = colL;
+            colL = colB;
+            colB = colR;
+            colR = colSave;
         }
         break;
     case 'z':
         if(nbQ == 1){
             color colSave = colU;
-            colU = colF;
-            colF = colD;
-            colD = colB;
-            colB = colSave;
+            colU = colL;
+            colL = colD;
+            colD = colR;
+            colR = colSave;
         } else {
             color colSave = colU;
-            colU = colB;
-            colB = colD;
-            colD = colF;
-            colF = colSave;
+            colU = colR;
+            colR = colD;
+            colD = colL;
+            colL = colSave;
         }
         break;
     default:
         break;
     }
+
     this->update();
 }
 
@@ -226,35 +227,70 @@ void IsometricCubeWidget::paintEvent(QPaintEvent* event)
             // ### ALPHA 255
 
             // FRONT FACE
-            painter.setBrush(getQColorFromValue(displayCube[x][y]));
+            painter.setBrush(getDaCola('F', x, y));
             painter.drawPolygon(plgnFront);
 
             // RIGHT FACE
-            painter.setBrush(getQColorFromValue(displayCube[x+3][y]));
+            painter.setBrush(getDaCola('R', x, y));
             painter.drawPolygon(plgnRight);
 
             // BACK FACE
-            painter.setBrush(getQColorFromValue(displayCube[x+6][y]));
+            painter.setBrush(getDaCola('B', x, y));
             painter.drawPolygon(plgnBack);
 
             // LEFT FACE
-            painter.setBrush(getQColorFromValue(displayCube[x+9][y]));
+            painter.setBrush(getDaCola('L', x, y));
             painter.drawPolygon(plgnLeft);
 
             // UP FACE
-            painter.setBrush(getQColorFromValue(displayCube[x+12][y]));
+            painter.setBrush(getDaCola('U', x, y));
             painter.drawPolygon(plgnUp);
 
             // DOWN FACE
-            // y and x reversed, and y decrease instead of increasing
-            // cuz the down and up face are drawn in opposed positions
-            painter.setBrush(getQColorFromValue(displayCube[17-y][x]));
+            painter.setBrush(getDaCola('D', x, y));
             painter.drawPolygon(plgnDown);
 
 
 
         }
     }
+
+}
+
+QColor IsometricCubeWidget::getDaCola(QChar face, int x, int y)
+{
+    return getQColorFromValue(getValueFromFace(face, x , y));
+}
+
+int IsometricCubeWidget::getValueFromFace(QChar face, int x, int y)
+{
+    int value;
+
+    switch(face.toLatin1())
+    {
+        case 'U':
+            value = displayCube[x+colU*3][y];
+            break;
+        case 'D':
+            // y and x reversed, and y decrease instead of increasing
+            // cuz the down and up face are drawn in opposed positions
+            value = displayCube[y+colD*3][x];
+            break;
+        case 'L':
+            value = displayCube[x+colL*3][y];
+            break;
+        case 'R':
+            value = displayCube[x+colR*3][y];
+            break;
+        case 'F':
+            value = displayCube[x+colF*3][y];
+            break;
+        case 'B':
+            value = displayCube[x+colB*3][y];
+            break;
+    }
+
+    return value;
 
 }
 
