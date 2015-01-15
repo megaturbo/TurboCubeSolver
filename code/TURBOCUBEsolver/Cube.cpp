@@ -475,6 +475,59 @@ QString Cube::reverseSequence(QString sequence)
     return reversed;
 }
 
+//This method merges consecutive moves on the same face in one move. For example, U2 U' = U.
+//It returns the cleaned sequence
+QString Cube::cleanSequence(QString sequence){
+    QStringList moves = sequence.split(' ');
+    QString cleanedSequence = "";
+    QString tmp;
+    QString lastMove = "";
+
+    for (int i = 0; i < moves.length(); i++) {
+        tmp = moves.at(i);
+        if (tmp.at(0) == lastMove.at(0)) {
+            int nbQTurn = 2;
+            if(tmp.length() > 1) {
+                if(tmp[1]=='2') {
+                    nbQTurn += 1;
+                } else {
+                    nbQTurn += 2;
+                }
+            }
+            if (lastMove.length() > 1) {
+                if (lastMove[1]=='2') {
+                    nbQTurn += 1;
+                } else {
+                    nbQTurn += 2;
+                }
+            }
+            nbQTurn %= 4;
+            switch(nbQTurn){
+            case 1:
+                tmp = tmp[0];
+                break;
+            case 2:
+                tmp = tmp[0] + "2";
+                break;
+            case 3:
+                tmp = tmp[0] + "\'";
+                break;
+            default:
+                tmp = "";
+                break;
+            }
+            lastMove = "";
+        }
+        if (lastMove.length() > 0) {
+            cleanedSequence += lastMove + " ";
+        }
+        lastMove = tmp;
+    }
+    cleanedSequence += tmp;
+    return cleanedSequence;
+}
+
+
 /**
  * @brief Cube::moveSequence Move a sequence depending of the cube orientation
  * @param sequence The sequence to do
