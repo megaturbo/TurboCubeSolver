@@ -7,6 +7,9 @@
 
 using namespace CubeColor;
 
+// Nested class Face
+class Face;
+
 class IsometricCubeWidget : public QWidget
 {
     Q_OBJECT
@@ -22,12 +25,12 @@ public:
     color getUp();
 
 private:
-    color colU;
-    color colF;
-    color colB;
-    color colR;
-    color colL;
-    color colD;
+    Face *faceU;
+    Face *faceF;
+    Face *faceB;
+    Face *faceR;
+    Face *faceL;
+    Face *faceD;
 
     Cube *cube;
     QPoint isogrid[7][7];

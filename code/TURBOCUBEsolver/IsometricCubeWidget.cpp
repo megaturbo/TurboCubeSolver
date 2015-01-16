@@ -11,6 +11,58 @@ This class is used to represent the cube in a isometric view
 #define W 100
 #define H 60
 
+/**********************************************************\
+|****************    Internal class    ********************|
+\**********************************************************/
+class Face{
+public:
+    // Construct
+    Face(color colSrc, int orientationSrc){
+        col = new color;
+        orientation = new int;
+        *col = colSrc;
+        *orientation = orientationSrc;
+    }
+    Face(const Face &src)
+    {
+        col = new color;
+        *col = *src.col;
+        orientation = new int;
+        *orientation = *src.orientation;
+    }
+    ~Face()
+    {
+        delete col;
+        delete orientation;
+        col = NULL;
+        orientation = NULL;
+    }
+
+    // Getter / Setter
+    void setO(int value)
+    {
+        *orientation += value;
+        *orientation %= 4;
+    }
+    int getO()
+    {
+        return *orientation;
+    }
+    color getC()
+    {
+        return *col;
+    }
+
+private:
+    // Attribs
+    color *col;
+    int *orientation;
+};
+
+
+/**********************************************************\
+|****************      Constructor     ********************|
+\**********************************************************/
 IsometricCubeWidget::IsometricCubeWidget(Cube c, QWidget *parent)
     : QWidget(parent)
 {
@@ -21,13 +73,13 @@ IsometricCubeWidget::IsometricCubeWidget(Cube c, QWidget *parent)
     // init isometric grid, used to create polygons
     initIsoGrid();
 
-    // Set orientation
-    colU = WHITE;
-    colF = RED;
-    colB = ORANGE;
-    colD = YELLOW;
-    colR = BLUE;
-    colL = GREEN;
+    // Set Faces colors and orientations
+    faceU = new Face(WHITE, 0);
+    faceF = new Face(RED, 0);
+    faceB = new Face(ORANGE, 0);
+    faceD = new Face(YELLOW, 0);
+    faceR = new Face(BLUE, 0);
+    faceL = new Face(GREEN, 0);
 
     // Use the right cube
     this->setCube(c);
@@ -35,53 +87,87 @@ IsometricCubeWidget::IsometricCubeWidget(Cube c, QWidget *parent)
 
 void IsometricCubeWidget::setOrientation(QChar axe, int nbQ)
 {
+    Face *faceSave;
     switch(axe.toLatin1()){
     case 'x':
         if(nbQ == 1){
-            color colSave = colU;
-            colU = colF;
-            colF = colD;
-            colD = colB;
-            colB = colSave;
+            // Switch faces
+            faceSave = new Face(*faceU);
+            faceU = faceF;
+            faceF = faceD;
+            faceD = faceB;
+            faceB = faceSave;
+            // Turn parallels faces
+            faceR->setO(1);
+            faceL->setO(3);
+            // Cuz of the drawing logic
+            faceB->setO(2);
+            faceF->setO(2);
         } else {
-            color colSave = colU;
-            colU = colB;
-            colB = colD;
-            colD = colF;
-            colF = colSave;
+            // Switch faces
+            faceSave = new Face(*faceU);
+            faceU = faceB;
+            faceB = faceD;
+            faceD = faceF;
+            faceF = faceSave;
+            // Turn parallels faces
+            faceR->setO(3);
+            faceL->setO(1);
+            // Cuz of the drawing logic
+            faceU->setO(2);
+            faceD->setO(2);
         }
         break;
     case 'y':
         if(nbQ == 1){
-            color colSave = colF;
-            colF = colR;
-            colR = colB;
-            colB = colL;
-            colL = colSave;
+            // Switch faces
+            faceSave = new Face(*faceF);
+            faceF = faceR;
+            faceR = faceB;
+            faceB = faceL;
+            faceL = faceSave;
+            // Turn parallels faces
+            faceU->setO(1);
+            faceD->setO(3);
         } else {
-            color colSave = colF;
-            colF = colL;
-            colL = colB;
-            colB = colR;
-            colR = colSave;
+            // Switch faces
+            faceSave = new Face(*faceF);
+            faceF = faceL;
+            faceL = faceB;
+            faceB = faceR;
+            faceR = faceSave;
+            // Turn parallels faces
+            faceU->setO(3);
+            faceD->setO(1);
         }
         break;
     case 'z':
         if(nbQ == 1){
-            color colSave = colU;
-            colU = colL;
-            colL = colD;
-            colD = colR;
-            colR = colSave;
+            // Switch faces
+            faceSave = new Face(*faceU);
+            faceU = faceL;
+            faceL = faceD;
+            faceD = faceR;
+            faceR = faceSave;
+            // Turn parallels faces
+            faceF->setO(1);
+            faceB->setO(3);
+            // Cuz of the drawing logic
+            faceR->setO(1);
+            faceD->setO(3);
+            faceL->setO(3);
+            faceU->setO(1);
         } else {
-            color colSave = colU;
-            colU = colR;
-            colR = colD;
-            colD = colL;
-            colL = colSave;
+            // Switch faces
+            faceSave = new Face(*faceU);
+            faceU = faceR;
+            faceR = faceD;
+            faceD = faceL;
+            faceL = faceSave;
+            // Turn parallels faces
+            faceF->setO(3);
+            faceB->setO(1);
         }
-        break;
-    default:
         break;
     }
 
@@ -183,6 +269,8 @@ void IsometricCubeWidget::paintEvent(QPaintEvent* event)
     QPolygon plgnBack;
     QPolygon plgnLeft;
 
+    QList<QPoint> tPoints;
+    QList<QString> tTexts;
 
     for (int y = 0; y < 3 ; y++)
     {
@@ -190,6 +278,7 @@ void IsometricCubeWidget::paintEvent(QPaintEvent* event)
         {
             // Clearing the polygon's vector
             plgnUp.clear();
+            plgnDown.clear();
             plgnFront.clear();
             plgnRight.clear();
 
@@ -209,9 +298,13 @@ void IsometricCubeWidget::paintEvent(QPaintEvent* event)
             plgnRight.append(isogrid[3+x-y][4+y]);
             plgnRight.append(isogrid[2+x-y][4+y]);
 
+            plgnDown.append(isogrid[x][y+4]);
+            plgnDown.append(isogrid[x+1][y+4]);
+            plgnDown.append(isogrid[x+1][y+3]);
+            plgnDown.append(isogrid[x][y+3]);
+            plgnDown.translate(4*W,0);
+
             // CREATE AND TRANSLATE THE HIDDEN FACES
-            plgnDown = QPolygon(plgnUp);
-            plgnDown.translate(4*W,3*H);
 
             plgnBack = QPolygon(plgnRight);
             plgnBack.translate(2.5*W,-1.5*H);
@@ -251,9 +344,9 @@ void IsometricCubeWidget::paintEvent(QPaintEvent* event)
             painter.drawPolygon(plgnDown);
 
 
-
         }
     }
+
 
 }
 
@@ -266,29 +359,62 @@ int IsometricCubeWidget::getValueFromFace(QChar face, int x, int y)
 {
     int value;
 
+    // cuz value will change with the orientation
+    Face *actFace;
+    int mx, my;
+
     switch(face.toLatin1())
     {
         case 'U':
-            value = displayCube[x+colU*3][y];
+            actFace = faceU;
             break;
         case 'D':
-            // y and x reversed, and y decrease instead of increasing
-            // cuz the down and up face are drawn in opposed positions
-            value = displayCube[y+colD*3][x];
+            actFace = faceD;
             break;
         case 'L':
-            value = displayCube[x+colL*3][y];
+            actFace = faceL;
             break;
         case 'R':
-            value = displayCube[x+colR*3][y];
+            actFace = faceR;
             break;
         case 'F':
-            value = displayCube[x+colF*3][y];
+            actFace = faceF;
             break;
         case 'B':
-            value = displayCube[x+colB*3][y];
+            actFace = faceB;
             break;
     }
+
+    switch(actFace->getO())
+    {
+        case 0:
+            mx = x;
+            my = y;
+            break;
+        case 1:
+            mx = y;
+            my = 2-x;
+            break;
+        case 2:
+            mx = 2-x;
+            my = 2-y;
+            break;
+        case 3:
+            mx = 2-y;
+            my = x;
+            break;
+    }
+
+    // y and x reversed, and y decrease instead of increasing
+    // cuz the down and up face are drawn in opposed positions
+    if(actFace->getC() == YELLOW)
+    {
+
+    }
+
+
+    value = displayCube[mx+actFace->getC()*3][my];
+
 
     return value;
 
@@ -331,9 +457,9 @@ QColor IsometricCubeWidget::getQColorFromValue(int color, int alpha)
 
 
 color IsometricCubeWidget::getFront(){
-    return colF;
+    return faceF->getC();
 }
 
 color IsometricCubeWidget::getUp(){
-    return colU;
+    return faceU->getC();
 }

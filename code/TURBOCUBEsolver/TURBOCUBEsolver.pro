@@ -14,6 +14,7 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
     Cube.cpp \
+    ColorPicker.cpp \
     Fridrich.cpp \
     TurboCubeSolver.cpp \
     IsometricCubeWidget.cpp \
@@ -22,6 +23,7 @@ SOURCES += main.cpp\
 
 HEADERS  += \
     CubeColor.h \
+    ColorPicker.h \
     Cube.h \
     Fridrich.h \
     TurboCubeSolver.h \
