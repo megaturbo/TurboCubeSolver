@@ -221,74 +221,93 @@ void IsometricCubeWidget::initIsoGrid()
         }
     }
 
-}
-
-void IsometricCubeWidget::mousePressEvent(QMouseEvent *e){
-    QPolygon plgnUp;
-    QPolygon plgnFront;
-    QPolygon plgnRight;
-    QPolygon plgnDown;
-    QPolygon plgnBack;
-    QPolygon plgnLeft;
-
     for (int y = 0; y < 3 ; y++)
     {
         for (int x = 0; x < 3; x++)
         {
-            // Clearing the polygon's vector
-            plgnUp.clear();
-            plgnDown.clear();
-            plgnFront.clear();
-            plgnRight.clear();
-
             // Creating the polygon's vector
-            plgnUp.append(isogrid[6-y][x]);
-            plgnUp.append(isogrid[6-y][x+1]);
-            plgnUp.append(isogrid[5-y][x+1]);
-            plgnUp.append(isogrid[5-y][x]);
+            plgnUp[x][y].append(isogrid[6-y][x]);
+            plgnUp[x][y].append(isogrid[6-y][x+1]);
+            plgnUp[x][y].append(isogrid[5-y][x+1]);
+            plgnUp[x][y].append(isogrid[5-y][x]);
 
-            plgnFront.append(isogrid[3-y][x+y]);
-            plgnFront.append(isogrid[3-y][x+y+1]);
-            plgnFront.append(isogrid[2-y][x+y+2]);
-            plgnFront.append(isogrid[2-y][x+y+1]);
+            plgnFront[x][y].append(isogrid[3-y][x+y]);
+            plgnFront[x][y].append(isogrid[3-y][x+y+1]);
+            plgnFront[x][y].append(isogrid[2-y][x+y+2]);
+            plgnFront[x][y].append(isogrid[2-y][x+y+1]);
 
-            plgnRight.append(isogrid[3+x-y][3+y]);
-            plgnRight.append(isogrid[4+x-y][3+y]);
-            plgnRight.append(isogrid[3+x-y][4+y]);
-            plgnRight.append(isogrid[2+x-y][4+y]);
+            plgnRight[x][y].append(isogrid[3+x-y][3+y]);
+            plgnRight[x][y].append(isogrid[4+x-y][3+y]);
+            plgnRight[x][y].append(isogrid[3+x-y][4+y]);
+            plgnRight[x][y].append(isogrid[2+x-y][4+y]);
 
-            plgnDown.append(isogrid[x][y+4]);
-            plgnDown.append(isogrid[x+1][y+4]);
-            plgnDown.append(isogrid[x+1][y+3]);
-            plgnDown.append(isogrid[x][y+3]);
-            plgnDown.translate(4*W,0);
+            plgnDown[x][y].append(isogrid[x][y+4]);
+            plgnDown[x][y].append(isogrid[x+1][y+4]);
+            plgnDown[x][y].append(isogrid[x+1][y+3]);
+            plgnDown[x][y].append(isogrid[x][y+3]);
+            plgnDown[x][y].translate(4*W,0);
 
-            // CREATE AND TRANSLATE THE HIDDEN FACES
+            plgnBack[x][y] = QPolygon(plgnRight[x][y]);
+            plgnBack[x][y].translate(2.5*W,-1.5*H);
 
-            plgnBack = QPolygon(plgnRight);
-            plgnBack.translate(2.5*W,-1.5*H);
+            plgnLeft[x][y] = QPolygon(plgnFront[x][y]);
+            plgnLeft[x][y].translate(5.5*W,-1.5*H);
+        }
+    }
 
-            plgnLeft = QPolygon(plgnFront);
-            plgnLeft.translate(5.5*W,-1.5*H);
+}
 
-            if(plgnBack.containsPoint(e->pos())){
-
+void IsometricCubeWidget::mousePressEvent(QMouseEvent *e){
+    QChar face = '♥';
+    int matX;
+    int matY;
+    for (int y = 0; y < 3 ; y++)
+    {
+        for (int x = 0; x < 3; x++)
+        {
+            if(plgnBack[x][y].containsPoint(e->pos(), Qt::OddEvenFill)){
+                face = 'B';
+                matX = x;
+                matY = y;
             }
-            if(plgnUp.containsPoint(e->pos())){
-
+            if(plgnUp[x][y].containsPoint(e->pos(), Qt::OddEvenFill)){
+                face = 'U';
+                matX = x;
+                matY = y;
             }
-            if(plgnFront.containsPoint(e->pos())){
-
+            if(plgnFront[x][y].containsPoint(e->pos(), Qt::OddEvenFill)){
+                face = 'F';
+                matX = x;
+                matY = y;
             }
-            if(plgnLeft.containsPoint(e->pos())){
-
+            if(plgnLeft[x][y].containsPoint(e->pos(), Qt::OddEvenFill)){
+                face = 'L';
+                matX = x;
+                matY = y;
             }
-            if(plgnDown.containsPoint(e->pos())){
-
+            if(plgnDown[x][y].containsPoint(e->pos(), Qt::OddEvenFill)){
+                face = 'D';
+                matX = x;
+                matY = y;
             }
-            if(plgnRight.containsPoint(e->pos())){
-
+            if(plgnRight[x][y].containsPoint(e->pos(), Qt::OddEvenFill)){
+                face = 'R';
+                matX = x;
+                matY = y;
             }
+        }
+    }
+
+    if(face != '♥'){
+        qDebug() << matX << matY << face;
+        qDebug() << getValueFromFace(face, matX, matY);
+        int mx, my;
+        getMXMY(matX, matY, mx, my, face);
+        qDebug() << mx << my;
+
+        if(!(mx % 3 == 1 && my == 1)){
+            displayCube[mx][my] = (color)((displayCube[mx][my] + 1) % 6);
+            this->update();
         }
     }
 }
@@ -332,14 +351,6 @@ void IsometricCubeWidget::paintEvent(QPaintEvent* event)
 
     // END SHADOW
 
-
-    QPolygon plgnUp;
-    QPolygon plgnFront;
-    QPolygon plgnRight;
-    QPolygon plgnDown;
-    QPolygon plgnBack;
-    QPolygon plgnLeft;
-
     QList<QPoint> tPoints;
     QList<QString> tTexts;
 
@@ -347,42 +358,6 @@ void IsometricCubeWidget::paintEvent(QPaintEvent* event)
     {
         for (int x = 0; x < 3; x++)
         {
-            // Clearing the polygon's vector
-            plgnUp.clear();
-            plgnDown.clear();
-            plgnFront.clear();
-            plgnRight.clear();
-
-            // Creating the polygon's vector
-            plgnUp.append(isogrid[6-y][x]);
-            plgnUp.append(isogrid[6-y][x+1]);
-            plgnUp.append(isogrid[5-y][x+1]);
-            plgnUp.append(isogrid[5-y][x]);
-
-            plgnFront.append(isogrid[3-y][x+y]);
-            plgnFront.append(isogrid[3-y][x+y+1]);
-            plgnFront.append(isogrid[2-y][x+y+2]);
-            plgnFront.append(isogrid[2-y][x+y+1]);
-
-            plgnRight.append(isogrid[3+x-y][3+y]);
-            plgnRight.append(isogrid[4+x-y][3+y]);
-            plgnRight.append(isogrid[3+x-y][4+y]);
-            plgnRight.append(isogrid[2+x-y][4+y]);
-
-            plgnDown.append(isogrid[x][y+4]);
-            plgnDown.append(isogrid[x+1][y+4]);
-            plgnDown.append(isogrid[x+1][y+3]);
-            plgnDown.append(isogrid[x][y+3]);
-            plgnDown.translate(4*W,0);
-
-            // CREATE AND TRANSLATE THE HIDDEN FACES
-
-            plgnBack = QPolygon(plgnRight);
-            plgnBack.translate(2.5*W,-1.5*H);
-
-            plgnLeft = QPolygon(plgnFront);
-            plgnLeft.translate(5.5*W,-1.5*H);
-
             // DRAWING
 
             QPen pen(Qt::black, 3);
@@ -392,27 +367,27 @@ void IsometricCubeWidget::paintEvent(QPaintEvent* event)
 
             // FRONT FACE
             painter.setBrush(getDaCola('F', x, y));
-            painter.drawPolygon(plgnFront);
+            painter.drawPolygon(plgnFront[x][y]);
 
             // RIGHT FACE
             painter.setBrush(getDaCola('R', x, y));
-            painter.drawPolygon(plgnRight);
+            painter.drawPolygon(plgnRight[x][y]);
 
             // BACK FACE
             painter.setBrush(getDaCola('B', x, y));
-            painter.drawPolygon(plgnBack);
+            painter.drawPolygon(plgnBack[x][y]);
 
             // LEFT FACE
             painter.setBrush(getDaCola('L', x, y));
-            painter.drawPolygon(plgnLeft);
+            painter.drawPolygon(plgnLeft[x][y]);
 
             // UP FACE
             painter.setBrush(getDaCola('U', x, y));
-            painter.drawPolygon(plgnUp);
+            painter.drawPolygon(plgnUp[x][y]);
 
             // DOWN FACE
             painter.setBrush(getDaCola('D', x, y));
-            painter.drawPolygon(plgnDown);
+            painter.drawPolygon(plgnDown[x][y]);
 
 
         }
@@ -426,54 +401,49 @@ QColor IsometricCubeWidget::getDaCola(QChar face, int x, int y)
     return getQColorFromValue(getValueFromFace(face, x , y));
 }
 
-int IsometricCubeWidget::getValueFromFace(QChar face, int x, int y)
+void IsometricCubeWidget::getMXMY(int x, int y, int &mx, int &my, QChar face)
 {
-    int value;
-
-    // cuz value will change with the orientation
     Face *actFace;
-    int mx, my;
-
     switch(face.toLatin1())
     {
-        case 'U':
-            actFace = faceU;
-            break;
-        case 'D':
-            actFace = faceD;
-            break;
-        case 'L':
-            actFace = faceL;
-            break;
-        case 'R':
-            actFace = faceR;
-            break;
-        case 'F':
-            actFace = faceF;
-            break;
-        case 'B':
-            actFace = faceB;
-            break;
+    case 'U':
+        actFace = faceU;
+        break;
+    case 'D':
+        actFace = faceD;
+        break;
+    case 'L':
+        actFace = faceL;
+        break;
+    case 'R':
+        actFace = faceR;
+        break;
+    case 'F':
+        actFace = faceF;
+        break;
+    case 'B':
+        actFace = faceB;
+        break;
     }
 
     switch(actFace->getO())
     {
-        case 0:
-            mx = x;
-            my = y;
-            break;
-        case 1:
-            mx = y;
-            my = 2-x;
-            break;
-        case 2:
-            mx = 2-x;
-            my = 2-y;
-            break;
-        case 3:
-            mx = 2-y;
-            my = x;
-            break;
+    case 0:
+        mx = x;
+        my = y;
+        break;
+    case 1:
+        mx = y;
+        my = 2-x;
+        break;
+    case 2:
+        mx = 2-x;
+        my = 2-y;
+        break;
+    case 3:
+        mx = 2-y;
+        my = x;
+        break;
     }
 
     // y and x reversed, and y decrease instead of increasing
@@ -483,8 +453,20 @@ int IsometricCubeWidget::getValueFromFace(QChar face, int x, int y)
 
     }
 
+    mx = mx+actFace->getC()*3;
+}
 
-    value = displayCube[mx+actFace->getC()*3][my];
+int IsometricCubeWidget::getValueFromFace(QChar face, int x, int y)
+{
+    int value;
+
+    int mx, my;
+
+    // cuz value will change with the orientation
+    getMXMY(x, y, mx, my, face);
+
+
+    value = displayCube[mx][my];
 
 
     return value;
