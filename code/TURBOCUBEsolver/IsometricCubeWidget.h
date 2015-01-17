@@ -33,8 +33,15 @@ private:
     Face *faceL;
     Face *faceD;
 
-    Cube *cube;
     QPoint isogrid[7][7];
+    QPolygon plgnUp[3][3];
+    QPolygon plgnFront[3][3];
+    QPolygon plgnRight[3][3];
+    QPolygon plgnDown[3][3];
+    QPolygon plgnBack[3][3];
+    QPolygon plgnLeft[3][3];
+
+    Cube *cube;
     int displayCube[18][3];
     QColor getDaCola(QChar face, int x, int y);
     int getValueFromFace(QChar face, int x, int y);
