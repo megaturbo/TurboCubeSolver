@@ -3,7 +3,7 @@
 #include <QtWidgets>
 #include <QDebug>
 
-#define W 40
+#define W 60
 
 InputWidget::InputWidget(QWidget *parent) :
     QWidget(parent)
@@ -64,7 +64,6 @@ void InputWidget::mousePressEvent(QMouseEvent *event)
     }
 
     if(face != -1 && !(x == 1 && y == 1)){
-        qDebug() << face << x << y;
         displayCube[x + face * 3][y] = (color)((displayCube[x + face * 3][y] + 1) % 6);
         this->update();
     }
@@ -131,5 +130,24 @@ void InputWidget::paintEvent(QPaintEvent* event)
                 painter.drawPolygon(plgn);
             }
         }
+        // Creating the polygon
+        QPolygon plgn;
+
+        // Creating the polygon's vectors
+        QPoint p1(W + 0 * W + 3 * W * offsetX[face], W + 0 * W + 3 * W * offsetY[face]);
+        QPoint p2(W + (3) * W + 3 * W * offsetX[face], W + 0 * W + 3 * W * offsetY[face]);
+        QPoint p3(W + (3) * W + 3 * W * offsetX[face], W + (3) * W + 3 * W * offsetY[face]);
+        QPoint p4(W + 0 * W + 3 * W * offsetX[face], W + (3) * W + 3 * W * offsetY[face]);
+
+        plgn.append(p1);
+        plgn.append(p2);
+        plgn.append(p3);
+        plgn.append(p4);
+
+        QPen pen(Qt::black, 5);
+        painter.setPen(pen);
+        painter.setBrush(Qt::NoBrush);
+
+        painter.drawPolygon(plgn);
     }
 }
