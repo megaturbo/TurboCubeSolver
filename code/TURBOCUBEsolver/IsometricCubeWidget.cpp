@@ -270,22 +270,22 @@ void IsometricCubeWidget::mousePressEvent(QMouseEvent *e){
             plgnLeft = QPolygon(plgnFront);
             plgnLeft.translate(5.5*W,-1.5*H);
 
-            if(plgnBack.containsPoint(e->pos())){
+            if(plgnBack.containsPoint(e->pos(), Qt::OddEvenFill)){
 
             }
-            if(plgnUp.containsPoint(e->pos())){
+            if(plgnUp.containsPoint(e->pos(), Qt::OddEvenFill)){
 
             }
-            if(plgnFront.containsPoint(e->pos())){
+            if(plgnFront.containsPoint(e->pos(), Qt::OddEvenFill)){
 
             }
-            if(plgnLeft.containsPoint(e->pos())){
+            if(plgnLeft.containsPoint(e->pos(), Qt::OddEvenFill)){
 
             }
-            if(plgnDown.containsPoint(e->pos())){
+            if(plgnDown.containsPoint(e->pos(), Qt::OddEvenFill)){
 
             }
-            if(plgnRight.containsPoint(e->pos())){
+            if(plgnRight.containsPoint(e->pos(), Qt::OddEvenFill)){
 
             }
         }

@@ -16,6 +16,7 @@ class IsometricCubeWidget : public QWidget
 
 public:
     IsometricCubeWidget(Cube c, QWidget *parent = 0);
+    void mousePressEvent(QMouseEvent *e);
     void paintEvent(QPaintEvent*);
     void setCube(Cube c);
     void setCubeMatrix(int matrix[18][3]);
