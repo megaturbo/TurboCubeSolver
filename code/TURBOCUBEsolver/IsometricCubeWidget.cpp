@@ -299,6 +299,15 @@ void IsometricCubeWidget::mousePressEvent(QMouseEvent *e){
 
     if(face != '♥'){
         qDebug() << matX << matY << face;
+        qDebug() << getValueFromFace(face, matX, matY);
+        int mx, my;
+        getMXMY(matX, matY, mx, my, face);
+        qDebug() << mx << my;
+
+        if(!(mx % 3 == 1 && my == 1)){
+            displayCube[mx][my] = (color)((displayCube[mx][my] + 1) % 6);
+            this->update();
+        }
     }
 }
 
@@ -391,14 +400,9 @@ QColor IsometricCubeWidget::getDaCola(QChar face, int x, int y)
     return getQColorFromValue(getValueFromFace(face, x , y));
 }
 
-int IsometricCubeWidget::getValueFromFace(QChar face, int x, int y)
+void IsometricCubeWidget::getMXMY(int x, int y, int &mx, int &my, QChar face)
 {
-    int value;
-
-    // cuz value will change with the orientation
     Face *actFace;
-    int mx, my;
-
     switch(face.toLatin1())
     {
     case 'U':
@@ -448,8 +452,20 @@ int IsometricCubeWidget::getValueFromFace(QChar face, int x, int y)
 
     }
 
+    mx = mx+actFace->getC()*3;
+}
 
-    value = displayCube[mx+actFace->getC()*3][my];
+int IsometricCubeWidget::getValueFromFace(QChar face, int x, int y)
+{
+    int value;
+
+    int mx, my;
+
+    // cuz value will change with the orientation
+    getMXMY(x, y, mx, my, face);
+
+
+    value = displayCube[mx][my];
 
 
     return value;

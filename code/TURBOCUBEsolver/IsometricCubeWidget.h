@@ -25,6 +25,7 @@ public:
     color getFront();
     color getUp();
 
+    void getMXMY(int x, int y, int &mx, int &my, QChar face);
 private:
     Face *faceU;
     Face *faceF;
