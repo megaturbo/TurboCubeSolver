@@ -1,8 +1,9 @@
 /**
 This class is used to represent the cube in a isometric view
 
-
+@author: Thomas Roulin
 **/
+
 #include "IsometricCubeWidget.h"
 #include <QPainter>
 #include <QtWidgets>
