@@ -79,8 +79,10 @@ MainWidget::MainWidget(QWidget *parent) :
 
 void MainWidget::startCubeInput()
 {
-    cubeInputWidget = new CubeInputWidget();
-    cubeInputWidget->show();
+    inputWidget = new InputWidget();
+    inputWidget->show();
+//    cubeInputWidget = new CubeInputWidget();
+//    cubeInputWidget->show();
 }
 
 void MainWidget::turnXSlot()

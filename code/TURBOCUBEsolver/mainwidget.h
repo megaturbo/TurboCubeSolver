@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QtWidgets>
+#include "InputWidget.h"
 #include "CubeInputWidget.h"
 #include "IsometricCubeWidget.h"
 #include "Cube.h"
@@ -15,6 +16,7 @@ public:
     explicit MainWidget(QWidget *parent = 0);
 
 private:
+    InputWidget *inputWidget;
     CubeInputWidget *cubeInputWidget;
     IsometricCubeWidget *isometricCubeWidget;
 

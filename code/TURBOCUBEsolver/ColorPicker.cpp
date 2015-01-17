@@ -1,5 +1,6 @@
-#include "colorpicker.h"
 #include <QApplication>
+#include <ColorPicker.h>
+#include <qdebug.h>
 
 ColorPicker::ColorPicker(QWidget *parent) :
     QWidget(parent)
@@ -27,8 +28,6 @@ ColorPicker::ColorPicker(QWidget *parent) :
     colorPB[3]->setStyleSheet("background-color: green");
     colorPB[4]->setStyleSheet("background-color: white");
     colorPB[5]->setStyleSheet("background-color: yellow");
-
-
 
 }
 
