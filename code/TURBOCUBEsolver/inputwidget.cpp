@@ -33,7 +33,6 @@ InputWidget::InputWidget(QWidget *parent) :
     offsetX[YELLOW] = 3;
     offsetY[YELLOW] = 2;
 
-    cube = new Cube(displayCube);
 }
 
 void InputWidget::mousePressEvent(QMouseEvent *event)
@@ -67,6 +66,13 @@ void InputWidget::mousePressEvent(QMouseEvent *event)
         displayCube[x + face * 3][y] = (color)((displayCube[x + face * 3][y] + 1) % 6);
         this->update();
     }
+}
+
+void InputWidget::validateCube(){
+    Cube cube(displayCube);
+
+
+
 }
 
 void InputWidget::paintEvent(QPaintEvent* event)

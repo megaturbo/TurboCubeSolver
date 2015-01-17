@@ -23,8 +23,7 @@ private:
     color displayCube[18][3];
     int offsetX[6];
     int offsetY[6];
-
-    Cube *cube;
+    void validateCube();
 };
 
 #endif // INPUTWIDGET_H

@@ -222,6 +222,76 @@ void IsometricCubeWidget::initIsoGrid()
 
 }
 
+void IsometricCubeWidget::mousePressEvent(QMouseEvent *e){
+    QPolygon plgnUp;
+    QPolygon plgnFront;
+    QPolygon plgnRight;
+    QPolygon plgnDown;
+    QPolygon plgnBack;
+    QPolygon plgnLeft;
+
+    for (int y = 0; y < 3 ; y++)
+    {
+        for (int x = 0; x < 3; x++)
+        {
+            // Clearing the polygon's vector
+            plgnUp.clear();
+            plgnDown.clear();
+            plgnFront.clear();
+            plgnRight.clear();
+
+            // Creating the polygon's vector
+            plgnUp.append(isogrid[6-y][x]);
+            plgnUp.append(isogrid[6-y][x+1]);
+            plgnUp.append(isogrid[5-y][x+1]);
+            plgnUp.append(isogrid[5-y][x]);
+
+            plgnFront.append(isogrid[3-y][x+y]);
+            plgnFront.append(isogrid[3-y][x+y+1]);
+            plgnFront.append(isogrid[2-y][x+y+2]);
+            plgnFront.append(isogrid[2-y][x+y+1]);
+
+            plgnRight.append(isogrid[3+x-y][3+y]);
+            plgnRight.append(isogrid[4+x-y][3+y]);
+            plgnRight.append(isogrid[3+x-y][4+y]);
+            plgnRight.append(isogrid[2+x-y][4+y]);
+
+            plgnDown.append(isogrid[x][y+4]);
+            plgnDown.append(isogrid[x+1][y+4]);
+            plgnDown.append(isogrid[x+1][y+3]);
+            plgnDown.append(isogrid[x][y+3]);
+            plgnDown.translate(4*W,0);
+
+            // CREATE AND TRANSLATE THE HIDDEN FACES
+
+            plgnBack = QPolygon(plgnRight);
+            plgnBack.translate(2.5*W,-1.5*H);
+
+            plgnLeft = QPolygon(plgnFront);
+            plgnLeft.translate(5.5*W,-1.5*H);
+
+            if(plgnBack.containsPoint(e->pos())){
+
+            }
+            if(plgnUp.containsPoint(e->pos())){
+
+            }
+            if(plgnFront.containsPoint(e->pos())){
+
+            }
+            if(plgnLeft.containsPoint(e->pos())){
+
+            }
+            if(plgnDown.containsPoint(e->pos())){
+
+            }
+            if(plgnRight.containsPoint(e->pos())){
+
+            }
+        }
+    }
+}
+
 void IsometricCubeWidget::paintEvent(QPaintEvent* event)
 {
     QPainter painter(this);
