@@ -79,7 +79,7 @@ MainWidget::MainWidget(QWidget *parent) :
 
 void MainWidget::startCubeInput()
 {
-    cubeInputWidget = new CubeInputWidget();
+    cubeInputWidget = new InputWidget();
     cubeInputWidget->show();
 }
 

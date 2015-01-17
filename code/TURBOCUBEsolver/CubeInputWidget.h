@@ -3,6 +3,7 @@
 #include <QPushButton>
 #include <QButtonGroup>
 #include <colorpicker.h>
+
 using namespace CubeColor;
 class CubeInputWidget : public QWidget
 {
@@ -46,4 +47,3 @@ public slots:
     //void colorReceptionSlot(color c);
 
 };
-
