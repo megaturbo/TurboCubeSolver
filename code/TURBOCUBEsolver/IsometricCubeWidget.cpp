@@ -260,52 +260,95 @@ void IsometricCubeWidget::mousePressEvent(QMouseEvent *e){
     QChar face = '♥';
     int matX;
     int matY;
-    for (int y = 0; y < 3 ; y++)
+    //Checking each isometric polygon and saving x, y and the face if we find the correct polygon
+    int x = 0;
+    int y = 0;
+    while(x < 3 && face == '♥')
     {
-        for (int x = 0; x < 3; x++)
-        {
-            if(plgnBack[x][y].containsPoint(e->pos(), Qt::OddEvenFill)){
-                face = 'B';
-                matX = x;
-                matY = y;
-            }
-            if(plgnUp[x][y].containsPoint(e->pos(), Qt::OddEvenFill)){
-                face = 'U';
-                matX = x;
-                matY = y;
-            }
-            if(plgnFront[x][y].containsPoint(e->pos(), Qt::OddEvenFill)){
-                face = 'F';
-                matX = x;
-                matY = y;
-            }
-            if(plgnLeft[x][y].containsPoint(e->pos(), Qt::OddEvenFill)){
-                face = 'L';
-                matX = x;
-                matY = y;
-            }
-            if(plgnDown[x][y].containsPoint(e->pos(), Qt::OddEvenFill)){
-                face = 'D';
-                matX = x;
-                matY = y;
-            }
-            if(plgnRight[x][y].containsPoint(e->pos(), Qt::OddEvenFill)){
-                face = 'R';
-                matX = x;
-                matY = y;
-            }
+        if(plgnBack[x][y].containsPoint(e->pos(), Qt::OddEvenFill)){
+            face = 'B';
+            matX = x;
+            matY = y;
+        }
+        if(plgnUp[x][y].containsPoint(e->pos(), Qt::OddEvenFill)){
+            face = 'U';
+            matX = x;
+            matY = y;
+        }
+        if(plgnFront[x][y].containsPoint(e->pos(), Qt::OddEvenFill)){
+            face = 'F';
+            matX = x;
+            matY = y;
+        }
+        if(plgnLeft[x][y].containsPoint(e->pos(), Qt::OddEvenFill)){
+            face = 'L';
+            matX = x;
+            matY = y;
+        }
+        if(plgnDown[x][y].containsPoint(e->pos(), Qt::OddEvenFill)){
+            face = 'D';
+            matX = x;
+            matY = y;
+        }
+        if(plgnRight[x][y].containsPoint(e->pos(), Qt::OddEvenFill)){
+            face = 'R';
+            matX = x;
+            matY = y;
+        }
+        if (++y == 3){
+            x++;
+            y %= 3;
         }
     }
 
+    //if event->pos() is into a polygon
     if(face != '♥'){
-        qDebug() << matX << matY << face;
-        qDebug() << getValueFromFace(face, matX, matY);
+        //Getting the indices on the cube matrix
         int mx, my;
         getMXMY(matX, matY, mx, my, face);
-        qDebug() << mx << my;
 
+        //if not a center
         if(!(mx % 3 == 1 && my == 1)){
-            displayCube[mx][my] = (color)((displayCube[mx][my] + 1) % 6);
+            int k = 0;
+            bool legal = true;
+            do{
+                k++;
+                //incrementing the color on the matrix
+                Cube c(displayCube);
+                color nextColor = (color)((displayCube[mx][my] + k) % 6);
+
+                //checking the validity of the new color
+                QList<int> stickers = c.linkedStickers(mx, my);
+
+                QList<color> col;
+
+                for (int i = 2; i < stickers.length(); i += 2) {
+                    col.append((color)displayCube[stickers.at(i)][stickers.at(i + 1)]);
+                }
+
+                qDebug() << col.at(0) << col.at(1);
+
+                switch(col.length()){
+                case 1:
+                    if(c.locateCubie(nextColor, col.at(0)).length() > 0){
+                        //the cubie already exists
+                        legal = false;
+                    }
+                    break;
+                case 2:
+                    if(c.locateCubie(nextColor, col.at(0), col.at(1)).length() > 0){
+                        //the cubie already exists
+                        legal = false;
+                    }
+                    break;
+                default:
+                    //should not happen
+                    break;
+                }
+                if(legal){
+                    displayCube[mx][my] = nextColor;
+                }
+            }while(!legal);
             this->update();
         }
     }

@@ -242,6 +242,7 @@ QList<int> Cube::locateCubie(color firstColor, color secondColor, color thirdCol
             return sortedIndices;
         }
     }
+    indices.clear();
     return indices;
 }
 
