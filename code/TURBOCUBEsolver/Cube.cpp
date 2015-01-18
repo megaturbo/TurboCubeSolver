@@ -65,6 +65,16 @@ void Cube::setMatrix(int matrix[18][3])
     }
 }
 
+void Cube::setCubie(int x, int y, int c)
+{
+    setCubie(x, y, (color)c);
+}
+
+void Cube::setCubie(int x, int y, color c)
+{
+    matCube[x][y] = c;
+}
+
 color** Cube::getFaceMatrix(QChar face) const{
 
     int firstID;

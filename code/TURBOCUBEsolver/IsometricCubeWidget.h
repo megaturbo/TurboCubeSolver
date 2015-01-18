@@ -48,6 +48,9 @@ private:
     int getValueFromFace(QChar face, int x, int y);
     QColor getQColorFromValue(int color, int alpha = 255);
     void initIsoGrid();
+
+signals:
+    void cubieModified(int x, int y, color c);
 };
 
 #endif // ISOMETRICCUBEWIDGET_H

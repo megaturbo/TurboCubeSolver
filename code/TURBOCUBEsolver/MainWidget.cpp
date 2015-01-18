@@ -70,11 +70,18 @@ MainWidget::MainWidget(QWidget *parent) :
     connect(movesPB[2], SIGNAL(clicked()), this, SLOT(turnZSlot()));
 
     connect(cubeInputPB, SIGNAL(clicked()), this, SLOT(startCubeInput()));
+    connect(isometricCubeWidget, SIGNAL(cubieModified(int, int, color)), this, SLOT(cubieModified(int, int, color)));
 
     // Display settings
     this->setLayout(MainLayout);
     this->resize(1000,600);
     this->show();
+}
+
+void MainWidget::cubieModified(int x, int y, color c)
+{
+    displayedCube->setCubie(x, y, c);
+    isometricCubeWidget->setCube(*displayedCube);
 }
 
 void MainWidget::startCubeInput()

@@ -33,6 +33,10 @@ class Cube {
 
     void setMatrix(color matrix[18][3]);
     void setMatrix(int matrix[18][3]);
+
+    void setCubie(int x, int y, int c);
+    void setCubie(int x, int y, color c);
+
     color** getMatrix() const;
     color** getFaceMatrix(QChar face) const;
 

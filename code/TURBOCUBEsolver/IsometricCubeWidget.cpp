@@ -59,8 +59,6 @@ private:
     color *col;
     int *orientation;
 };
-
-
 /**********************************************************\
 |****************      Constructor     ********************|
 \**********************************************************/
@@ -299,15 +297,14 @@ void IsometricCubeWidget::mousePressEvent(QMouseEvent *e){
     }
 
     if(face != '♥'){
-        qDebug() << matX << matY << face;
-        qDebug() << getValueFromFace(face, matX, matY);
         int mx, my;
+        // Get the right x and y dependig on the orientation
         getMXMY(matX, matY, mx, my, face);
-        qDebug() << mx << my;
 
+        // Check if not center
         if(!(mx % 3 == 1 && my == 1)){
-            displayCube[mx][my] = (color)((displayCube[mx][my] + 1) % 6);
-            this->update();
+            color mc = (color)((displayCube[mx][my] + 1) % 6);
+            emit cubieModified(mx, my, mc);
         }
     }
 }
@@ -321,14 +318,7 @@ void IsometricCubeWidget::paintEvent(QPaintEvent* event)
     // START TITLES
     painter.setPen(Qt::black);
 
-    //int rdFontID = QFontDatabase::addApplicationFont(":/Fonts/reservoirdogs.ttf");
-    //QString fontFamily = QFontDatabase::applicationFontFamilies(rdFontID).at(0);
-    //QFont font(fontFamily);
-
-    QFont font("Arial", 30);
-    //font.setPointSize(30);
-
-    painter.setFont(QFont(font));
+    painter.setFont(QFont("Arial", 30));
 
     painter.drawText(isogrid[3][0].rx() + 0.3 * W, 100, "FRONT");
     painter.drawText(isogrid[4][0].rx() + 4 * W, 100, "BACK");
@@ -351,8 +341,6 @@ void IsometricCubeWidget::paintEvent(QPaintEvent* event)
 
     // END SHADOW
 
-    QList<QPoint> tPoints;
-    QList<QString> tTexts;
 
     for (int y = 0; y < 3 ; y++)
     {
@@ -362,8 +350,6 @@ void IsometricCubeWidget::paintEvent(QPaintEvent* event)
 
             QPen pen(Qt::black, 3);
             painter.setPen(pen);
-
-            // ### ALPHA 255
 
             // FRONT FACE
             painter.setBrush(getDaCola('F', x, y));
