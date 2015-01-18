@@ -648,8 +648,23 @@ QString Cube::R(int nbQuarterTurn, color colorFront, color colorUp) {
     default:
         if(colorUp == YELLOW){
             face = (color) ((colorFront + 3) % 4);
-        } else {
+        } else if(colorUp == WHITE){
             face = (color) ((colorFront + 1) % 4);
+        }else{
+            if(colorUp > colorFront)
+            {
+                face = YELLOW;
+                if(colorUp == GREEN && colorFront == RED)
+                {
+                    face = WHITE;
+                }
+            }else {
+                face = WHITE;
+                if(colorUp == RED && colorFront == GREEN)
+                {
+                    face = YELLOW;
+                }
+            }
         }
         break;
     }
@@ -667,8 +682,23 @@ QString Cube::L(int nbQuarterTurn, color colorFront, color colorUp) {
     default:
         if(colorUp == YELLOW){
             face = (color) ((colorFront + 1) % 4);
-        } else {
+        } else if(colorUp == WHITE){
             face = (color) ((colorFront + 3) % 4);
+        } else {
+            if(colorUp > colorFront)
+            {
+                face = WHITE;
+                if(colorUp == GREEN && colorFront == RED)
+                {
+                    face = YELLOW;
+                }
+            }else {
+                face = YELLOW;
+                if(colorUp == RED && colorFront == GREEN)
+                {
+                    face = WHITE;
+                }
+            }
         }
         break;
     }

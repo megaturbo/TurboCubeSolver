@@ -166,6 +166,11 @@ void IsometricCubeWidget::setOrientation(QChar axe, int nbQ)
             // Turn parallels faces
             faceF->setO(3);
             faceB->setO(1);
+            // Cuz of the drawing logic
+            faceR->setO(1);
+            faceD->setO(1);
+            faceL->setO(3);
+            faceU->setO(3);
         }
         break;
     }
@@ -432,13 +437,6 @@ void IsometricCubeWidget::getMXMY(int x, int y, int &mx, int &my, QChar face)
         break;
     }
 
-    // y and x reversed, and y decrease instead of increasing
-    // cuz the down and up face are drawn in opposed positions
-    if(actFace->getC() == YELLOW)
-    {
-
-    }
-
     mx = mx+actFace->getC()*3;
 }
 
@@ -458,8 +456,6 @@ int IsometricCubeWidget::getValueFromFace(QChar face, int x, int y)
     return value;
 
 }
-
-// RED = 0, BLUE = 1, ORANGE = 2, GREEN = 3, WHITE = 4, YELLOW = 5
 
 QColor IsometricCubeWidget::getQColorFromValue(int color, int alpha)
 {
@@ -493,7 +489,6 @@ QColor IsometricCubeWidget::getQColorFromValue(int color, int alpha)
 
     return returnColor;
 }
-
 
 color IsometricCubeWidget::getFront(){
     return faceF->getC();
