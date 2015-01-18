@@ -1,8 +1,9 @@
 /**
 This class is used to represent the cube in a isometric view
 
-
+@author: Thomas Roulin
 **/
+
 #include "IsometricCubeWidget.h"
 #include <QPainter>
 #include <QtWidgets>
@@ -58,8 +59,6 @@ private:
     color *col;
     int *orientation;
 };
-
-
 /**********************************************************\
 |****************      Constructor     ********************|
 \**********************************************************/
@@ -167,6 +166,11 @@ void IsometricCubeWidget::setOrientation(QChar axe, int nbQ)
             // Turn parallels faces
             faceF->setO(3);
             faceB->setO(1);
+            // Cuz of the drawing logic
+            faceR->setO(1);
+            faceD->setO(1);
+            faceL->setO(3);
+            faceU->setO(3);
         }
         break;
     }
@@ -305,52 +309,15 @@ void IsometricCubeWidget::mousePressEvent(QMouseEvent *e){
     if(face != '♥'){
         //Getting the indices on the cube matrix
         int mx, my;
+        // Get the right x and y dependig on the orientation
         getMXMY(matX, matY, mx, my, face);
 
-        //if not a center
+        // Check if not center
         if(!(mx % 3 == 1 && my == 1)){
-            int k = 0;
-            bool legal = true;
-            do{
-                k++;
-                //incrementing the color on the matrix
-                Cube c(displayCube);
-                color nextColor = (color)((displayCube[mx][my] + k) % 6);
-
-                //checking the validity of the new color
-                QList<int> stickers = c.linkedStickers(mx, my);
-
-                QList<color> col;
-
-                for (int i = 2; i < stickers.length(); i += 2) {
-                    col.append((color)displayCube[stickers.at(i)][stickers.at(i + 1)]);
-                }
-
-                qDebug() << col.at(0) << col.at(1);
-
-                switch(col.length()){
-                case 1:
-                    if(c.locateCubie(nextColor, col.at(0)).length() > 0){
-                        //the cubie already exists
-                        legal = false;
-                    }
-                    break;
-                case 2:
-                    if(c.locateCubie(nextColor, col.at(0), col.at(1)).length() > 0){
-                        //the cubie already exists
-                        legal = false;
-                    }
-                    break;
-                default:
-                    //should not happen
-                    break;
-                }
-                if(legal){
-                    displayCube[mx][my] = nextColor;
-                }
-            }while(!legal);
-            this->update();
+            color mc = (color)((displayCube[mx][my] + 1) % 6);
+            emit cubieModified(mx, my, mc);
         }
+        this->update();
     }
 }
 
@@ -363,14 +330,7 @@ void IsometricCubeWidget::paintEvent(QPaintEvent* event)
     // START TITLES
     painter.setPen(Qt::black);
 
-    //int rdFontID = QFontDatabase::addApplicationFont(":/Fonts/reservoirdogs.ttf");
-    //QString fontFamily = QFontDatabase::applicationFontFamilies(rdFontID).at(0);
-    //QFont font(fontFamily);
-
-    QFont font("Arial", 30);
-    //font.setPointSize(30);
-
-    painter.setFont(QFont(font));
+    painter.setFont(QFont("Arial", 30));
 
     painter.drawText(isogrid[3][0].rx() + 0.3 * W, 100, "FRONT");
     painter.drawText(isogrid[4][0].rx() + 4 * W, 100, "BACK");
@@ -393,8 +353,6 @@ void IsometricCubeWidget::paintEvent(QPaintEvent* event)
 
     // END SHADOW
 
-    QList<QPoint> tPoints;
-    QList<QString> tTexts;
 
     for (int y = 0; y < 3 ; y++)
     {
@@ -404,8 +362,6 @@ void IsometricCubeWidget::paintEvent(QPaintEvent* event)
 
             QPen pen(Qt::black, 3);
             painter.setPen(pen);
-
-            // ### ALPHA 255
 
             // FRONT FACE
             painter.setBrush(getDaCola('F', x, y));
@@ -488,13 +444,6 @@ void IsometricCubeWidget::getMXMY(int x, int y, int &mx, int &my, QChar face)
         break;
     }
 
-    // y and x reversed, and y decrease instead of increasing
-    // cuz the down and up face are drawn in opposed positions
-    if(actFace->getC() == YELLOW)
-    {
-
-    }
-
     mx = mx+actFace->getC()*3;
 }
 
@@ -514,8 +463,6 @@ int IsometricCubeWidget::getValueFromFace(QChar face, int x, int y)
     return value;
 
 }
-
-// RED = 0, BLUE = 1, ORANGE = 2, GREEN = 3, WHITE = 4, YELLOW = 5
 
 QColor IsometricCubeWidget::getQColorFromValue(int color, int alpha)
 {
@@ -549,7 +496,6 @@ QColor IsometricCubeWidget::getQColorFromValue(int color, int alpha)
 
     return returnColor;
 }
-
 
 color IsometricCubeWidget::getFront(){
     return faceF->getC();
