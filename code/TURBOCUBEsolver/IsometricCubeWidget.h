@@ -42,6 +42,8 @@ private:
     QPolygon plgnBack[3][3];
     QPolygon plgnLeft[3][3];
 
+    bool validateCube();
+
     Cube *cube;
     int displayCube[18][3];
     QColor getDaCola(QChar face, int x, int y);

@@ -316,9 +316,64 @@ void IsometricCubeWidget::mousePressEvent(QMouseEvent *e){
         if(!(mx % 3 == 1 && my == 1)){
             color mc = (color)((displayCube[mx][my] + 1) % 6);
             emit cubieModified(mx, my, mc);
+            if(validateCube()) {
+                qDebug() << "cube valide";
+            }
+            this->update();
         }
-        this->update();
     }
+}
+
+bool IsometricCubeWidget::validateCube(){
+    QList<color*> cubies;
+    //CORNERS
+    cubies.append(new color[3]{WHITE, RED, BLUE});
+    cubies.append(new color[3]{WHITE, BLUE, ORANGE});
+    cubies.append(new color[3]{WHITE, ORANGE, GREEN});
+    cubies.append(new color[3]{WHITE, GREEN, RED});
+
+    cubies.append(new color[3]{YELLOW, RED, BLUE});
+    cubies.append(new color[3]{YELLOW, BLUE, ORANGE});
+    cubies.append(new color[3]{YELLOW, ORANGE, GREEN});
+    cubies.append(new color[3]{YELLOW, GREEN, RED});
+
+    //EDGES
+    cubies.append(new color[2]{WHITE, RED});
+    cubies.append(new color[2]{WHITE, BLUE});
+    cubies.append(new color[2]{WHITE, ORANGE});
+    cubies.append(new color[2]{WHITE, GREEN});
+
+    cubies.append(new color[2]{YELLOW, RED});
+    cubies.append(new color[2]{YELLOW, BLUE});
+    cubies.append(new color[2]{YELLOW, ORANGE});
+    cubies.append(new color[2]{YELLOW, GREEN});
+
+    cubies.append(new color[2]{RED, BLUE});
+    cubies.append(new color[2]{BLUE, ORANGE});
+    cubies.append(new color[2]{ORANGE, GREEN});
+    cubies.append(new color[2]{GREEN, RED});
+
+    bool legal = true;
+    Cube cube(displayCube);
+    for (int i = 0; i < 8; ++i) {
+        QList<int> indices = cube.locateCubie(cubies.at(i)[0], cubies.at(i)[1], cubies.at(i)[2]);
+        if(indices.length() < 1){
+            legal = false;
+        }
+    }
+
+    for (int i = 8; i < 20; ++i) {
+        QList<int> indices = cube.locateCubie(cubies.at(i)[0], cubies.at(i)[1]);
+        if(indices.length() < 1){
+            legal = false;
+        }
+    }
+
+    for(int i = 0; i < 20; i++){
+        delete[] cubies.at(i);
+    }
+
+    return legal;
 }
 
 void IsometricCubeWidget::paintEvent(QPaintEvent* event)
