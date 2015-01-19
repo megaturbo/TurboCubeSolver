@@ -277,7 +277,7 @@ void MainWidget::solveSlot()
 {
     Cube *tmpCube = new Cube(*displayedCube);
     resolutionWidget->newSolveSequence(Fridrich::solve(tmpCube));
-
+    Fridrich::solve(displayedCube);
     isometricCubeWidget->setCube(*displayedCube);
 }
 
