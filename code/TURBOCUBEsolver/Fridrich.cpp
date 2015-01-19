@@ -13,11 +13,14 @@ QString Fridrich::solve(Cube *cube){
     step4 += PLL2Look(cube); //2-look PLL
     //positionning the solved YELLOW face
     step4 += cube->turnFace(YELLOW, RED - cube->locateCubie(RED, BLUE, YELLOW).at(0) / 3);
-    qDebug() << "Cross: " << step1 << step1.count(' ') << " moves.";
-    qDebug() << "F2L: " << step2 << step2.count(' ') << " moves.";
-    qDebug() << "OLL: " << step3 << step3.count(' ') << " moves.";
-    qDebug() << "PLL: " << step4 << step4.count(' ') << " moves.";
-    qDebug() << "Total moves to solve: " << step1.count(' ') + step2.count(' ') + step3.count(' ') + step4.count(' ');
+    step1.chop(1);
+    step3.chop(1);
+    step4.chop(1);
+//    qDebug() << "Cross: " << step1 << step1.count(' ') << " moves.";
+//    qDebug() << "F2L: " << step2 << step2.count(' ') << " moves.";
+//    qDebug() << "OLL: " << step3 << step3.count(' ') << " moves.";
+//    qDebug() << "PLL: " << step4 << step4.count(' ') << " moves.";
+//    qDebug() << "Total moves to solve: " << step1.count(' ') + step2.count(' ') + step3.count(' ') + step4.count(' ');
     return "[" + step1 + "][" + step2 + "][" + step3 + "][" + step4 + "]";
 }
 
@@ -476,6 +479,9 @@ QString Fridrich::F2L(Cube *cube){
         }
     }
     cube->moveSequence(fewestMovesSequence.join(""), RED, YELLOW);
+    for (int i = 0; i < fewestMovesSequence.length(); ++i) {
+        fewestMovesSequence[i].chop(1);
+    }
     return fewestMovesSequence.join("|");
 }
 

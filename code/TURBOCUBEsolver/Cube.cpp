@@ -347,6 +347,7 @@ QList<int> Cube::locateCubie(color firstColor, color secondColor) {
             }
         }
     }
+    //if we did not find the given cubie, we return an empty QList
     indices.clear();
     return indices;
 }
@@ -408,6 +409,7 @@ QList<int> Cube::locateCubie(color firstColor, color secondColor, color thirdCol
             return sortedIndices;
         }
     }
+    //if we did not find the given cubie, we return an empty QList
     indices.clear();
     return indices;
 }
@@ -543,6 +545,7 @@ QList<int> Cube::linkedStickers(int i, int j) {
     }
 }
 
+//Randomly scrambles the cube and returns the generated moves
 QString Cube::scramble(int depth)
 {
     QString scrambling;
@@ -614,6 +617,7 @@ QString Cube::scramble(int depth)
 
 }
 
+//Returns the sequence nullifying the sequence in parameter. E.g, U' R2 is reverse for R2 U
 QString Cube::reverseSequence(QString sequence)
 {
     QStringList moves = sequence.split(' ');
@@ -758,6 +762,7 @@ QString Cube::U(int nbQuarterTurn, color colorFront, color colorUp) {
 }
 
 QString Cube::D(int nbQuarterTurn, color colorFront, color colorUp) {
+    //Defining the face we'll spin relatively to which face are up and front
     color face;
     switch(colorUp){
     case YELLOW:
@@ -774,6 +779,7 @@ QString Cube::D(int nbQuarterTurn, color colorFront, color colorUp) {
 }
 
 QString Cube::B(int nbQuarterTurn, color colorFront, color colorUp) {
+    //Defining the face we'll spin relatively to which face are up and front
     color face;
     switch(colorFront){
     case YELLOW:
@@ -794,6 +800,7 @@ QString Cube::F(int nbQuarterTurn, color colorFront, color colorUp) {
 }
 
 QString Cube::R(int nbQuarterTurn, color colorFront, color colorUp) {
+    //Defining the face we'll spin relatively to which face are up and front
     color face;
     switch(colorFront){
     case YELLOW:
@@ -829,6 +836,7 @@ QString Cube::R(int nbQuarterTurn, color colorFront, color colorUp) {
 }
 
 QString Cube::L(int nbQuarterTurn, color colorFront, color colorUp) {
+    //Defining the face we'll spin relatively to which face are up and front
     color face;
     switch(colorFront){
     case YELLOW:
@@ -864,8 +872,9 @@ QString Cube::L(int nbQuarterTurn, color colorFront, color colorUp) {
 
 QString Cube::turnFace(int faceToTurn, int nbQuarterTurns) {
     color face = (color) faceToTurn;
+    //The string s contains the move done with the YELLOW face up and RIGHT face front
     QString s = "";
-    //defining which stickers are on the face
+    //defining the indices of the stickers on the face
     //those will get spinned
     nbQuarterTurns = (nbQuarterTurns + 8) % 4;
     if(nbQuarterTurns == 0){
@@ -879,7 +888,7 @@ QString Cube::turnFace(int faceToTurn, int nbQuarterTurns) {
                             2, 2,
                             1, 2,
                             0, 0};
-    //defining which stickers are adjacent to the face
+    //defining the indices of the stickers adjacent to the face
     //those too will get spinned
     int* indicesX;
     int* indicesY;
