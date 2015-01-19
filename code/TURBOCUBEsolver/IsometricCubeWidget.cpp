@@ -264,13 +264,13 @@ void IsometricCubeWidget::initIsoGrid()
 
 void IsometricCubeWidget::mousePressEvent(QMouseEvent *e){
     if (config) {
-        QChar face = '♥';
+        QChar face = 'r';
         int matX;
         int matY;
         //Checking each isometric polygon and saving x, y and the face if we find the correct polygon
         int x = 0;
         int y = 0;
-        while(x < 3 && face == '♥')
+        while(x < 3 && face == 'r')
         {
             if(plgnBack[x][y].containsPoint(e->pos(), Qt::OddEvenFill)){
                 face = 'B';
@@ -309,7 +309,7 @@ void IsometricCubeWidget::mousePressEvent(QMouseEvent *e){
         }
 
         //if event->pos() is into a polygon
-        if(face != '♥'){
+        if(face != 'r'){
             //Getting the indices on the cube matrix
             int mx, my;
             // Get the right x and y dependig on the orientation
