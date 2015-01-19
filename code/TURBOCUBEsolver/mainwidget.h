@@ -14,6 +14,7 @@ class MainWidget : public QWidget
     Q_OBJECT
 public:
     explicit MainWidget(QWidget *parent = 0);
+    void keyPressEvent(QKeyEvent *e);
 
 private:
     InputWidget *inputWidget;
