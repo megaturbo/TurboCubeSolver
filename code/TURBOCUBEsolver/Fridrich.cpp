@@ -604,7 +604,6 @@ QString Fridrich::OLL2Look(Cube *cube){
 }
 
 QString Fridrich::PLL2Look(Cube *c){
-    //copying the matrix
     color cubeMatrix[18][3];
     //this boolean checks if this step is already solved
     bool solved = true;

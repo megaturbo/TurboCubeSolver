@@ -1,4 +1,5 @@
 #include "mainwidget.h"
+#include <QMessageBox>
 
 MainWidget::MainWidget(QWidget *parent) :
     QWidget(parent)
@@ -14,7 +15,7 @@ MainWidget::MainWidget(QWidget *parent) :
 
     // Instanciation
     scramblePB = new QPushButton("Scramble", this);
-    cubeInputPB = new QPushButton("Set configuration", this);
+    cubeInputPB = new QPushButton("Enter configuration", this);
     solvePB = new QPushButton("Solve", this);
     resetPB = new QPushButton("Reset", this);
     sequencePB = new QPushButton("Send Sequence", this);
@@ -194,10 +195,19 @@ void MainWidget::cubieModified(int x, int y, color c)
 
 void MainWidget::startCubeInput()
 {
-    inputWidget = new InputWidget();
-    inputWidget->show();
-//    cubeInputWidget = new CubeInputWidget();
-//    cubeInputWidget->show();
+    if(isometricCubeWidget->getConfig()){
+        if(displayedCube->validateCube()){
+            isometricCubeWidget->setConfig(false);
+            cubeInputPB->setText("Enter configuration");
+        } else {
+            QMessageBox::information(this, tr("Cube error"),
+                                     tr("The cube you tried to input is in an impossible configuration."),
+                                     QMessageBox::Ok | QMessageBox::Default);
+        }
+    } else {
+        isometricCubeWidget->setConfig(true);
+        cubeInputPB->setText("Confirm configuration");
+    }
 }
 
 void MainWidget::turnXSlot()
@@ -250,13 +260,15 @@ void MainWidget::scrambleSlot()
 
 void MainWidget::solveSlot()
 {
-    actMoveID = 0;
-    Cube *tmpCube = new Cube(*displayedCube);
-    QString res = Fridrich::solve(tmpCube);
-    sResolution = new QStringList(res.split(' '));
-    refreshResolutionState();
+    if(!isometricCubeWidget->getConfig()){
+        actMoveID = 0;
+        Cube *tmpCube = new Cube(*displayedCube);
+        QString res = Fridrich::solve(tmpCube);
+        sResolution = new QStringList(res.split(' '));
+        refreshResolutionState();
 
-    isometricCubeWidget->setCube(*displayedCube);
+        isometricCubeWidget->setCube(*displayedCube);
+    }
 }
 
 void MainWidget::sendSequenceSlot()

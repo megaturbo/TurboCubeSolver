@@ -65,6 +65,8 @@ private:
 IsometricCubeWidget::IsometricCubeWidget(Cube c, QWidget *parent)
     : QWidget(parent)
 {
+    config = false;
+
     // Widget size
     this->resize(1000,550);
     this->setStyleSheet("background-color: rgb(220,220,220);");
@@ -261,66 +263,64 @@ void IsometricCubeWidget::initIsoGrid()
 }
 
 void IsometricCubeWidget::mousePressEvent(QMouseEvent *e){
-    QChar face = '♥';
-    int matX;
-    int matY;
-    //Checking each isometric polygon and saving x, y and the face if we find the correct polygon
-    int x = 0;
-    int y = 0;
-    while(x < 3 && face == '♥')
-    {
-        if(plgnBack[x][y].containsPoint(e->pos(), Qt::OddEvenFill)){
-            face = 'B';
-            matX = x;
-            matY = y;
+    if (config) {
+        QChar face = '♥';
+        int matX;
+        int matY;
+        //Checking each isometric polygon and saving x, y and the face if we find the correct polygon
+        int x = 0;
+        int y = 0;
+        while(x < 3 && face == '♥')
+        {
+            if(plgnBack[x][y].containsPoint(e->pos(), Qt::OddEvenFill)){
+                face = 'B';
+                matX = x;
+                matY = y;
+            }
+            if(plgnUp[x][y].containsPoint(e->pos(), Qt::OddEvenFill)){
+                face = 'U';
+                matX = x;
+                matY = y;
+            }
+            if(plgnFront[x][y].containsPoint(e->pos(), Qt::OddEvenFill)){
+                face = 'F';
+                matX = x;
+                matY = y;
+            }
+            if(plgnLeft[x][y].containsPoint(e->pos(), Qt::OddEvenFill)){
+                face = 'L';
+                matX = x;
+                matY = y;
+            }
+            if(plgnDown[x][y].containsPoint(e->pos(), Qt::OddEvenFill)){
+                face = 'D';
+                matX = x;
+                matY = y;
+            }
+            if(plgnRight[x][y].containsPoint(e->pos(), Qt::OddEvenFill)){
+                face = 'R';
+                matX = x;
+                matY = y;
+            }
+            if (++y == 3){
+                x++;
+                y %= 3;
+            }
         }
-        if(plgnUp[x][y].containsPoint(e->pos(), Qt::OddEvenFill)){
-            face = 'U';
-            matX = x;
-            matY = y;
-        }
-        if(plgnFront[x][y].containsPoint(e->pos(), Qt::OddEvenFill)){
-            face = 'F';
-            matX = x;
-            matY = y;
-        }
-        if(plgnLeft[x][y].containsPoint(e->pos(), Qt::OddEvenFill)){
-            face = 'L';
-            matX = x;
-            matY = y;
-        }
-        if(plgnDown[x][y].containsPoint(e->pos(), Qt::OddEvenFill)){
-            face = 'D';
-            matX = x;
-            matY = y;
-        }
-        if(plgnRight[x][y].containsPoint(e->pos(), Qt::OddEvenFill)){
-            face = 'R';
-            matX = x;
-            matY = y;
-        }
-        if (++y == 3){
-            x++;
-            y %= 3;
-        }
-    }
 
-    //if event->pos() is into a polygon
-    if(face != '♥'){
-        //Getting the indices on the cube matrix
-        int mx, my;
-        // Get the right x and y dependig on the orientation
-        getMXMY(matX, matY, mx, my, face);
+        //if event->pos() is into a polygon
+        if(face != '♥'){
+            //Getting the indices on the cube matrix
+            int mx, my;
+            // Get the right x and y dependig on the orientation
+            getMXMY(matX, matY, mx, my, face);
 
-        // Check if not center
-        if(!(mx % 3 == 1 && my == 1)){
-            color mc = (color)((displayCube[mx][my] + 1) % 6);
-            emit cubieModified(mx, my, mc);
-//            Cube cube(displayCube);
-//            if(cube.validateCube()) {
-//                qDebug() << "cube valide";
-//            }
-            this->update();
+            // Check if not center
+            if(!(mx % 3 == 1 && my == 1)){
+                color mc = (color)((displayCube[mx][my] + 1) % 6);
+                emit cubieModified(mx, my, mc);
+                this->update();
+            }
         }
     }
 }
@@ -450,6 +450,16 @@ void IsometricCubeWidget::getMXMY(int x, int y, int &mx, int &my, QChar face)
 
     mx = mx+actFace->getC()*3;
 }
+bool IsometricCubeWidget::getConfig() const
+{
+    return config;
+}
+
+void IsometricCubeWidget::setConfig(bool value)
+{
+    config = value;
+}
+
 
 int IsometricCubeWidget::getValueFromFace(QChar face, int x, int y)
 {
