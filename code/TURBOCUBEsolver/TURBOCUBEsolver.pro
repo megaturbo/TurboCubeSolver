@@ -19,7 +19,8 @@ SOURCES += main.cpp\
     IsometricCubeWidget.cpp \
     MainWidget.cpp \
     CubeInputWidget.cpp \
-    inputwidget.cpp
+    inputwidget.cpp \
+    ResolutionWidget.cpp
 
 HEADERS  += \
     CubeColor.h \
@@ -30,10 +31,12 @@ HEADERS  += \
     IsometricCubeWidget.h \
     MainWidget.h \
     CubeInputWidget.h \
-    inputwidget.h
+    inputwidget.h \
+    ResolutionWidget.h
 
 FORMS    += TurboCubeSolver.ui
 
 RC_FILE = myapp.rc
 
-RESOURCES += resources.qrc
+RESOURCES += \
+    font_resources.qrc

@@ -11,6 +11,163 @@ Cube::~Cube(){
 
 }
 
+bool Cube::validateCube(){
+    //Defining legal cubies and what the location is on the solved cube
+    QList<color*> cubies;
+    QList<int*> loc;
+    //CORNERS
+    cubies.append(new color[3]{WHITE, RED, BLUE});
+    loc.append(new int[6]{14,2,2,0,3,0});
+    cubies.append(new color[3]{WHITE, BLUE, ORANGE});
+    loc.append(new int[6]{14,0,5,0,6,0});
+    cubies.append(new color[3]{WHITE, ORANGE, GREEN});
+    loc.append(new int[6]{12,0,8,0,9,0});
+    cubies.append(new color[3]{WHITE, GREEN, RED});
+    loc.append(new int[6]{12,2,11,0,0,0});
+
+    cubies.append(new color[3]{YELLOW, RED, GREEN});
+    loc.append(new int[6]{17,2,0,2,11,2});
+    cubies.append(new color[3]{YELLOW, GREEN, ORANGE});
+    loc.append(new int[6]{17,0,9,2,8,2});
+    cubies.append(new color[3]{YELLOW, ORANGE, BLUE});
+    loc.append(new int[6]{15,0,6,2,5,2});
+    cubies.append(new color[3]{YELLOW, BLUE, RED});
+    loc.append(new int[6]{15,2,3,2,2,2});
+
+    //EDGES
+    cubies.append(new color[2]{WHITE, RED});
+    loc.append(new int[6]{13,2,1,0});
+    cubies.append(new color[2]{WHITE, BLUE});
+    loc.append(new int[6]{14,1,4,0});
+    cubies.append(new color[2]{WHITE, ORANGE});
+    loc.append(new int[6]{13,0,7,0});
+    cubies.append(new color[2]{WHITE, GREEN});
+    loc.append(new int[6]{12,1,10,0});
+
+    cubies.append(new color[2]{YELLOW, RED});
+    loc.append(new int[6]{16,2,1,2});
+    cubies.append(new color[2]{YELLOW, GREEN});
+    loc.append(new int[6]{17,1,10,2});
+    cubies.append(new color[2]{YELLOW, ORANGE});
+    loc.append(new int[6]{16,0,7,2});
+    cubies.append(new color[2]{YELLOW, BLUE});
+    loc.append(new int[6]{15,1,4,2});
+
+    cubies.append(new color[2]{RED, BLUE});
+    loc.append(new int[6]{2,1,3,1});
+    cubies.append(new color[2]{BLUE, ORANGE});
+    loc.append(new int[6]{5,1,6,1});
+    cubies.append(new color[2]{ORANGE, GREEN});
+    loc.append(new int[6]{8,1,9,1});
+    cubies.append(new color[2]{GREEN, RED});
+    loc.append(new int[6]{11,1,0,1});
+
+    //copying the cube to not affect it by swapping cubies
+    Cube copy(matCube);
+
+    int nbSwaps = 0;
+
+    //if any one of the legal cubies doesn't exist on the cube, then it is not valid
+    for (int i = 0; i < 8; ++i) {
+        QList<int> indices = copy.locateCubie(cubies.at(i)[0], cubies.at(i)[1], cubies.at(i)[2]);
+        if(indices.length() < 1){
+            return false;
+        }
+        //Swapping corners to count parity
+        QList<int> loca;
+        for (int j = 0; j < indices.length(); ++j) {
+            loca.append(loc.at(i)[j]);
+        }
+        if(!copy.cubieEqual(loca, cubies.at(i)[0], cubies.at(i)[1], cubies.at(i)[2])){
+            nbSwaps++;
+            for (int j = 0; j < 3; ++j) {
+                color save = copy.matCube[loc.at(i)[2 * j]][loc.at(i)[2 * j + 1]];
+                copy.matCube[loc.at(i)[2 * j]][loc.at(i)[2 * j + 1]] = copy.matCube[indices[2 * j]][indices[2 * j + 1]];
+                copy.matCube[indices[2 * j]][indices[2 * j + 1]] = save;
+            }
+        }
+    }
+
+    for (int i = 8; i < 20; ++i) {
+        QList<int> indices = copy.locateCubie(cubies.at(i)[0], cubies.at(i)[1]);
+        if(indices.length() < 1){
+            return false;
+        }
+        //Swapping edges to count parity
+        QList<int> loca;
+        for (int j = 0; j < indices.length(); ++j) {
+            loca.append(loc.at(i)[j]);
+        }
+        if(!copy.cubieEqual(loca, cubies.at(i)[0], cubies.at(i)[1])){
+            nbSwaps++;
+            for (int j = 0; j < 2; ++j) {
+                color save = copy.matCube[loc.at(i)[2 * j]][loc.at(i)[2 * j + 1]];
+                copy.matCube[loc.at(i)[2 * j]][loc.at(i)[2 * j + 1]] = copy.matCube[indices[2 * j]][indices[2 * j + 1]];
+                copy.matCube[indices[2 * j]][indices[2 * j + 1]] = save;
+            }
+        }
+    }
+
+
+    //parity check
+    if(nbSwaps % 2 == 1){
+        return false;
+    }
+
+    //rotating corners by pairs, if the last corner is not correctly oriented, then the cube isn't legal
+    for (int i = 0; i < 7; ++i) {
+        while(copy.matCube[loc.at(i)[0]][loc.at(i)[1]] != cubies.at(i)[0]){
+            color save = copy.matCube[loc.at(i)[0]][loc.at(i)[1]];
+            copy.matCube[loc.at(i)[0]][loc.at(i)[1]] = copy.matCube[loc.at(i)[2]][loc.at(i)[3]];
+            copy.matCube[loc.at(i)[2]][loc.at(i)[3]] = copy.matCube[loc.at(i)[4]][loc.at(i)[5]];
+            copy.matCube[loc.at(i)[4]][loc.at(i)[5]] = save;
+            save = copy.matCube[loc.at(i + 1)[4]][loc.at(i + 1)[5]];
+            copy.matCube[loc.at(i + 1)[4]][loc.at(i + 1)[5]] = copy.matCube[loc.at(i + 1)[2]][loc.at(i + 1)[3]];
+            copy.matCube[loc.at(i + 1)[2]][loc.at(i + 1)[3]] = copy.matCube[loc.at(i + 1)[0]][loc.at(i + 1)[1]];
+            copy.matCube[loc.at(i + 1)[0]][loc.at(i + 1)[1]] = save;
+        }
+    }
+
+    //if the last corner is flipped
+    if(copy.matCube[loc.at(7)[0]][loc.at(7)[1]] != YELLOW){
+        return false;
+    }
+
+    //flipping the edges
+    for (int i = 8; i < 19; ++i) {
+        if(copy.matCube[loc.at(i)[0]][loc.at(i)[1]] != cubies.at(i)[0]){
+            color save = copy.matCube[loc.at(i)[0]][loc.at(i)[1]];
+            copy.matCube[loc.at(i)[0]][loc.at(i)[1]] = copy.matCube[loc.at(i)[2]][loc.at(i)[3]];
+            copy.matCube[loc.at(i)[2]][loc.at(i)[3]] = save;
+            save = copy.matCube[loc.at(i + 1)[2]][loc.at(i + 1)[3]];
+            copy.matCube[loc.at(i + 1)[2]][loc.at(i + 1)[3]] = copy.matCube[loc.at(i + 1)[0]][loc.at(i + 1)[1]];
+            copy.matCube[loc.at(i + 1)[0]][loc.at(i + 1)[1]] = save;
+        }
+    }
+
+    //if the last corner is flipped
+    if(copy.matCube[loc.at(19)[0]][loc.at(19)[1]] != GREEN){
+        return false;
+    }
+
+    //checking the corners stickers
+    for (int i = 0; i < 17; ++i) {
+        for (int j = 0; j < 3; ++j) {
+            if(copy.matCube[i][j] != (color)(i / 3)){
+                return false;
+            }
+        }
+    }
+
+    //freeing memory
+    for(int i = 0; i < 20; i++){
+        delete[] cubies.at(i);
+        delete[] loc.at(i);
+    }
+
+    return true;
+}
+
 void Cube::qDebugDisplay() {
     QString s = "\n";
     for (int y = 0; y < 3; y++) {
@@ -65,12 +222,12 @@ void Cube::setMatrix(int matrix[18][3])
     }
 }
 
-void Cube::setCubie(int x, int y, int c)
+void Cube::setSticker(int x, int y, int c)
 {
-    setCubie(x, y, (color)c);
+    setSticker(x, y, (color)c);
 }
 
-void Cube::setCubie(int x, int y, color c)
+void Cube::setSticker(int x, int y, color c)
 {
     matCube[x][y] = c;
 }
@@ -143,8 +300,6 @@ Cube::Cube(const Cube &c){
     }
 }
 
-//Utility methods
-
 //returns indices of the cubie's stickers
 //ordered by colors
 QList<int> Cube::locateCubie(color firstColor, color secondColor) {
@@ -192,6 +347,8 @@ QList<int> Cube::locateCubie(color firstColor, color secondColor) {
             }
         }
     }
+    //if we did not find the given cubie, we return an empty QList
+    indices.clear();
     return indices;
 }
 
@@ -252,6 +409,7 @@ QList<int> Cube::locateCubie(color firstColor, color secondColor, color thirdCol
             return sortedIndices;
         }
     }
+    //if we did not find the given cubie, we return an empty QList
     indices.clear();
     return indices;
 }
@@ -387,6 +545,7 @@ QList<int> Cube::linkedStickers(int i, int j) {
     }
 }
 
+//Randomly scrambles the cube and returns the generated moves
 QString Cube::scramble(int depth)
 {
     QString scrambling;
@@ -458,6 +617,7 @@ QString Cube::scramble(int depth)
 
 }
 
+//Returns the sequence nullifying the sequence in parameter. E.g, U' R2 is reverse for R2 U
 QString Cube::reverseSequence(QString sequence)
 {
     QStringList moves = sequence.split(' ');
@@ -602,6 +762,7 @@ QString Cube::U(int nbQuarterTurn, color colorFront, color colorUp) {
 }
 
 QString Cube::D(int nbQuarterTurn, color colorFront, color colorUp) {
+    //Defining the face we'll spin relatively to which face are up and front
     color face;
     switch(colorUp){
     case YELLOW:
@@ -618,6 +779,7 @@ QString Cube::D(int nbQuarterTurn, color colorFront, color colorUp) {
 }
 
 QString Cube::B(int nbQuarterTurn, color colorFront, color colorUp) {
+    //Defining the face we'll spin relatively to which face are up and front
     color face;
     switch(colorFront){
     case YELLOW:
@@ -638,6 +800,7 @@ QString Cube::F(int nbQuarterTurn, color colorFront, color colorUp) {
 }
 
 QString Cube::R(int nbQuarterTurn, color colorFront, color colorUp) {
+    //Defining the face we'll spin relatively to which face are up and front
     color face;
     switch(colorFront){
     case YELLOW:
@@ -673,6 +836,7 @@ QString Cube::R(int nbQuarterTurn, color colorFront, color colorUp) {
 }
 
 QString Cube::L(int nbQuarterTurn, color colorFront, color colorUp) {
+    //Defining the face we'll spin relatively to which face are up and front
     color face;
     switch(colorFront){
     case YELLOW:
@@ -708,8 +872,9 @@ QString Cube::L(int nbQuarterTurn, color colorFront, color colorUp) {
 
 QString Cube::turnFace(int faceToTurn, int nbQuarterTurns) {
     color face = (color) faceToTurn;
+    //The string s contains the move done with the YELLOW face up and RIGHT face front
     QString s = "";
-    //defining which stickers are on the face
+    //defining the indices of the stickers on the face
     //those will get spinned
     nbQuarterTurns = (nbQuarterTurns + 8) % 4;
     if(nbQuarterTurns == 0){
@@ -723,7 +888,7 @@ QString Cube::turnFace(int faceToTurn, int nbQuarterTurns) {
                             2, 2,
                             1, 2,
                             0, 0};
-    //defining which stickers are adjacent to the face
+    //defining the indices of the stickers adjacent to the face
     //those too will get spinned
     int* indicesX;
     int* indicesY;

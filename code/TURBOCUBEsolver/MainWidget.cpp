@@ -1,4 +1,5 @@
 #include "mainwidget.h"
+#include <QMessageBox>
 
 MainWidget::MainWidget(QWidget *parent) :
     QWidget(parent)
@@ -13,19 +14,21 @@ MainWidget::MainWidget(QWidget *parent) :
     //=====         BOTTOM MENU         =====//
 
     // Instanciation
-    scramblePB = new QPushButton("Scramble", this);
-    cubeInputPB = new QPushButton("Set configuration", this);
-    solvePB = new QPushButton("Solve", this);
-    resetPB = new QPushButton("Reset", this);
+    scramblePB = new QPushButton("Scr&amble", this);
+    cubeInputPB = new QPushButton("Enter &configuration", this);
+    solvePB = new QPushButton("&Solve", this);
+    resetPB = new QPushButton("&Reset", this);
     sequencePB = new QPushButton("Send Sequence", this);
     sequenceLE = new QLineEdit(this);
     reverseSequencePB = new QPushButton("R", this);
 
+    sequenceLE->setFocus();
 
     //=====     RESOLUTION MENU        =====//
 
+    resolutionWidget = new ResolutionWidget();
     // Instanciation
-    pastMovesLabel = new QLabel(this);
+    /*pastMovesLabel = new QLabel(this);
     nextMovesLabel = new QLabel(this);
     actMoveLabel = new QLabel(this);
     pastMovePB = new QPushButton("<", this);
@@ -45,12 +48,15 @@ MainWidget::MainWidget(QWidget *parent) :
     actMoveLabel->setMaximumWidth(80);
 
     // Settings: Fonts
-    QFont f = actMoveLabel->font();
-    f.setPointSize(36);
-    actMoveLabel->setFont(f);
+
+    int id = QFontDatabase::addApplicationFont(":/Fonts/reservoirdogs.ttf");
+    QString family = QFontDatabase::applicationFontFamilies(id).at(0);
+    QFont rdFont(family);
+    rdFont.setPointSize(30);
+    actMoveLabel->setFont(rdFont);
     actMoveLabel->setAlignment(Qt::AlignHCenter);
     nextMovesLabel->setAlignment(Qt::AlignLeft);
-    pastMovesLabel->setAlignment(Qt::AlignRight);
+    pastMovesLabel->setAlignment(Qt::AlignRight);*/
 
 
     //=====        RIGHT MENU           =====//
@@ -72,7 +78,7 @@ MainWidget::MainWidget(QWidget *parent) :
     QHBoxLayout *cubeMenuLayout = new QHBoxLayout();
     QHBoxLayout *topLayout = new QHBoxLayout();
     QVBoxLayout *orientationMenuLayout = new QVBoxLayout();
-    QHBoxLayout *resolutionMenuLayout = new QHBoxLayout();
+    //QHBoxLayout *resolutionMenuLayout = new QHBoxLayout();
     QVBoxLayout *MainLayout = new QVBoxLayout();
 
     // Cube tools
@@ -95,15 +101,16 @@ MainWidget::MainWidget(QWidget *parent) :
     topLayout->addLayout(orientationMenuLayout);
 
     // Resolution menu
-    resolutionMenuLayout->addWidget(pastMovesLabel);
+    /*resolutionMenuLayout->addWidget(pastMovesLabel);
     resolutionMenuLayout->addWidget(pastMovePB);
     resolutionMenuLayout->addWidget(actMoveLabel);
     resolutionMenuLayout->addWidget(nextMovePB);
-    resolutionMenuLayout->addWidget(nextMovesLabel);
+    resolutionMenuLayout->addWidget(nextMovesLabel);*/
+
 
     // Layout: Total
     MainLayout->addLayout(topLayout);
-    MainLayout->addLayout(resolutionMenuLayout);
+    MainLayout->addWidget(resolutionWidget);
     MainLayout->addLayout(cubeMenuLayout);
 
 
@@ -121,8 +128,7 @@ MainWidget::MainWidget(QWidget *parent) :
     connect(cubeInputPB, SIGNAL(clicked()), this, SLOT(startCubeInput()));
     connect(isometricCubeWidget, SIGNAL(cubieModified(int, int, color)), this, SLOT(cubieModified(int, int, color)));
 
-    connect(pastMovePB, SIGNAL(clicked()), this, SLOT(pastMove()));
-    connect(nextMovePB, SIGNAL(clicked()), this, SLOT(nextMove()));
+    connect(resolutionWidget, SIGNAL(sendMove(QChar)), this, SLOT(mo));
 
     // Display settings
     this->setLayout(MainLayout);
@@ -130,13 +136,17 @@ MainWidget::MainWidget(QWidget *parent) :
     this->show();
 }
 
-
+void MainWidget::keyPressEvent(QKeyEvent *e){
+    if(e->key() == Qt::Key_Enter || e->key() == Qt::Key_Return){
+        sendSequenceSlot();
+    }
+}
 
 /**********************************************************\
 |******************       Slots        ********************|
 \******************  a lot of slots    ********************/
 
-void MainWidget::refreshResolutionState()
+/*void MainWidget::refreshResolutionState()
 {
     actMoveLabel->clear();
     pastMovesLabel->clear();
@@ -184,20 +194,37 @@ void MainWidget::nextMove()
     isometricCubeWidget->setCube(*displayedCube);
     actMoveID++;
     refreshResolutionState();
+}*/
+
+void MainWidget::receiveMove(QString move)
+{
+    displayedCube->moveSequence(move, RED, YELLOW);
+    isometricCubeWidget->setCube(*displayedCube);
 }
 
 void MainWidget::cubieModified(int x, int y, color c)
 {
-    displayedCube->setCubie(x, y, c);
+    displayedCube->setSticker(x, y, c);
     isometricCubeWidget->setCube(*displayedCube);
 }
 
 void MainWidget::startCubeInput()
 {
-    inputWidget = new InputWidget();
-    inputWidget->show();
-//    cubeInputWidget = new CubeInputWidget();
-//    cubeInputWidget->show();
+    if(isometricCubeWidget->getConfig()){
+        if(displayedCube->validateCube()){
+            isometricCubeWidget->setConfig(false);
+            cubeInputPB->setText("Enter &configuration");
+            solvePB->setEnabled(true);
+        } else {
+            QMessageBox::information(this, tr("Cube error"),
+                                     tr("The cube you tried to input is in an impossible configuration."),
+                                     QMessageBox::Ok | QMessageBox::Default);
+        }
+    } else {
+        isometricCubeWidget->setConfig(true);
+        cubeInputPB->setText("Confirm &configuration");
+        solvePB->setDisabled(true);
+    }
 }
 
 void MainWidget::turnXSlot()
@@ -234,9 +261,7 @@ void MainWidget::reverseSequenceSlot()
 
 void MainWidget::resetSlot()
 {
-    actMoveID = 0;
-    sResolution->clear();
-    refreshResolutionState();
+    resolutionWidget->reset();
 
     initSolvedCube();
     isometricCubeWidget->setCube(*displayedCube);
@@ -250,11 +275,8 @@ void MainWidget::scrambleSlot()
 
 void MainWidget::solveSlot()
 {
-    actMoveID = 0;
     Cube *tmpCube = new Cube(*displayedCube);
-    QString res = Fridrich::solve(tmpCube);
-    sResolution = new QStringList(res.split(' '));
-    refreshResolutionState();
+    resolutionWidget->newSolveSequence(Fridrich::solve(tmpCube));
 
     isometricCubeWidget->setCube(*displayedCube);
 }
