@@ -26,7 +26,12 @@ public:
     color getUp();
 
     void getMXMY(int x, int y, int &mx, int &my, QChar face);
+    bool getConfig() const;
+    void setConfig(bool value);
+
 private:
+    bool config;
+
     Face *faceU;
     Face *faceF;
     Face *faceB;

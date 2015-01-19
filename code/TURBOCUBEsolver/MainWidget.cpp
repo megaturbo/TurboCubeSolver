@@ -1,4 +1,5 @@
 #include "mainwidget.h"
+#include <QMessageBox>
 
 MainWidget::MainWidget(QWidget *parent) :
     QWidget(parent)
@@ -14,7 +15,7 @@ MainWidget::MainWidget(QWidget *parent) :
 
     // Instanciation
     scramblePB = new QPushButton("Scramble", this);
-    cubeInputPB = new QPushButton("Set configuration", this);
+    cubeInputPB = new QPushButton("Enter configuration", this);
     solvePB = new QPushButton("Solve", this);
     resetPB = new QPushButton("Reset", this);
     sequencePB = new QPushButton("Send Sequence", this);
@@ -198,16 +199,27 @@ void MainWidget::receiveMove(QString move)
 
 void MainWidget::cubieModified(int x, int y, color c)
 {
-    displayedCube->setCubie(x, y, c);
+    displayedCube->setSticker(x, y, c);
     isometricCubeWidget->setCube(*displayedCube);
 }
 
 void MainWidget::startCubeInput()
 {
-    inputWidget = new InputWidget();
-    inputWidget->show();
-//    cubeInputWidget = new CubeInputWidget();
-//    cubeInputWidget->show();
+    if(isometricCubeWidget->getConfig()){
+        if(displayedCube->validateCube()){
+            isometricCubeWidget->setConfig(false);
+            cubeInputPB->setText("Enter configuration");
+            solvePB->setEnabled(true);
+        } else {
+            QMessageBox::information(this, tr("Cube error"),
+                                     tr("The cube you tried to input is in an impossible configuration."),
+                                     QMessageBox::Ok | QMessageBox::Default);
+        }
+    } else {
+        isometricCubeWidget->setConfig(true);
+        cubeInputPB->setText("Confirm configuration");
+        solvePB->setDisabled(true);
+    }
 }
 
 void MainWidget::turnXSlot()
