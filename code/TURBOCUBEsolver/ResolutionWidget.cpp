@@ -53,6 +53,8 @@ ResolutionWidget::ResolutionWidget(QWidget *parent)
 
     megaMainLayout->addWidget(groupBox);
 
+    reset();
+
     this->setLayout(megaMainLayout);
 }
 
@@ -66,7 +68,7 @@ void ResolutionWidget::newSolveSequence(QString solveSequence)
     // remove the first character which is '[' cuz of the string concatenation
     for(int i = 0; i < cfop.length(); i++)
     {
-        cfop[i].remove(1, 1);
+        cfop[i].remove(0, 1);
     }
 
     resolutionSequence = new QStringList(cfop.join(' '));
@@ -80,4 +82,15 @@ void ResolutionWidget::newSolveSequence(QString solveSequence)
     f2lLabel->setText(f2lPairsList.join(' '));
     ollLabel->setText(ollList.join(' '));
     pllLabel->setText(pllList.join(' '));
+}
+
+void ResolutionWidget::reset()
+{
+    actMoveLabel->clear();
+    crossLabel->clear();
+    f2lLabel->clear();
+    ollLabel->clear();
+    pllLabel->clear();
+    pastMovePB->setDisabled(true);
+    nextMovePB->setDisabled(true);
 }

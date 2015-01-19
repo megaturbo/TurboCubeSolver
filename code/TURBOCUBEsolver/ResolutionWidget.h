@@ -11,6 +11,7 @@ class ResolutionWidget : public QWidget
 
 public:
     ResolutionWidget(QWidget *parent = 0);
+    void reset();
 
 public slots:
     void newSolveSequence(QString);

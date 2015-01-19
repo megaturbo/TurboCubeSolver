@@ -261,7 +261,7 @@ void MainWidget::reverseSequenceSlot()
 
 void MainWidget::resetSlot()
 {
-    resolutionWidget->newSolveSequence("");
+    resolutionWidget->reset();
 
     initSolvedCube();
     isometricCubeWidget->setCube(*displayedCube);
