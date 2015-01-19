@@ -244,12 +244,8 @@ void MainWidget::resetSlot()
 
 void MainWidget::scrambleSlot()
 {
-//    sequenceLE->setText(displayedCube->scramble(5));
-//    isometricCubeWidget->setCube(*displayedCube);
-
-    if(displayedCube->validateCube()) {
-        qDebug() << "cube valide";
-    }
+    sequenceLE->setText(displayedCube->scramble(5));
+    isometricCubeWidget->setCube(*displayedCube);
 }
 
 void MainWidget::solveSlot()
