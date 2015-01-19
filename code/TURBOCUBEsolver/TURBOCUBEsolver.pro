@@ -11,7 +11,6 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = TURBOCUBEsolver
 TEMPLATE = app
 
-
 SOURCES += main.cpp\
     Cube.cpp \
     ColorPicker.cpp \
@@ -33,8 +32,8 @@ HEADERS  += \
     CubeInputWidget.h \
     inputwidget.h
 
-FORMS    +=\
-    TurboCubeSolver.ui
+FORMS    += TurboCubeSolver.ui
 
-RESOURCES += \
-    resources.qrc
+RC_FILE = myapp.rc
+
+RESOURCES += resources.qrc

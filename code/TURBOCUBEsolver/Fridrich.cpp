@@ -18,7 +18,7 @@ QString Fridrich::solve(Cube *cube){
     qDebug() << "OLL: " << step3 << step3.count(' ') << " moves.";
     qDebug() << "PLL: " << step4 << step4.count(' ') << " moves.";
     qDebug() << "Total moves to solve: " << step1.count(' ') + step2.count(' ') + step3.count(' ') + step4.count(' ');
-    return step1 + step2 + step3 + step4;
+    return "[" + step1 + "][" + step2 + "][" + step3 + "][" + step4 + "]";
 }
 
 QString Fridrich::crossEdge(Cube *cube, int firstEdgeColor)
@@ -446,7 +446,8 @@ QString Fridrich::cross(Cube *cube){
 }
 
 QString Fridrich::F2L(Cube *cube){
-    QString fewestMovesSequence = "F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L F 2 L ";
+    QStringList fewestMovesSequence;
+    fewestMovesSequence.append("F2 L F2 L F2 L F2 L F2 L F2 L F2 L F2 L F2 L F2 L F2 L F2 L F2 L F2 L F2 L F2 L F2 L F2 L F2 L F2 L F2 L F2 L F2 L F2 L F2 L F2 L F2 L F2 L F2 L ");
     for (int color1 = 0; color1 < 4; color1++) { //Solving the 4 pairs of cubies {{WHITE, RED, BLUE}, {RED BLUE}},
         //{{WHITE, BLUE, ORANGE}, {BLUE, ORANGE}}, {{WHITE, ORANGE, GREEN}, {ORANGE, GREEN}},
         //{{WHITE, GREEN, RED}, {GREEN, RED}}
@@ -457,12 +458,12 @@ QString Fridrich::F2L(Cube *cube){
                         for (int color4 = 0; color4 < 4; ++color4) {
                             if(color4 != color3 && color4 != color2 && color4 != color1){
                                 Cube *tempCube = new Cube(*cube);
-                                QString sequence= "";
+                                QStringList sequence;
                                 sequence += F2LPair(tempCube, color1);
                                 sequence += F2LPair(tempCube, color2);
                                 sequence += F2LPair(tempCube, color3);
                                 sequence += F2LPair(tempCube, color4);
-                                if(sequence.count(' ') < fewestMovesSequence.count(' ')){
+                                if(sequence.join("").count(' ') < fewestMovesSequence.join("").count(' ')){
                                     fewestMovesSequence = sequence;
                                 }
                                 delete tempCube;
@@ -474,8 +475,8 @@ QString Fridrich::F2L(Cube *cube){
             }
         }
     }
-    cube->moveSequence(fewestMovesSequence, RED, YELLOW);
-    return fewestMovesSequence;
+    cube->moveSequence(fewestMovesSequence.join(""), RED, YELLOW);
+    return fewestMovesSequence.join("| ");
 }
 
 QString Fridrich::OLL2Look(Cube *cube){

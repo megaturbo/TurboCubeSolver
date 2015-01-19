@@ -29,12 +29,22 @@ private:
     QPushButton *cubeInputPB;
     QLineEdit *sequenceLE;
 
+    // Resolution menu
+    QLabel *pastMovesLabel;
+    QLabel *nextMovesLabel;
+    QLabel *actMoveLabel;
+    QPushButton *pastMovePB;
+    QPushButton *nextMovePB;
+    QStringList *sResolution;
+    int actMoveID;
+
     // Orientation menu
     QPushButton **movesPB;
 
     Cube *displayedCube;
 
     void initSolvedCube();
+    void refreshResolutionState();
 
 signals:
 
@@ -49,6 +59,9 @@ public slots:
     void turnZSlot();
     void startCubeInput();
     void cubieModified(int, int, color);
+
+    void nextMove();
+    void pastMove();
 
 };
 
