@@ -476,7 +476,7 @@ QString Fridrich::F2L(Cube *cube){
         }
     }
     cube->moveSequence(fewestMovesSequence.join(""), RED, YELLOW);
-    return fewestMovesSequence.join("| ");
+    return fewestMovesSequence.join("|");
 }
 
 QString Fridrich::OLL2Look(Cube *cube){
