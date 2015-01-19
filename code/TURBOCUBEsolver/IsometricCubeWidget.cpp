@@ -317,7 +317,12 @@ void IsometricCubeWidget::mousePressEvent(QMouseEvent *e){
 
             // Check if not center
             if(!(mx % 3 == 1 && my == 1)){
-                color mc = (color)((displayCube[mx][my] + 1) % 6);
+                color mc = UNDEFINED;
+                if(e->button() == Qt::LeftButton){
+                     mc = (color)((displayCube[mx][my] + 1) % 6);
+                } else {
+                    mc = (color)((displayCube[mx][my] + 5) % 6);
+                }
                 emit cubieModified(mx, my, mc);
                 this->update();
             }
