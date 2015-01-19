@@ -18,6 +18,9 @@ private:
     //Main steps
     static QString cross(Cube *cube);
     static QString F2L(Cube *cube);
+    static QString PLL(Cube *cube);
+    static QString OLL(Cube *cube);
+
     static QString OLL2Look(Cube *cube);
     static QString PLL2Look(Cube *cube);
 };

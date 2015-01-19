@@ -137,7 +137,7 @@ MainWidget::MainWidget(QWidget *parent) :
 }
 
 void MainWidget::keyPressEvent(QKeyEvent *e){
-    if(e->key() == Qt::Key_Enter || e->key() == Qt::Key_Return){
+    if((e->key() == Qt::Key_Enter || e->key() == Qt::Key_Return) && sequenceLE->hasFocus()){
         sendSequenceSlot();
     }
 }
