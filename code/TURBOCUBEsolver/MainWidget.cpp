@@ -14,14 +14,15 @@ MainWidget::MainWidget(QWidget *parent) :
     //=====         BOTTOM MENU         =====//
 
     // Instanciation
-    scramblePB = new QPushButton("Scramble", this);
-    cubeInputPB = new QPushButton("Enter configuration", this);
-    solvePB = new QPushButton("Solve", this);
-    resetPB = new QPushButton("Reset", this);
+    scramblePB = new QPushButton("Scr&amble", this);
+    cubeInputPB = new QPushButton("Enter &configuration", this);
+    solvePB = new QPushButton("&Solve", this);
+    resetPB = new QPushButton("&Reset", this);
     sequencePB = new QPushButton("Send Sequence", this);
     sequenceLE = new QLineEdit(this);
     reverseSequencePB = new QPushButton("R", this);
 
+    sequenceLE->setFocus();
 
     //=====     RESOLUTION MENU        =====//
 
@@ -135,7 +136,11 @@ MainWidget::MainWidget(QWidget *parent) :
     this->show();
 }
 
-
+void MainWidget::keyPressEvent(QKeyEvent *e){
+    if(e->key() == Qt::Key_Enter || e->key() == Qt::Key_Return){
+        sendSequenceSlot();
+    }
+}
 
 /**********************************************************\
 |******************       Slots        ********************|
@@ -208,7 +213,7 @@ void MainWidget::startCubeInput()
     if(isometricCubeWidget->getConfig()){
         if(displayedCube->validateCube()){
             isometricCubeWidget->setConfig(false);
-            cubeInputPB->setText("Enter configuration");
+            cubeInputPB->setText("Enter &configuration");
             solvePB->setEnabled(true);
         } else {
             QMessageBox::information(this, tr("Cube error"),
@@ -217,7 +222,7 @@ void MainWidget::startCubeInput()
         }
     } else {
         isometricCubeWidget->setConfig(true);
-        cubeInputPB->setText("Confirm configuration");
+        cubeInputPB->setText("Confirm &configuration");
         solvePB->setDisabled(true);
     }
 }
