@@ -330,7 +330,12 @@ void IsometricCubeWidget::paintEvent(QPaintEvent* event)
     // START TITLES
     painter.setPen(Qt::black);
 
-    painter.setFont(QFont("Arial", 30));
+
+    int id = QFontDatabase::addApplicationFont(":/Fonts/reservoirdogs.ttf");
+    QString family = QFontDatabase::applicationFontFamilies(id).at(0);
+    QFont rdFont(family);
+    rdFont.setPointSize(30);
+    painter.setFont(rdFont);
 
     painter.drawText(isogrid[3][0].rx() + 0.3 * W, 100, "FRONT");
     painter.drawText(isogrid[4][0].rx() + 4 * W, 100, "BACK");

@@ -8,6 +8,7 @@
 #include "IsometricCubeWidget.h"
 #include "Cube.h"
 #include "Fridrich.h"
+#include "ResolutionWidget.h"
 
 class MainWidget : public QWidget
 {
@@ -19,6 +20,7 @@ private:
     InputWidget *inputWidget;
     CubeInputWidget *cubeInputWidget;
     IsometricCubeWidget *isometricCubeWidget;
+    ResolutionWidget *resolutionWidget;
 
     // Menu
     QPushButton *scramblePB;
@@ -28,15 +30,6 @@ private:
     QPushButton *reverseSequencePB;
     QPushButton *cubeInputPB;
     QLineEdit *sequenceLE;
-
-    // Resolution menu
-    QLabel *pastMovesLabel;
-    QLabel *nextMovesLabel;
-    QLabel *actMoveLabel;
-    QPushButton *pastMovePB;
-    QPushButton *nextMovePB;
-    QStringList *sResolution;
-    int actMoveID;
 
     // Orientation menu
     QPushButton **movesPB;
@@ -60,8 +53,7 @@ public slots:
     void startCubeInput();
     void cubieModified(int, int, color);
 
-    void nextMove();
-    void pastMove();
+    void receiveMove(QString);
 
 };
 

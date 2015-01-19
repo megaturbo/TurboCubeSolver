@@ -8,11 +8,13 @@ INPUT(
 ./debug\MainWidget.o
 ./debug\CubeInputWidget.o
 ./debug\inputwidget.o
-./debug\qrc_resources.o
+./debug\ResolutionWidget.o
+./debug\qrc_font_resources.o
 ./debug\moc_ColorPicker.o
 ./debug\moc_TurboCubeSolver.o
 ./debug\moc_IsometricCubeWidget.o
 ./debug\moc_MainWidget.o
 ./debug\moc_CubeInputWidget.o
 ./debug\moc_inputwidget.o
+./debug\moc_ResolutionWidget.o
 );
