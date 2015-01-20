@@ -9,9 +9,9 @@ QString Fridrich::solve(Cube *cube){
     QString step2 = F2L(cube);
     QString step3 = OLL2Look(cube);
     step3 += OLL2Look(cube); //2-look OLL
-    QString step4 = PLL2Look(cube);
-    step4 += PLL2Look(cube); //2-look PLL
-//    QString step4 = PLL(cube);
+//    QString step4 = PLL2Look(cube);
+//    step4 += PLL2Look(cube); //2-look PLL
+        QString step4 = PLL(cube);
     //positionning the solved YELLOW face
     step4 += cube->turnFace(YELLOW, RED - cube->locateCubie(RED, BLUE, YELLOW).at(0) / 3);
     step1.chop(1);
@@ -742,11 +742,11 @@ QString Fridrich::PLL(Cube *c){
                 else if(cubeMatrix[face * 3][2] == cubeMatrix[((face + 3) % 4) * 3  + 1][2]){
                     //edge from left on the evaluated face
                     if(cubeMatrix[face * 3 + 1][2] == cubeMatrix[((face + 1) % 4) * 3][2]){
-                        return c->moveSequence("F2 R2 F L F' R2 F L' F", (color)((face + 1) % 4), YELLOW);
+                        return c->moveSequence("F2 R2 F L F' R2 F L' F", face, YELLOW);
                     }
                     //edge from opposite face on evaluated face
                     else if(cubeMatrix[face * 3 + 1][2] == cubeMatrix[((face + 1) % 4) * 3 + 2][2]){
-                        return c->moveSequence("L U L' B2 D' R U' R' U R' D B2", face, YELLOW);
+                        return c->moveSequence("L U L' B2 D' R U' R' U R' D B2", (color)((face + 1) % 4), YELLOW);
                     }
                     //edge from right face on evaluated face
                     else if(cubeMatrix[face * 3 + 1][2] == cubeMatrix[((face + 3) % 4) * 3 + 2][2]){
@@ -765,21 +765,21 @@ QString Fridrich::PLL(Cube *c){
                     }
                     //edge from right face on evaluated face
                     else if(cubeMatrix[face * 3 + 1][2] == cubeMatrix[((face + 3) % 4) * 3 + 2][2]){
-                        return c->moveSequence("F2 L2 F' R' F L2 F' R F'", (color)((face + 2) % 4), YELLOW);
+                        return c->moveSequence("F2 L2 F' R' F L2 F' R F'", face, YELLOW);
                     }
                 }
                 //edge from evaluated face on the evaluated face
                 else if(cubeMatrix[face * 3][2] == cubeMatrix[face * 3 + 1][2]){
                     //edge from opposite face on opposite face
-                    if(cubeMatrix[(face * 3 + 2) % 4 + 1][2] == cubeMatrix[(face * 3 + 2) % 4][2]){
+                    if(cubeMatrix[((face + 2) % 4) * 3 + 1][2] == cubeMatrix[((face + 1) % 4) * 3 + 2][2]){
                         return c->moveSequence("U' R' U R U' R2 F' U' F U R F R' F' R2", (color)((face + 3) % 4), YELLOW);
                     }
                     //edge from opposite face on right face
-                    else if(cubeMatrix[(face * 3 + 2) % 4 + 1][2] == cubeMatrix[(face * 3 + 3) % 4 + 2][2]){
+                    else if(cubeMatrix[((face + 3) % 4) * 3 + 1][2] == cubeMatrix[((face + 3) % 4) * 3][2]){
                         return c->moveSequence("R U R' F' R U R' U' R' F R2 U' R' U'", (color)((face + 3) % 4), YELLOW);
                     }
                     //edge from opposite face on left face
-                    else if(cubeMatrix[(face * 3 + 2) % 4 + 1][2] == cubeMatrix[(face * 3 + 1) % 4][2]){
+                    else if(cubeMatrix[((face + 1) % 4) * 3 + 1][2] == cubeMatrix[((face + 1) % 4) * 3 + 2][2]){
                         return c->moveSequence("L' U' L F L' U' L U L F' L2 U L U", (color)((face + 1) % 4), YELLOW);
                     }
                 }
@@ -788,36 +788,36 @@ QString Fridrich::PLL(Cube *c){
         //no corners correct relatively
         else if ((int)cubeMatrix[face * 3][2] == (cubeMatrix[face * 3 + 2][2] + 2) % 4 && (int)cubeMatrix[((face + 1) % 4) * 3][2] == (cubeMatrix[((face + 1) % 4) * 3 + 2][2] + 2) % 4) {
             //todo
-            //edges are correct relatively
-            if((int)cubeMatrix[face * 3 + 1][2] == (cubeMatrix[((face + 2) % 4) * 3 + 1][2] + 2) % 4 && (int)cubeMatrix[((face + 1) % 4) * 3 + 1][2] == (cubeMatrix[((face + 3) % 4) * 3 + 1][2] + 2) % 4){
-                //and the corners on evaluated face belong to it
-                if(cubeMatrix[(face * 3 + 1) % 4][2] == cubeMatrix[face * 3 + 1][2]){
+            //edges from opposite faces are on opposite faces (e.g. RED and ORANGE opposite)
+            if((int)cubeMatrix[face * 3 + 1][2] == (cubeMatrix[((face + 2) % 4) * 3 + 1][2] + 2) % 4
+                    && (int)cubeMatrix[((face + 1) % 4) * 3 + 1][2] == (cubeMatrix[((face + 3) % 4) * 3 + 1][2] + 2) % 4){
+                //the corners on evaluated face belong to it and same for opposite face
+                if(cubeMatrix[((face + 1) % 4) * 3][2] == cubeMatrix[face * 3 + 1][2] && cubeMatrix[((face + 3) % 4) * 3 + 2][2] == cubeMatrix[face * 3 + 1][2]
+                        && cubeMatrix[((face + 1) % 4) * 3 + 2][2] == cubeMatrix[((face + 2) % 4) * 3 + 1][2] && cubeMatrix[((face + 3) % 4) * 3][2] == cubeMatrix[((face + 2) % 4) * 3 + 1][2]){
                     return c->moveSequence("R' F' L' F R F' L F R' F' L F R F' L' F", face, YELLOW);
                 }
-            }
-            //edges from left and right faces are swapped
-            else if((int)cubeMatrix[((face + 1) % 4) * 3 + 1][2] == (cubeMatrix[((face + 3) % 4) * 3 + 1][2] + 2) % 4){
                 //edge and left corner from evaluated face identical
-                if(cubeMatrix[face * 3 + 1][2] == cubeMatrix[face * 3 + 2][2]){
+                else if(cubeMatrix[face * 3 + 1][2] == cubeMatrix[face * 3 + 2][2]){
                     return c->moveSequence("R' U R U' R' F' U' F R U R' F R' F' R U' R", face, YELLOW);
                 }
                 //edge and right corner from evaluated face identical
-                if(cubeMatrix[face * 3 + 1][2] == cubeMatrix[face * 3][2]){
+                else if(cubeMatrix[face * 3 + 1][2] == cubeMatrix[face * 3][2]){
                     return c->moveSequence("R U' R' U R B U B' R' U' R B' R B R' U R'", face, YELLOW);
                 }
+
             }
             //evaluated face has left corner and edge similar
             else if(cubeMatrix[face * 3 + 1][2] == cubeMatrix[face * 3 + 2][2]){
                 //edge from opposite face on right face
-                if(cubeMatrix[(face * 3 + 2) % 4 + 1][2] == cubeMatrix[(face * 3 + 3) % 4 + 2][2]){
+                if(cubeMatrix[((face + 3) % 4) * 3 + 1][2] == cubeMatrix[face * 3][2]){
                     return c->moveSequence("R' U R' U' B' D B' D' B2 R' B' R B R", face, YELLOW);
                 }
                 //edge from opposite face on left face
-                else if(cubeMatrix[(face * 3 + 2) % 4 + 1][2] == cubeMatrix[(face * 3 + 1) % 4][2]){
+                else if(cubeMatrix[((face + 1) % 4) * 3 + 1][2] == cubeMatrix[face * 3][2]){
                     return c->moveSequence("F R U' R' U' R U R' F' R U R' U' R' F R F'", face, YELLOW);
                 }
             }
         }
+        return "";
     }
-    return "";
 }

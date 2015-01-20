@@ -51,6 +51,9 @@ public slots:
     void turnXSlot();
     void turnYSlot();
     void turnZSlot();
+    void turnXpSlot();
+    void turnYpSlot();
+    void turnZpSlot();
     void startCubeInput();
     void cubieModified(int, int, color);
 
