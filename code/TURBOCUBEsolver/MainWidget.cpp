@@ -31,15 +31,22 @@ MainWidget::MainWidget(QWidget *parent) :
     //=====        RIGHT MENU           =====//
 
     // Instanciation
-    movesPB = new QPushButton*[3]();
+    movesPB = new QPushButton*[6]();
     movesPB[0] = new QPushButton("x", this);
     movesPB[1] = new QPushButton("y", this);
     movesPB[2] = new QPushButton("z", this);
+
+    movesPB[3] = new QPushButton("x'", this);
+    movesPB[4] = new QPushButton("y'", this);
+    movesPB[5] = new QPushButton("z'", this);
 
     // Settings
     movesPB[0]->setMaximumWidth(40);
     movesPB[1]->setMaximumWidth(40);
     movesPB[2]->setMaximumWidth(40);
+    movesPB[3]->setMaximumWidth(40);
+    movesPB[4]->setMaximumWidth(40);
+    movesPB[5]->setMaximumWidth(40);
 
 
     //=====          LAYOUTS           =====//
@@ -63,6 +70,9 @@ MainWidget::MainWidget(QWidget *parent) :
     orientationMenuLayout->addWidget(movesPB[0]);
     orientationMenuLayout->addWidget(movesPB[1]);
     orientationMenuLayout->addWidget(movesPB[2]);
+    orientationMenuLayout->addWidget(movesPB[3]);
+    orientationMenuLayout->addWidget(movesPB[4]);
+    orientationMenuLayout->addWidget(movesPB[5]);
 
     // Top: IsometricWidget + Orientation Menu
     isometricCubeWidget->setMinimumHeight(600);
@@ -85,6 +95,9 @@ MainWidget::MainWidget(QWidget *parent) :
     connect(movesPB[0], SIGNAL(clicked()), this, SLOT(turnXSlot()));
     connect(movesPB[1], SIGNAL(clicked()), this, SLOT(turnYSlot()));
     connect(movesPB[2], SIGNAL(clicked()), this, SLOT(turnZSlot()));
+    connect(movesPB[3], SIGNAL(clicked()), this, SLOT(turnZpSlot()));
+    connect(movesPB[4], SIGNAL(clicked()), this, SLOT(turnZpSlot()));
+    connect(movesPB[5], SIGNAL(clicked()), this, SLOT(turnZpSlot()));
 
     connect(cubeInputPB, SIGNAL(clicked()), this, SLOT(startCubeInput()));
     connect(isometricCubeWidget, SIGNAL(cubieModified(int, int, color)), this, SLOT(cubieModified(int, int, color)));
@@ -101,7 +114,7 @@ MainWidget::MainWidget(QWidget *parent) :
 }
 
 void MainWidget::keyPressEvent(QKeyEvent *e){
-    if(e->key() == Qt::Key_Enter || e->key() == Qt::Key_Return){
+    if((e->key() == Qt::Key_Enter || e->key() == Qt::Key_Return) && sequenceLE->hasFocus()){
         sendSequenceSlot();
     }
 }
@@ -154,6 +167,21 @@ void MainWidget::turnYSlot()
 void MainWidget::turnZSlot()
 {
     isometricCubeWidget->changeOrientation('z', 1);
+}
+
+void MainWidget::turnXpSlot()
+{
+    isometricCubeWidget->setOrientation('x', -1);
+}
+
+void MainWidget::turnYpSlot()
+{
+    isometricCubeWidget->setOrientation('y', -1);
+}
+
+void MainWidget::turnZpSlot()
+{
+    isometricCubeWidget->setOrientation('z', -1);
 }
 
 void MainWidget::initSolvedCube()
