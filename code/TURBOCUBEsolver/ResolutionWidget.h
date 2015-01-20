@@ -11,15 +11,21 @@ class ResolutionWidget : public QWidget
 
 public:
     ResolutionWidget(QWidget *parent = 0);
-    void reset();
+    void resetDisplay();
 
 public slots:
     void newSolveSequence(QString);
+
+private slots:
+    void pastMove();
+    void nextMove();
+    void infoSlot();
 
 signals:
     void sendMove(QString);
 
 private:
+    QPushButton *infoPB;
     QPushButton *nextMovePB;
     QPushButton *pastMovePB;
     QLabel *actMoveLabel;
@@ -27,8 +33,15 @@ private:
     QLabel *f2lLabel;
     QLabel *ollLabel;
     QLabel *pllLabel;
-    QStringList *resolutionSequence;
+    QStringList *CFOPSequence;
+    QStringList *CFOPlist;
+    int startF;
+    int startO;
+    int startP;
     int actMoveID;
+
+    void initDisplay();
+    void refreshDisplay();
 
 };
 

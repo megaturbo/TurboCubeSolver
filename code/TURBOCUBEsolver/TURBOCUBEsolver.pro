@@ -39,4 +39,5 @@ FORMS    += TurboCubeSolver.ui
 RC_FILE = myapp.rc
 
 RESOURCES += \
-    font_resources.qrc
+    font_resources.qrc \
+    picture_resources.qrc

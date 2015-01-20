@@ -86,7 +86,28 @@ IsometricCubeWidget::IsometricCubeWidget(Cube c, QWidget *parent)
     this->setCube(c);
 }
 
-void IsometricCubeWidget::setOrientation(QChar axe, int nbQ)
+void IsometricCubeWidget::setOrientation(color UP, color FRONT)
+{
+    for(int i = 0; i < 4; i++)
+    {
+        if(faceU->getC() == UP)
+        {
+            for(int j = 0; j < 4; j++)
+            {
+                if(faceF->getC() == FRONT)
+                {
+                    break;  // orientation is ok now
+                }else{
+                    this->changeOrientation('y', 1);
+                }
+            }
+        }else{
+            this->changeOrientation('x', 1);
+        }
+    }
+}
+
+void IsometricCubeWidget::changeOrientation(QChar axe, int nbQ)
 {
     Face *faceSave;
     switch(axe.toLatin1()){
