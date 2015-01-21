@@ -16,50 +16,50 @@ bool Cube::validateCube(){
     QList<QList<color> > cubies;
     QList<QList<int> > loc;
     //CORNERS
-    cubies.append(QList<color>() << WHITE << RED << BLUE);
-    loc.append(QList<int>() << 14 << 2 << 2 << 0 << 3 << 0);
-    cubies.append(QList<color>()<<WHITE<< BLUE<< ORANGE);
+    cubies.append(QList<color>()<<WHITE<<RED<<BLUE);
+    loc.append(QList<int>()<<14<<2<<2<<0<<3<<0);
+    cubies.append(QList<color>()<<WHITE<<BLUE<<ORANGE);
     loc.append(QList<int>()<<14<<0<<5<<0<<6<<0);
-    cubies.append(QList<color>()<<WHITE<< ORANGE<< GREEN);
+    cubies.append(QList<color>()<<WHITE<<ORANGE<<GREEN);
     loc.append(QList<int>()<<12<<0<<8<<0<<9<<0);
-    cubies.append(QList<color>()<<WHITE<< GREEN<< RED);
+    cubies.append(QList<color>()<<WHITE<<GREEN<<RED);
     loc.append(QList<int>()<<12<<2<<11<<0<<0<<0);
 
-    cubies.append(QList<color>()<<YELLOW<< RED<< GREEN);
+    cubies.append(QList<color>()<<YELLOW<<RED<<GREEN);
     loc.append(QList<int>()<<17<<2<<0<<2<<11<<2);
-    cubies.append(QList<color>()<<YELLOW<< GREEN<< ORANGE);
+    cubies.append(QList<color>()<<YELLOW<<GREEN<<ORANGE);
     loc.append(QList<int>()<<17<<0<<9<<2<<8<<2);
-    cubies.append(QList<color>()<<YELLOW<< ORANGE<< BLUE);
+    cubies.append(QList<color>()<<YELLOW<<ORANGE<<BLUE);
     loc.append(QList<int>()<<15<<0<<6<<2<<5<<2);
-    cubies.append(QList<color>()<<YELLOW<< BLUE<< RED);
+    cubies.append(QList<color>()<<YELLOW<<BLUE<<RED);
     loc.append(QList<int>()<<15<<2<<3<<2<<2<<2);
 
     //EDGES
-    cubies.append(QList<color>()<<WHITE<< RED);
+    cubies.append(QList<color>()<<WHITE<<RED);
     loc.append(QList<int>()<<13<<2<<1<<0);
-    cubies.append(QList<color>()<<WHITE<< BLUE);
+    cubies.append(QList<color>()<<WHITE<<BLUE);
     loc.append(QList<int>()<<14<<1<<4<<0);
-    cubies.append(QList<color>()<<WHITE<< ORANGE);
+    cubies.append(QList<color>()<<WHITE<<ORANGE);
     loc.append(QList<int>()<<13<<0<<7<<0);
-    cubies.append(QList<color>()<<WHITE<< GREEN);
+    cubies.append(QList<color>()<<WHITE<<GREEN);
     loc.append(QList<int>()<<12<<1<<10<<0);
 
-    cubies.append(QList<color>()<<YELLOW<< RED);
+    cubies.append(QList<color>()<<YELLOW<<RED);
     loc.append(QList<int>()<<16<<2<<1<<2);
-    cubies.append(QList<color>()<<YELLOW<< GREEN);
+    cubies.append(QList<color>()<<YELLOW<<GREEN);
     loc.append(QList<int>()<<17<<1<<10<<2);
-    cubies.append(QList<color>()<<YELLOW<< ORANGE);
+    cubies.append(QList<color>()<<YELLOW<<ORANGE);
     loc.append(QList<int>()<<16<<0<<7<<2);
-    cubies.append(QList<color>()<<YELLOW<< BLUE);
+    cubies.append(QList<color>()<<YELLOW<<BLUE);
     loc.append(QList<int>()<<15<<1<<4<<2);
 
-    cubies.append(QList<color>()<<RED<< BLUE);
+    cubies.append(QList<color>()<<RED<<BLUE);
     loc.append(QList<int>()<<2<<1<<3<<1);
-    cubies.append(QList<color>()<<BLUE<< ORANGE);
+    cubies.append(QList<color>()<<BLUE<<ORANGE);
     loc.append(QList<int>()<<5<<1<<6<<1);
-    cubies.append(QList<color>()<<ORANGE<< GREEN);
+    cubies.append(QList<color>()<<ORANGE<<GREEN);
     loc.append(QList<int>()<<8<<1<<9<<1);
-    cubies.append(QList<color>()<<GREEN<< RED);
+    cubies.append(QList<color>()<<GREEN<<RED);
     loc.append(QList<int>()<<11<<1<<0<<1);
 
     //copying the cube to not affect it by swapping cubies
@@ -873,90 +873,90 @@ QString Cube::turnFace(int faceToTurn, int nbQuarterTurns) {
     if(nbQuarterTurns == 0){
         return "";
     }
-    int indicesFaceX[] = {face * 3 + 2, face * 3 + 2,
-                            face * 3 + 1, face * 3 + 2,
-                            face * 3, face * 3,
-                            face * 3 + 1, face * 3};
-    int indicesFaceY[] = {1, 0,
-                            2, 2,
-                            1, 2,
-                            0, 0};
+    QList<int> indicesFaceX = QList<int>() << face * 3 + 2 <<  face * 3 + 2 <<
+                            face * 3 + 1 <<  face * 3 + 2 <<
+                            face * 3 <<  face * 3 <<
+                            face * 3 + 1 <<  face * 3;
+    QList<int> indicesFaceY = QList<int>() << 1 <<  0 <<
+                            2 <<  2 <<
+                            1 <<  2 <<
+                            0 <<  0;
     //defining the indices of the stickers adjacent to the face
     //those too will get spinned
-    int* indicesX;
-    int* indicesY;
+    QList<int> indicesX;
+    QList<int> indicesY;
     switch(face) {
     case RED:
         s = "F";
         //if the RED face gets turned, then:
         //{WHITE, BLUE, YELLOW, GREEN} are adjacent, in this order;
-        indicesX = new int[12]{WHITE * 3, WHITE * 3 + 1, WHITE * 3 + 2,
-                                BLUE * 3, BLUE * 3, BLUE * 3,
-                                YELLOW * 3, YELLOW * 3 + 1, YELLOW * 3 + 2,
-                                GREEN * 3 + 2, GREEN * 3 + 2, GREEN * 3 + 2};
-        indicesY = new int[12]{2, 2, 2,
-                                0, 1, 2,
-                                2, 2, 2,
-                                2, 1, 0};
+        indicesX = QList<int>() <<WHITE * 3 <<  WHITE * 3 + 1 <<  WHITE * 3 + 2 <<
+                                BLUE * 3 <<  BLUE * 3 <<  BLUE * 3 <<
+                                YELLOW * 3 <<  YELLOW * 3 + 1 <<  YELLOW * 3 + 2 <<
+                                GREEN * 3 + 2 <<  GREEN * 3 + 2 <<  GREEN * 3 + 2;
+        indicesY = QList<int>() <<2 <<  2 <<  2 <<
+                                0 <<  1 <<  2 <<
+                                2 <<  2 <<  2 <<
+                                2 <<  1 <<  0;
         break;
     case BLUE:
         s = "L";
-        //if the BLUE face gets turned, then:
-        //{WHITE, ORANGE, YELLOW, RED} are adjacent, in this order;
-        indicesX = new int[12]{WHITE * 3 + 2, WHITE * 3 + 2, WHITE * 3 + 2,
-                                ORANGE * 3, ORANGE * 3, ORANGE * 3,
-                                YELLOW * 3, YELLOW * 3, YELLOW * 3,
-                                RED * 3 + 2, RED * 3 + 2, RED * 3 + 2};
-        indicesY = new int[12]{2, 1, 0,
-                                0, 1, 2,
-                                0, 1, 2,
-                                2, 1, 0};
+        //if the BLUE face gets turned <<  then:
+        //{WHITE <<  ORANGE <<  YELLOW <<  RED are adjacent <<  in this order;
+        indicesX = QList<int>() <<WHITE * 3 + 2 <<  WHITE * 3 + 2 <<  WHITE * 3 + 2 <<
+                                ORANGE * 3 <<  ORANGE * 3 <<  ORANGE * 3 <<
+                                YELLOW * 3 <<  YELLOW * 3 <<  YELLOW * 3 <<
+                                RED * 3 + 2 <<  RED * 3 + 2 <<  RED * 3 + 2;
+        indicesY = QList<int>() <<2 <<  1 <<  0 <<
+                                0 <<  1 <<  2 <<
+                                0 <<  1 <<  2 <<
+                                2 <<  1 <<  0;
         break;
     case ORANGE:
         s = "B";
-        //if the ORANGE face gets turned, then:
-        //{WHITE, GREEN, YELLOW, BLUE} are adjacent, in this order;
-        indicesX = new int[12]{WHITE * 3 + 2, WHITE * 3 + 1, WHITE * 3,
-                                GREEN * 3, GREEN * 3, GREEN * 3,
-                                YELLOW * 3 + 2, YELLOW * 3 + 1, YELLOW * 3,
-                                BLUE * 3 + 2, BLUE * 3 + 2, BLUE * 3 + 2};
-        indicesY = new int[12]{0, 0, 0,
-                                0, 1, 2,
-                                0, 0 ,0,
-                                2, 1, 0};
+        //if the ORANGE face gets turned <<  then:
+        //{WHITE <<  GREEN <<  YELLOW <<  BLUE are adjacent <<  in this order;
+        indicesX = QList<int>() <<WHITE * 3 + 2 <<  WHITE * 3 + 1 <<  WHITE * 3 <<
+                                GREEN * 3 <<  GREEN * 3 <<  GREEN * 3 <<
+                                YELLOW * 3 + 2 <<  YELLOW * 3 + 1 <<  YELLOW * 3 <<
+                                BLUE * 3 + 2 <<  BLUE * 3 + 2 <<  BLUE * 3 + 2;
+        indicesY = QList<int>() <<0 <<  0 <<  0 <<
+                                0 <<  1 <<  2 <<
+                                0 <<  0  << 0 <<
+                                2 <<  1 <<  0;
         break;
     case GREEN:
         s = "R";
-        //if the GREEN face gets turned, then:
-        //{WHITE, RED, YELLOW, ORANGE} are adjacent, in this order;
-        indicesX = new int[12]{WHITE * 3, WHITE * 3, WHITE * 3,
-                                RED * 3, RED * 3, RED * 3,
-                                YELLOW * 3 + 2, YELLOW * 3 + 2, YELLOW * 3 + 2,
-                                ORANGE * 3 + 2, ORANGE * 3 + 2, ORANGE * 3 + 2};
-        indicesY = new int[12]{0, 1, 2,
-                                0, 1, 2,
-                                2, 1, 0,
-                                2, 1, 0};
+        //if the GREEN face gets turned <<  then:
+        //{WHITE <<  RED <<  YELLOW <<  ORANGE are adjacent <<  in this order;
+        indicesX = QList<int>() <<WHITE * 3 <<  WHITE * 3 <<  WHITE * 3 <<
+                                RED * 3 <<  RED * 3 <<  RED * 3 <<
+                                YELLOW * 3 + 2 <<  YELLOW * 3 + 2 <<  YELLOW * 3 + 2 <<
+                                ORANGE * 3 + 2 <<  ORANGE * 3 + 2 <<  ORANGE * 3 + 2;
+        indicesY = QList<int>() <<0 <<  1 <<  2 <<
+                                0 <<  1 <<  2 <<
+                                2 <<  1 <<  0 <<
+                                2 <<  1 <<  0;
         break;
     case WHITE:
         s = "D";
-        //if the WHITE face gets turned, then:
-        //{RED, GREEN, ORANGE, BLUE} are adjacent, in this order;
-        indicesX = new int[12]{RED * 3, RED * 3 + 1, RED * 3 + 2,
-                                GREEN * 3, GREEN * 3 + 1, GREEN * 3 + 2,
-                                ORANGE * 3, ORANGE * 3 + 1, ORANGE * 3 + 2,
-                                BLUE * 3, BLUE * 3 + 1, BLUE * 3 + 2};
-        indicesY = new int[12]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        //if the WHITE face gets turned <<  then:
+        //{RED <<  GREEN <<  ORANGE <<  BLUE are adjacent <<  in this order;
+        indicesX = QList<int>() <<RED * 3 <<  RED * 3 + 1 <<  RED * 3 + 2 <<
+                                GREEN * 3 <<  GREEN * 3 + 1 <<  GREEN * 3 + 2 <<
+                                ORANGE * 3 <<  ORANGE * 3 + 1 <<  ORANGE * 3 + 2 <<
+                                BLUE * 3 <<  BLUE * 3 + 1 <<  BLUE * 3 + 2;
+        indicesY = QList<int>() <<0 <<  0 <<  0 <<  0 <<  0 <<  0 <<  0 <<  0 <<  0 <<  0 <<  0 <<  0;
         break;
     case YELLOW:
         s = "U";
-        //if the YELLOW face gets turned, then:
-        //{RED, BLUE, ORANGE, GREEN} are adjacent, in this order;
-        indicesX = new int[12]{RED * 3, RED * 3 + 1, RED * 3 + 2,
-                                BLUE * 3, BLUE * 3 + 1, BLUE * 3 + 2,
-                                ORANGE * 3, ORANGE * 3 + 1, ORANGE * 3 + 2,
-                                GREEN * 3, GREEN * 3 + 1, GREEN * 3 + 2};
-        indicesY = new int[12]{2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2};
+        //if the YELLOW face gets turned <<  then:
+        //{RED <<  BLUE <<  ORANGE <<  GREEN are adjacent <<  in this order;
+        indicesX = QList<int>() <<RED * 3 <<  RED * 3 + 1 <<  RED * 3 + 2 <<
+                                BLUE * 3 <<  BLUE * 3 + 1 <<  BLUE * 3 + 2 <<
+                                ORANGE * 3 <<  ORANGE * 3 + 1 <<  ORANGE * 3 + 2 <<
+                                GREEN * 3 <<  GREEN * 3 + 1 <<  GREEN * 3 + 2;
+        indicesY = QList<int>() <<2 <<  2 <<  2 <<  2 <<  2 <<  2 <<  2 <<  2 <<  2 <<  2 <<  2 <<  2;
         break;
     default:
         return "should not happen";
@@ -1042,10 +1042,6 @@ QString Cube::turnFace(int faceToTurn, int nbQuarterTurns) {
         return "";
         break;
     }
-    delete [] indicesX;
-    delete [] indicesY;
-    indicesX = 0;
-    indicesY = 0;
     s += " ";
     return s;
 }
