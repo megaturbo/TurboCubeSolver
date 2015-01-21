@@ -33,8 +33,8 @@ private:
     QLabel *f2lLabel;
     QLabel *ollLabel;
     QLabel *pllLabel;
-    QStringList *CFOPSequence;
-    QStringList *CFOPlist;
+    QStringList CFOPSequence;
+    QStringList CFOPlist;
     int startF;
     int startO;
     int startP;
