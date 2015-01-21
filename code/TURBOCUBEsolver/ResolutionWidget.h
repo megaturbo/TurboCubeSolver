@@ -15,10 +15,10 @@ public:
 
 public slots:
     void newSolveSequence(QString);
-
-private slots:
     void pastMove();
     void nextMove();
+
+private slots:
     void infoSlot();
 
 signals:

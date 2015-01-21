@@ -54,8 +54,14 @@ MainWidget::MainWidget(QWidget *parent) :
     QHBoxLayout *cubeMenuLayout = new QHBoxLayout();
     QHBoxLayout *topLayout = new QHBoxLayout();
     QVBoxLayout *orientationMenuLayout = new QVBoxLayout();
+    QHBoxLayout *xLayout = new QHBoxLayout();
+    QHBoxLayout *yLayout = new QHBoxLayout();
+    QHBoxLayout *zLayout = new QHBoxLayout();
     //QHBoxLayout *resolutionMenuLayout = new QHBoxLayout();
     QVBoxLayout *MainLayout = new QVBoxLayout();
+
+    QGroupBox *orientationBox = new QGroupBox("Orientation", this);
+    orientationBox->setMaximumWidth(100);
 
     // Cube tools
     cubeMenuLayout->addWidget(cubeInputPB);
@@ -67,17 +73,23 @@ MainWidget::MainWidget(QWidget *parent) :
     cubeMenuLayout->addWidget(reverseSequencePB);
 
     // Orientation tools
-    orientationMenuLayout->addWidget(movesPB[0]);
-    orientationMenuLayout->addWidget(movesPB[1]);
-    orientationMenuLayout->addWidget(movesPB[2]);
-    orientationMenuLayout->addWidget(movesPB[3]);
-    orientationMenuLayout->addWidget(movesPB[4]);
-    orientationMenuLayout->addWidget(movesPB[5]);
+    xLayout->addWidget(movesPB[0]);
+    xLayout->addWidget(movesPB[3]);
+    yLayout->addWidget(movesPB[1]);
+    yLayout->addWidget(movesPB[4]);
+    zLayout->addWidget(movesPB[2]);
+    zLayout->addWidget(movesPB[5]);
+
+    orientationMenuLayout->addLayout(xLayout);
+    orientationMenuLayout->addLayout(yLayout);
+    orientationMenuLayout->addLayout(zLayout);
+
+    orientationBox->setLayout(orientationMenuLayout);
 
     // Top: IsometricWidget + Orientation Menu
-    isometricCubeWidget->setMinimumHeight(600);
+    isometricCubeWidget->setFixedSize(1000,600);
     topLayout->addWidget(isometricCubeWidget);
-    topLayout->addLayout(orientationMenuLayout);
+    topLayout->addWidget(orientationBox);
 
     // Layout: Total
     MainLayout->addLayout(topLayout);
@@ -95,8 +107,8 @@ MainWidget::MainWidget(QWidget *parent) :
     connect(movesPB[0], SIGNAL(clicked()), this, SLOT(turnXSlot()));
     connect(movesPB[1], SIGNAL(clicked()), this, SLOT(turnYSlot()));
     connect(movesPB[2], SIGNAL(clicked()), this, SLOT(turnZSlot()));
-    connect(movesPB[3], SIGNAL(clicked()), this, SLOT(turnZpSlot()));
-    connect(movesPB[4], SIGNAL(clicked()), this, SLOT(turnZpSlot()));
+    connect(movesPB[3], SIGNAL(clicked()), this, SLOT(turnXpSlot()));
+    connect(movesPB[4], SIGNAL(clicked()), this, SLOT(turnYpSlot()));
     connect(movesPB[5], SIGNAL(clicked()), this, SLOT(turnZpSlot()));
 
     connect(cubeInputPB, SIGNAL(clicked()), this, SLOT(startCubeInput()));
@@ -114,8 +126,22 @@ MainWidget::MainWidget(QWidget *parent) :
 }
 
 void MainWidget::keyPressEvent(QKeyEvent *e){
-    if((e->key() == Qt::Key_Enter || e->key() == Qt::Key_Return) && sequenceLE->hasFocus()){
-        sendSequenceSlot();
+    switch(e->key())
+    {
+        case Qt::Key_J:
+            resolutionWidget->pastMove();
+            break;
+        case Qt::Key_L:
+            resolutionWidget->nextMove();
+            break;
+        case Qt::Key_Enter:
+        case Qt::Key_Return:
+            if(sequenceLE->hasFocus())
+            {
+                sendSequenceSlot();
+            }
+            break;
+
     }
 }
 
@@ -171,17 +197,17 @@ void MainWidget::turnZSlot()
 
 void MainWidget::turnXpSlot()
 {
-    isometricCubeWidget->setOrientation('x', -1);
+    isometricCubeWidget->changeOrientation('x', -1);
 }
 
 void MainWidget::turnYpSlot()
 {
-    isometricCubeWidget->setOrientation('y', -1);
+    isometricCubeWidget->changeOrientation('y', -1);
 }
 
 void MainWidget::turnZpSlot()
 {
-    isometricCubeWidget->setOrientation('z', -1);
+    isometricCubeWidget->changeOrientation('z', -1);
 }
 
 void MainWidget::initSolvedCube()

@@ -9,9 +9,9 @@ QString Fridrich::solve(Cube *cube){
     QString step2 = F2L(cube);
     QString step3 = OLL2Look(cube);
     step3 += OLL2Look(cube); //2-look OLL
-//    QString step4 = PLL2Look(cube);
-//    step4 += PLL2Look(cube); //2-look PLL
-        QString step4 = PLL(cube);
+    QString step4 = PLL2Look(cube);
+    step4 += PLL2Look(cube); //2-look PLL
+    //QString step4 = PLL(cube);
     //positionning the solved YELLOW face
     step4 += cube->turnFace(YELLOW, RED - cube->locateCubie(RED, BLUE, YELLOW).at(0) / 3);
     step1.chop(1);

@@ -87,16 +87,22 @@ void ResolutionWidget::refreshDisplay()
 
 void ResolutionWidget::pastMove()
 {
-    emit sendMove(Cube::reverseSequence(CFOPlist->at(actMoveID-1)));
-    actMoveID--;
-    refreshDisplay();
+    if(pastMovePB->isEnabled())
+    {
+        emit sendMove(Cube::reverseSequence(CFOPlist->at(actMoveID-1)));
+        actMoveID--;
+        refreshDisplay();
+    }
 }
 
 void ResolutionWidget::nextMove()
 {
-    emit sendMove(CFOPlist->at(actMoveID));
-    actMoveID++;
-    refreshDisplay();
+    if(nextMovePB->isEnabled())
+    {
+        emit sendMove(CFOPlist->at(actMoveID));
+        actMoveID++;
+        refreshDisplay();
+    }
 }
 
 void ResolutionWidget::initDisplay()

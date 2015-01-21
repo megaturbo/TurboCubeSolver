@@ -69,7 +69,6 @@ IsometricCubeWidget::IsometricCubeWidget(Cube c, QWidget *parent)
 
     // Widget size
     this->resize(1000,550);
-    this->setStyleSheet("background-color: rgb(220,220,220);");
 
     // init isometric grid, used to create polygons
     initIsoGrid();
