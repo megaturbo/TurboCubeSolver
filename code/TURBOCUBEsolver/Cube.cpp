@@ -13,54 +13,54 @@ Cube::~Cube(){
 
 bool Cube::validateCube(){
     //Defining legal cubies and what the location is on the solved cube
-    QList<color*> cubies;
-    QList<int*> loc;
+    QList<QList<color> > cubies;
+    QList<QList<int> > loc;
     //CORNERS
-    cubies.append(new color[3]{WHITE, RED, BLUE});
-    loc.append(new int[6]{14,2,2,0,3,0});
-    cubies.append(new color[3]{WHITE, BLUE, ORANGE});
-    loc.append(new int[6]{14,0,5,0,6,0});
-    cubies.append(new color[3]{WHITE, ORANGE, GREEN});
-    loc.append(new int[6]{12,0,8,0,9,0});
-    cubies.append(new color[3]{WHITE, GREEN, RED});
-    loc.append(new int[6]{12,2,11,0,0,0});
+    cubies.append(QList<color>() << WHITE << RED << BLUE);
+    loc.append(QList<int>() << 14 << 2 << 2 << 0 << 3 << 0);
+    cubies.append(QList<color>()<<WHITE<< BLUE<< ORANGE);
+    loc.append(QList<int>()<<14<<0<<5<<0<<6<<0);
+    cubies.append(QList<color>()<<WHITE<< ORANGE<< GREEN);
+    loc.append(QList<int>()<<12<<0<<8<<0<<9<<0);
+    cubies.append(QList<color>()<<WHITE<< GREEN<< RED);
+    loc.append(QList<int>()<<12<<2<<11<<0<<0<<0);
 
-    cubies.append(new color[3]{YELLOW, RED, GREEN});
-    loc.append(new int[6]{17,2,0,2,11,2});
-    cubies.append(new color[3]{YELLOW, GREEN, ORANGE});
-    loc.append(new int[6]{17,0,9,2,8,2});
-    cubies.append(new color[3]{YELLOW, ORANGE, BLUE});
-    loc.append(new int[6]{15,0,6,2,5,2});
-    cubies.append(new color[3]{YELLOW, BLUE, RED});
-    loc.append(new int[6]{15,2,3,2,2,2});
+    cubies.append(QList<color>()<<YELLOW<< RED<< GREEN);
+    loc.append(QList<int>()<<17<<2<<0<<2<<11<<2);
+    cubies.append(QList<color>()<<YELLOW<< GREEN<< ORANGE);
+    loc.append(QList<int>()<<17<<0<<9<<2<<8<<2);
+    cubies.append(QList<color>()<<YELLOW<< ORANGE<< BLUE);
+    loc.append(QList<int>()<<15<<0<<6<<2<<5<<2);
+    cubies.append(QList<color>()<<YELLOW<< BLUE<< RED);
+    loc.append(QList<int>()<<15<<2<<3<<2<<2<<2);
 
     //EDGES
-    cubies.append(new color[2]{WHITE, RED});
-    loc.append(new int[6]{13,2,1,0});
-    cubies.append(new color[2]{WHITE, BLUE});
-    loc.append(new int[6]{14,1,4,0});
-    cubies.append(new color[2]{WHITE, ORANGE});
-    loc.append(new int[6]{13,0,7,0});
-    cubies.append(new color[2]{WHITE, GREEN});
-    loc.append(new int[6]{12,1,10,0});
+    cubies.append(QList<color>()<<WHITE<< RED);
+    loc.append(QList<int>()<<13<<2<<1<<0);
+    cubies.append(QList<color>()<<WHITE<< BLUE);
+    loc.append(QList<int>()<<14<<1<<4<<0);
+    cubies.append(QList<color>()<<WHITE<< ORANGE);
+    loc.append(QList<int>()<<13<<0<<7<<0);
+    cubies.append(QList<color>()<<WHITE<< GREEN);
+    loc.append(QList<int>()<<12<<1<<10<<0);
 
-    cubies.append(new color[2]{YELLOW, RED});
-    loc.append(new int[6]{16,2,1,2});
-    cubies.append(new color[2]{YELLOW, GREEN});
-    loc.append(new int[6]{17,1,10,2});
-    cubies.append(new color[2]{YELLOW, ORANGE});
-    loc.append(new int[6]{16,0,7,2});
-    cubies.append(new color[2]{YELLOW, BLUE});
-    loc.append(new int[6]{15,1,4,2});
+    cubies.append(QList<color>()<<YELLOW<< RED);
+    loc.append(QList<int>()<<16<<2<<1<<2);
+    cubies.append(QList<color>()<<YELLOW<< GREEN);
+    loc.append(QList<int>()<<17<<1<<10<<2);
+    cubies.append(QList<color>()<<YELLOW<< ORANGE);
+    loc.append(QList<int>()<<16<<0<<7<<2);
+    cubies.append(QList<color>()<<YELLOW<< BLUE);
+    loc.append(QList<int>()<<15<<1<<4<<2);
 
-    cubies.append(new color[2]{RED, BLUE});
-    loc.append(new int[6]{2,1,3,1});
-    cubies.append(new color[2]{BLUE, ORANGE});
-    loc.append(new int[6]{5,1,6,1});
-    cubies.append(new color[2]{ORANGE, GREEN});
-    loc.append(new int[6]{8,1,9,1});
-    cubies.append(new color[2]{GREEN, RED});
-    loc.append(new int[6]{11,1,0,1});
+    cubies.append(QList<color>()<<RED<< BLUE);
+    loc.append(QList<int>()<<2<<1<<3<<1);
+    cubies.append(QList<color>()<<BLUE<< ORANGE);
+    loc.append(QList<int>()<<5<<1<<6<<1);
+    cubies.append(QList<color>()<<ORANGE<< GREEN);
+    loc.append(QList<int>()<<8<<1<<9<<1);
+    cubies.append(QList<color>()<<GREEN<< RED);
+    loc.append(QList<int>()<<11<<1<<0<<1);
 
     //copying the cube to not affect it by swapping cubies
     Cube copy(matCube);
@@ -107,7 +107,6 @@ bool Cube::validateCube(){
             }
         }
     }
-
 
     //parity check
     if(nbSwaps % 2 == 1){
@@ -157,12 +156,6 @@ bool Cube::validateCube(){
                 return false;
             }
         }
-    }
-
-    //freeing memory
-    for(int i = 0; i < 20; i++){
-        delete[] cubies.at(i);
-        delete[] loc.at(i);
     }
 
     return true;

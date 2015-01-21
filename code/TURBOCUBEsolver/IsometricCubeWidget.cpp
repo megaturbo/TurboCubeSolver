@@ -108,12 +108,12 @@ void IsometricCubeWidget::setOrientation(color UP, color FRONT)
 
 void IsometricCubeWidget::changeOrientation(QChar axe, int nbQ)
 {
-    Face *faceSave;
+//    Face faceSave;
     switch(axe.toLatin1()){
     case 'x':
         if(nbQ == 1){
             // Switch faces
-            faceSave = new Face(*faceU);
+            Face *faceSave = faceU;
             faceU = faceF;
             faceF = faceD;
             faceD = faceB;
@@ -126,7 +126,7 @@ void IsometricCubeWidget::changeOrientation(QChar axe, int nbQ)
             faceF->setO(2);
         } else {
             // Switch faces
-            faceSave = new Face(*faceU);
+            Face *faceSave = faceU;
             faceU = faceB;
             faceB = faceD;
             faceD = faceF;
@@ -142,7 +142,7 @@ void IsometricCubeWidget::changeOrientation(QChar axe, int nbQ)
     case 'y':
         if(nbQ == 1){
             // Switch faces
-            faceSave = new Face(*faceF);
+            Face *faceSave = faceF;
             faceF = faceR;
             faceR = faceB;
             faceB = faceL;
@@ -152,7 +152,7 @@ void IsometricCubeWidget::changeOrientation(QChar axe, int nbQ)
             faceD->setO(3);
         } else {
             // Switch faces
-            faceSave = new Face(*faceF);
+            Face *faceSave = faceF;
             faceF = faceL;
             faceL = faceB;
             faceB = faceR;
@@ -165,7 +165,7 @@ void IsometricCubeWidget::changeOrientation(QChar axe, int nbQ)
     case 'z':
         if(nbQ == 1){
             // Switch faces
-            faceSave = new Face(*faceU);
+            Face *faceSave = faceU;
             faceU = faceL;
             faceL = faceD;
             faceD = faceR;
@@ -180,7 +180,7 @@ void IsometricCubeWidget::changeOrientation(QChar axe, int nbQ)
             faceU->setO(1);
         } else {
             // Switch faces
-            faceSave = new Face(*faceU);
+            Face *faceSave = faceU;
             faceU = faceR;
             faceR = faceD;
             faceD = faceL;
@@ -196,7 +196,6 @@ void IsometricCubeWidget::changeOrientation(QChar axe, int nbQ)
         }
         break;
     }
-
     this->update();
 }
 

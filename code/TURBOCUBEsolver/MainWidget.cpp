@@ -245,7 +245,7 @@ void MainWidget::solveSlot()
 {
     Cube *tmpCube = new Cube(*displayedCube);
     resolutionWidget->newSolveSequence(Fridrich::solve(tmpCube));
-    isometricCubeWidget->setCube(*displayedCube);
+    delete tmpCube;
     isometricCubeWidget->setOrientation(YELLOW, RED);
 }
 
