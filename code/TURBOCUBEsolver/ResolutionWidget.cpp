@@ -19,7 +19,7 @@ void ResolutionWidget::refreshDisplay()
 {
 
     QStringList actSequence = CFOPSequence.join(' ').split(' ');
-    int lengthSequence = actSequence.length();
+    int lengthSequence = actSequence.   length();
 
     if(actMoveID < lengthSequence){
         actMoveLabel->setText(actSequence.at(actMoveID));
