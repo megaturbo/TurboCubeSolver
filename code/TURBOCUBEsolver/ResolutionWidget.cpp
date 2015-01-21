@@ -18,7 +18,7 @@ ResolutionWidget::ResolutionWidget(QWidget *parent)
 void ResolutionWidget::refreshDisplay()
 {
 
-    QStringList actSequence = CFOPSequence->join(' ').split(' ');
+    QStringList actSequence = CFOPSequence.join(' ').split(' ');
     int lengthSequence = actSequence.length();
 
     if(actMoveID < lengthSequence){
@@ -27,10 +27,10 @@ void ResolutionWidget::refreshDisplay()
         actMoveLabel->clear();
     }
 
-    int c_end = CFOPSequence->at(0).split(' ').size();
-    int f_end = CFOPSequence->at(1).split(' ').size() + c_end;
-    int o_end = CFOPSequence->at(2).split(' ').size() + f_end;
-    int p_end = CFOPSequence->at(3).split(' ').size() + o_end;
+    int c_end = CFOPSequence.at(0).split(' ').size();
+    int f_end = CFOPSequence.at(1).split(' ').size() + c_end;
+    int o_end = CFOPSequence.at(2).split(' ').size() + f_end;
+    int p_end = CFOPSequence.at(3).split(' ').size() + o_end;
 
     QString C = "";
     QString F = "";
@@ -39,7 +39,7 @@ void ResolutionWidget::refreshDisplay()
     QString tmp;
     QString tmp2;
 
-    for(int i = 0; i < CFOPlist->size(); i++)
+    for(int i = 0; i < CFOPlist.size(); i++)
     {
         tmp = "";
         tmp2 = " ";
@@ -52,17 +52,17 @@ void ResolutionWidget::refreshDisplay()
 
         if(i < c_end)
         {
-            C += tmp + CFOPlist->at(i) + tmp2;
+            C += tmp + CFOPlist.at(i) + tmp2;
 
         }else if(i < f_end)
         {
-            F += tmp + CFOPlist->at(i) + tmp2;
+            F += tmp + CFOPlist.at(i) + tmp2;
         }else if(i < o_end)
         {
-            O += tmp + CFOPlist->at(i) + tmp2;
+            O += tmp + CFOPlist.at(i) + tmp2;
         }else if(i < p_end)
         {
-            P += tmp + CFOPlist->at(i) + tmp2;
+            P += tmp + CFOPlist.at(i) + tmp2;
         }
     }
 
@@ -89,7 +89,7 @@ void ResolutionWidget::pastMove()
 {
     if(pastMovePB->isEnabled())
     {
-        emit sendMove(Cube::reverseSequence(CFOPlist->at(actMoveID-1)));
+        emit sendMove(Cube::reverseSequence(CFOPlist.at(actMoveID-1)));
         actMoveID--;
         refreshDisplay();
     }
@@ -99,7 +99,7 @@ void ResolutionWidget::nextMove()
 {
     if(nextMovePB->isEnabled())
     {
-        emit sendMove(CFOPlist->at(actMoveID));
+        emit sendMove(CFOPlist.at(actMoveID));
         actMoveID++;
         refreshDisplay();
     }
@@ -110,9 +110,6 @@ void ResolutionWidget::initDisplay()
     QString rdDefault = QFontDatabase::applicationFontFamilies(QFontDatabase::addApplicationFont(":/Fonts/reservoirdogs.ttf")).at(0);
     QFont rdFont(rdDefault);
     rdFont.setPointSize(30);
-
-    CFOPSequence = new QStringList();
-    CFOPlist = new QStringList();
 
     infoPB = new QPushButton("Information", this);
     infoPB->setFixedWidth(100);
@@ -196,12 +193,12 @@ void ResolutionWidget::newSolveSequence(QString solveSequence)
         cfop[i].remove(0, 1);
     }
 
-    CFOPSequence->append(cfop.at(0));
-    CFOPSequence->append(cfop.at(1).split('|').join(' '));  // cuz f2l 4 pairs
-    CFOPSequence->append(cfop.at(2));
-    CFOPSequence->append(cfop.at(3));
+    CFOPSequence.append(cfop.at(0));
+    CFOPSequence.append(cfop.at(1).split('|').join(' '));  // cuz f2l 4 pairs
+    CFOPSequence.append(cfop.at(2));
+    CFOPSequence.append(cfop.at(3));
 
-    *CFOPlist = CFOPSequence->join(' ').split(' ');
+    CFOPlist = CFOPSequence.join(' ').split(' ');
 
     refreshDisplay();
 
@@ -209,7 +206,8 @@ void ResolutionWidget::newSolveSequence(QString solveSequence)
 
 void ResolutionWidget::resetDisplay()
 {
-    CFOPSequence->clear();
+    CFOPSequence.clear();
+    CFOPlist.clear();
     actMoveLabel->clear();
     crossLabel->clear();
     f2lLabel->clear();
