@@ -77,7 +77,7 @@ void ResolutionWidget::refreshDisplay()
     }else{
         pastMovePB->setDisabled(true);
     }
-    if(actMoveID >= lengthSequence )
+    if(actMoveID >= lengthSequence)
     {
         nextMovePB->setDisabled(true);
     }else{
@@ -201,7 +201,6 @@ void ResolutionWidget::newSolveSequence(QString solveSequence)
     CFOPlist = CFOPSequence.join(' ').split(' ');
 
     refreshDisplay();
-
 }
 
 void ResolutionWidget::resetDisplay()

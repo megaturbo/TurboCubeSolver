@@ -237,15 +237,27 @@ void MainWidget::resetSlot()
 
 void MainWidget::scrambleSlot()
 {
-    sequenceLE->setText(displayedCube->scramble(5));
+    resolutionWidget->resetDisplay();
+    sequenceLE->setText(displayedCube->scramble(25));
     isometricCubeWidget->setCube(*displayedCube);
 }
 
 void MainWidget::solveSlot()
 {
     Cube *tmpCube = new Cube(*displayedCube);
-    resolutionWidget->newSolveSequence(Fridrich::solve(tmpCube));
+    Cube *tmpCube2 = new Cube(*displayedCube);
+
+    QString solv = Fridrich::solve(tmpCube);
+    QString fastSolv = Fridrich::fastestFridrichSolve(tmpCube2);
+
     delete tmpCube;
+    delete tmpCube2;
+
+    qDebug() << solv.count(' ') << solv;
+    qDebug() << fastSolv.count(' ') << fastSolv;
+
+    resolutionWidget->newSolveSequence(fastSolv);
+
     isometricCubeWidget->setOrientation(YELLOW, RED);
 }
 

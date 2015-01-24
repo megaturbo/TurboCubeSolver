@@ -24,7 +24,7 @@ class Cube {
 
     QString scramble(int depth = 25);
     static QString reverseSequence(QString sequence);
-    static QString cleanSequence(QString sequence);
+    static void cleanSequence(QString &sequence);
 
     QString moveSequence(QString sequence, color colorFront, color colorUp);
     QString turnFace(int faceToTurn, int nbQuarterTurns = 1);

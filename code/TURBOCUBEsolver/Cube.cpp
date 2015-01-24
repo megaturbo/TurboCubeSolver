@@ -178,14 +178,14 @@ void Cube::qDebugDisplay() {
             case ORANGE:
                 s += "O ";
                 break;
-            default:
-                s += "? ";
-                break;
             case WHITE:
                 s += "W ";
                 break;
             case YELLOW:
                 s += "Y ";
+                break;
+            default:
+                s += "? ";
                 break;
             }
             if(x % 3 == 2) {
@@ -602,7 +602,7 @@ QString Cube::scramble(int depth)
         firstLastMove = nextMove;
     }
 
-    qDebug() << scrambling;
+//    qDebug() << scrambling;
 
     this->moveSequence(scrambling, RED, YELLOW);
 
@@ -641,7 +641,7 @@ QString Cube::reverseSequence(QString sequence)
 
 //This method merges consecutive moves on the same face in one move. For example, U2 U' = U.
 //It returns the cleaned sequence
-QString Cube::cleanSequence(QString sequence){
+void Cube::cleanSequence(QString &sequence){
     QStringList moves = sequence.split(' ');
     QString cleanedSequence = "";
     QString tmp;
@@ -688,7 +688,7 @@ QString Cube::cleanSequence(QString sequence){
         lastMove = tmp;
     }
     cleanedSequence += tmp;
-    return cleanedSequence;
+    sequence = cleanedSequence;
 }
 
 
