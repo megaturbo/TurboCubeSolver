@@ -19,38 +19,45 @@ class Face{
 public:
     // Construct
     Face(color colSrc, int orientationSrc){
-        col = colSrc;
-        orientation = orientationSrc;
+        col = new color;
+        orientation = new int;
+        *col = colSrc;
+        *orientation = orientationSrc;
     }
     Face(const Face &src)
     {
-        col = src.col;
-        orientation = src.orientation;
+        col = new color;
+        *col = *src.col;
+        orientation = new int;
+        *orientation = *src.orientation;
     }
     ~Face()
     {
-
+        delete col;
+        delete orientation;
+        col = 0;
+        orientation = 0;
     }
 
     // Getter / Setter
     void setO(int value)
     {
-        orientation += value;
-        orientation %= 4;
+        *orientation += value;
+        *orientation %= 4;
     }
     int getO()
     {
-        return orientation;
+        return *orientation;
     }
     color getC()
     {
-        return col;
+        return *col;
     }
 
 private:
     // Attribs
-    color col;
-    int orientation;
+    color *col;
+    int *orientation;
 };
 
 /**********************************************************\

@@ -832,6 +832,7 @@ QString Cube::L(int nbQuarterTurn, color colorFront, color colorUp) {
     switch(colorFront){
     case YELLOW:
         face = (color) ((colorUp + 3) % 4);
+        break;
     case WHITE:
         face = (color) ((colorUp + 1) % 4);
         break;
@@ -848,7 +849,7 @@ QString Cube::L(int nbQuarterTurn, color colorFront, color colorUp) {
                 {
                     face = YELLOW;
                 }
-            }else {
+            } else {
                 face = YELLOW;
                 if(colorUp == RED && colorFront == GREEN)
                 {

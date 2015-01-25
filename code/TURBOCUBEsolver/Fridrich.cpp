@@ -5,8 +5,8 @@
 QString Fridrich::solve(Cube *cube){
     QString step1 = cross(cube);
     QString step2 = F2L(cube);
-//    QString step3 = OLL2Look(cube);
-//    step3 += OLL2Look(cube); //2-look OLL
+    //    QString step3 = OLL2Look(cube);
+    //    step3 += OLL2Look(cube); //2-look OLL
     //    QString step4 = PLL2Look(cube);
     //    step4 += PLL2Look(cube); //2-look PLL
 
@@ -18,7 +18,7 @@ QString Fridrich::solve(Cube *cube){
     step1.chop(1);
     step3.chop(1);
     step4.chop(1);
-    qDebug() << "[" + step1 + "][" + step2 + "][" + step3 + "][" + step4 + "]";
+//    qDebug() << "[" + step1 + "][" + step2 + "][" + step3 + "][" + step4 + "]";
     return "[" + step1 + "][" + step2 + "][" + step3 + "][" + step4 + "]";
 }
 
@@ -26,8 +26,8 @@ void Fridrich::clean2Sequences(QString &sequenceLeft, QString &sequenceRight)
 {
     if(!sequenceLeft.isEmpty() && !sequenceRight.isEmpty()){
 
-//        Cube::cleanSequence(sequenceLeft);
-//        Cube::cleanSequence(sequenceRight);
+        //        Cube::cleanSequence(sequenceLeft);
+        //        Cube::cleanSequence(sequenceRight);
 
         //getting the moves
         QStringList movesLeft = sequenceLeft.split(' ');
@@ -1041,12 +1041,12 @@ QString Fridrich::OLL(Cube *cube){
         bool adjFront[3];
         bool adjRight[3];
         bool adjLeft[3];
-        bool adjOpp[3];
+        bool adjBack[3];
         for (int i = 0; i < 3; ++i) {
             adjFront[i] = cubeMatrix[face * 3 + 2 - i][2] == YELLOW;
             adjRight[i] = cubeMatrix[((face + 3) % 4) * 3 + 2 - i][2] == YELLOW;
             adjLeft[i] = cubeMatrix[((face + 1) % 4) * 3 + 2 - i][2] == YELLOW;
-            adjOpp[i] = cubeMatrix[((face + 2) % 4) * 3 + 2 - i][2] == YELLOW;
+            adjBack[i] = cubeMatrix[((face + 2) % 4) * 3 + 2 - i][2] == YELLOW;
         }
         switch(face){
         case RED:
@@ -1100,11 +1100,11 @@ QString Fridrich::OLL(Cube *cube){
             //No corner solved yet
             if(nbCorner == 0) {
                 //The YELLOW stickers on the corners are parallel
-                if(adjFront[0] && adjFront[2] && adjOpp[0] && adjOpp[2]) {
+                if(adjFront[0] && adjFront[2] && adjBack[0] && adjBack[2]) {
                     return cube->moveSequence("R U2 R' U' R U R' U' R U' R'", face, YELLOW);
                 }
                 //The YELLOW stickers on the corners are not parallel
-                else if (adjFront[0] && adjOpp[2] && adjRight[0] && adjRight[2]) {
+                else if (adjFront[0] && adjBack[2] && adjRight[0] && adjRight[2]) {
                     return cube->moveSequence("L U' R' U L' U R U R' U R", face, YELLOW);
                 }
             }
@@ -1155,35 +1155,231 @@ QString Fridrich::OLL(Cube *cube){
                         s += cube->moveSequence("R' U' R' U R' F", face, (color)((face + 1) % 4));
                         return s;
                     }else if(adjLeft[2]){
-                        return cube->moveSequence("F' B2 L B' L F U2' F' L B' F", face, YELLOW); //y L' R2 B R' B L U2' L' B M'
+                        return cube->moveSequence("F' B2 L B' L F U2 F' L B' F", face, YELLOW); //y L' R2 B R' B L U2' L' B M'
                     }
                 }
                 break;
             case 2:
-                if(botLeft && botRight && adjOpp[0] && adjOpp[2]){
+                if(botLeft && botRight && adjBack[0] && adjBack[2]){
                     QString s = cube->moveSequence("F R U R' U", face, YELLOW);
                     s += cube->moveSequence("R' U2 R' F R F'", (color)((face + 1) % 4), YELLOW);
                     return s;
+                } else if(topLeft && topRight && adjLeft[2] && adjRight[0]){
+                    QString s = cube->moveSequence("R' U2 F R U R' U'", face, YELLOW); //R' U2 F R U R' U' y' R2 U2 x' R U
+                    s += cube->moveSequence("R2 U2", (color)((face + 1) % 4), YELLOW);
+                    s += cube->moveSequence("R U", YELLOW, (color)((face + 3) % 4));
+                    return s;
+                } else if(topLeft && botRight && adjLeft[2]){
+                    return cube->moveSequence("R U R' U R' F R F' U2 R' F R F'", face, YELLOW);
                 }
                 break;
             case 4:
+                return cube->moveSequence("R2 U2 R' F2 U2 R2 F' R2 U2 F2 R U2 R2 U'", face, YELLOW);
                 break;
             }
-
-//            return cube->moveSequence("R U R' U R' F R F' U2 R' F R F'", face, YELLOW);
+        }
+        //all corners
+        else if (nbCorner == 4){
+            if(left && right){
+                return cube->moveSequence("L' R U R' U' L R' F R F'", face, YELLOW);
+            }
+            if(left && bot){
+                return cube->moveSequence("L' U2 L U F R U2 R' U' F'", face, YELLOW);
+            }
         }
         //the edge stickers form a YELLOW line on the YELLOW face
         else if ((left && right) || (top && bot)) {
-            //horizontal line
-            if(left){
-                return cube->moveSequence("F R U R' U' F'", face, YELLOW);
+            //lines
+            if(nbCorner == 0){
+                //vertical
+                if(top && adjRight[0] && adjRight[2]){
+                    if(adjLeft[0] && adjLeft[2]){
+                        QString s = cube->moveSequence("R U'", face, YELLOW); //R U' y R2 D R' U2 R D' R2 d R'
+                        s += cube->moveSequence("R2 D R' U2 R D' R2 U F'", (color)((face + 3) % 4), YELLOW);
+                        return s;
+                    } else if(adjFront[0] && adjBack[2]){
+                        return cube->moveSequence("R' U' F' U F' L F L' F R", face, YELLOW);
+                    }
+                } else if(left && adjRight[0] && adjRight[2]){
+                    if(adjLeft[0] && adjLeft[2]){
+                        return cube->moveSequence("L' B' L U' R' U R U' R' U R L' B L", face, YELLOW);
+                    } else if(adjFront[0] && adjBack[2]){
+                        return cube->moveSequence("F U R U' R' U R U' R' F'", face, YELLOW);
+                    }
+                }
+            }
+            //Big Ls
+            if(nbCorner == 1){
+                if(botRight){
+                    if(adjFront[0]){
+                        return cube->moveSequence("R' F R U R' F' R F U' F'", face, YELLOW);
+                    } else if(adjLeft[2]){
+                        return cube->moveSequence("L' B' L R' U' R U L' B L", face, YELLOW);
+                    }
+                } else if(botLeft){
+                    if(adjRight[0]){
+                        return cube->moveSequence("R B R' L U L' U' R B' R'", face, YELLOW);
+                    } else if(adjFront[2]){
+                        return cube->moveSequence("L F' L' U' L F L' F' U F", face, YELLOW);
+                    }
+                }
+            }
+            //Ts
+            if(left && botRight && topRight){
+                if(adjLeft[0] && adjLeft[2]){
+                    return cube->moveSequence("F R U R' U' F'", face, YELLOW);
+                } else if(adjFront[0] && adjBack[2]){
+                    return cube->moveSequence("R U R' U' R' F R F'", face, YELLOW);
+                }
+            }
+            //Zs
+            if((botRight && topLeft) || (botLeft && topRight)){
+                if(left && topLeft){
+                    return cube->moveSequence("R' F R U R' U' F' U R", face, YELLOW);
+                } else if(left && botLeft){
+                    return cube->moveSequence("L F' L' U' L U F U' L'", face, YELLOW);
+                }
+            }
+            //Cs
+            if((topLeft && botLeft) || (botLeft && botRight)){
+                if (bot && topLeft){
+                    QString s = cube->moveSequence("R U'", face, YELLOW); //R U x' R U' R' U x U' R'
+                    s += cube->moveSequence("R U' R' U", YELLOW, (color)((face + 2) % 4));
+                    s += cube->moveSequence("U' R'", face, YELLOW);
+                    return s;
+                } else if (left && botLeft){
+                    QString s = cube->moveSequence("R U R' U'", face, YELLOW); //R U R' U' x D' R' U R E'
+                    s += cube->moveSequence("D' R' U R D U'", WHITE, face);
+                    return s;
+                }
             }
         }
-        //other cases
-        else {
-            //little L yellow left and top
-            if (left && top){
-                return cube->moveSequence("F U R U' R' F'", face, YELLOW);
+        //little Ls
+        else if ((top && left) || (top && right) || (bot && left) || (bot && right)){
+            if(nbCorner == 0){
+                if(left && top){
+                    //2 cases
+                    if(adjLeft[0] && adjLeft[2] && adjBack[0] && adjFront[2]){
+                        return cube->moveSequence("F R U R' U' R U R' U' F'", face, YELLOW);
+                    } else if (adjFront[0] && adjFront[2] && adjBack[0] && adjBack[2]){
+                        return cube->moveSequence("L F' L' F U2 L2 y' B L B' L", face, YELLOW);
+                    }
+                }
+                if(top && right){
+                    //3 cases
+                    if(adjRight[0] && adjRight[2] && adjBack[2] && adjFront[0]){
+                        return cube->moveSequence("F' L' U' L U L' U' L U F", face, YELLOW);
+                    }
+                    if(adjLeft[0] && adjLeft[2] && adjFront[2] && adjBack[0]){
+                        return cube->moveSequence("R' F R' F' R2 U2 B' R B R'", face, YELLOW);
+                    }
+                    if(adjFront[0] && adjFront[2] && adjBack[0] && adjBack[2]){
+                        return cube->moveSequence("R' F R F' U2 R2 y B' R' B R'", face, YELLOW);
+                    }
+                }
+                if(bot && right){
+                    //1 case
+                    if(adjLeft[0] && adjLeft[2] && adjFront[2] && adjBack[0]){
+                        QString s = cube->moveSequence("L U'", face, YELLOW); //L U' y' R' U2' R' U R U' R U2 R d' L'
+                        s += cube->moveSequence("R' U2 R' U R U' R U2 R U' B'", (color)((face + 1) % 4), YELLOW);
+                        return s;
+                    }
+                }
+                if(left){
+                    //8 cases + Ps/Ws
+                    if(top){
+                        //4 cases + Ps
+                        if(botLeft && adjFront[2] && adjRight[2] && adjBack[2]){
+                            return cube->moveSequence("L F R' F R F2 L'", face, YELLOW);
+                        }
+                        if(botLeft && botRight && adjBack[0] && adjBack[2]){
+                            return cube->moveSequence("U' R U2 R' U' R U' R2 F' U' F U R", face, YELLOW);
+                        }
+                        if(botRight && adjBack[0] && adjLeft[0] && adjFront[0]){
+                            QString s = cube->moveSequence("R' U' R", face, YELLOW); //R' U' R y' x' R U' R' F R U R'
+                            s += cube->moveSequence("R U' R' F R U R'", YELLOW, (color)((face + 3) % 4));
+                            return s;
+                        }
+                        if(botRight && topLeft && adjFront[0] && adjRight[2]){
+                            return cube->moveSequence("F R' F' R U R U' R'", face, YELLOW);
+                        }
+                        //Ps
+                        if(topLeft && botLeft && adjFront[2] && adjBack[0]){
+                            return cube->moveSequence("L U F' U' L' U L F L'", face, YELLOW);
+                        }
+                        if(topLeft && botLeft && adjRight[0] && adjRight[2]){
+                            return cube->moveSequence("F U R U' R' F'", face, YELLOW);
+                        }
+                    }
+                    if(bot){
+                        //4 cases + Ws
+                        if(topLeft && topRight && adjLeft[2] && adjRight[0]){
+                            QString s = cube->moveSequence("U' R U' R2 F", YELLOW, (color)((face + 2) % 4)); //x' U' R U' R2' F x R U R' U' R B2
+                            s += cube->moveSequence("R U R' U' R B2", face, YELLOW);
+                            return s;
+                        }
+                        if(botRight && adjBack[0] && adjLeft[0] && adjBack[0]){
+                            QString s = cube->moveSequence("U2 L", face, YELLOW); //U2 r R2' U' R U' R' U2 R U' M
+                            s += cube->moveSequence("R2 U' R U' R' U2 R U' L R'", WHITE, face);
+                            return s;
+                        }
+                        if(topRight && adjLeft[2] && adjBack[2] && adjFront[2]){
+                            QString s = cube->moveSequence("R U R'", face, YELLOW); //R U R' y R' F R U' R' F' R
+                            s += cube->moveSequence("R' F R U' R' F' R", (color)((face + 3) % 4), YELLOW);
+                            return s;
+                        }
+                        if(topLeft && adjFront[0] && adjBack[0] && adjRight[0]){
+                            return cube->moveSequence("L' B' L U' R' U R L' B L", face, YELLOW);
+                        }
+                        //Ws
+                        if(topLeft && botRight && adjFront[0] && adjRight[2]){
+                            return cube->moveSequence("R' U' R U' R' U R U R B' R' B", face, YELLOW);
+                        }
+                    }
+                }
+                if(right){
+                    //6 cases + Ps/Ws
+                    if(top){
+                        //3 cases + Ps
+                        if(botLeft && botRight && adjBack[0] && adjBack[2]){
+                            return cube->moveSequence("U' R' U2 R U R' U R2 B U B' U' R'", face, YELLOW);
+                        }
+                        if(botLeft && topRight && adjRight[0] && adjBack[2]){
+                            QString s = cube->moveSequence("R' U2 R", face, YELLOW); //R' U2 l R U' R' U l' U2 R
+                            s += cube->moveSequence("R U' R' U R'", YELLOW, (color)((face + 2) % 4));
+                            s += cube->moveSequence("U2 R", face, YELLOW);
+                            return s;
+                        }
+                        if(topRight && adjFront[0] && adjRight[0] && adjLeft[0]){
+                            return cube->moveSequence("L U2 R' U' R U' L'", WHITE, face);
+                        }
+                        //Ps
+                        if(topRight && botRight && adjFront[0] && adjBack[2]){
+                            return cube->moveSequence("R' U' F U R U' R' F' R", face, YELLOW);
+                        }
+                        if(topRight && botRight && adjLeft[0] && adjLeft[2]){
+                            return cube->moveSequence("F' U' L' U L F", face, YELLOW);
+                        }
+                    }
+                    if(bot){
+                        //3 cases + Ws
+                        if(botLeft && adjFront[2] && adjBack[2] && adjRight[2]){
+                            QString s = cube->moveSequence("U2 R'", face, YELLOW); //U2 l' L2 U L' U L U2 L' U M
+                            s += cube->moveSequence("L2 U L' U L U2 L' U L R'", WHITE, face);
+                            return s;
+                        }
+                        if(topRight && topLeft && adjLeft[2] && adjRight[0]){
+                            return cube->moveSequence("R2 U R' B R U' R2 U R B R'", face, YELLOW);
+                        }
+                        if(botRight && adjLeft[2] && adjBack[2] && adjRight[2]){
+                            return cube->moveSequence("L' U2 R U R' U L", YELLOW, (color)((face + 2) % 4));
+                        }
+                        //Ws
+                        if(botLeft && topRight && adjFront[2] && adjLeft[0]){
+                            return cube->moveSequence("L U L' U L U' L' U' L' B L B'", face, YELLOW);
+                        }
+                    }
+                }
             }
         }
     }
