@@ -17,8 +17,6 @@ class IsometricCubeWidget : public QWidget
 
 public:
     IsometricCubeWidget(Cube c, QWidget *parent = 0);
-    void mousePressEvent(QMouseEvent *e);
-    void paintEvent(QPaintEvent*);
     void setCube(Cube c);
     void setCubeMatrix(int matrix[18][3]);
     void changeOrientation(QChar axe, int nbQ);
@@ -34,6 +32,9 @@ public:
 private:
     bool config;
 
+    //Tools
+    Cube *cube;
+    int displayCube[18][3];
     Face *faceU;
     Face *faceF;
     Face *faceB;
@@ -41,6 +42,8 @@ private:
     Face *faceL;
     Face *faceD;
 
+    //Display
+    QFont rdFont;
     QPolygon plgnUp[3][3];
     QPolygon plgnFront[3][3];
     QPolygon plgnRight[3][3];
@@ -51,14 +54,16 @@ private:
     QPoint frontText;
     QPoint backText;
 
-    Cube *cube;
-    int displayCube[18][3];
+
+    // Events methods
+    void mousePressEvent(QMouseEvent *e);
+    void paintEvent(QPaintEvent*);
+
+    // Methods
     QColor getDaCola(QChar face, int x, int y);
     int getValueFromFace(QChar face, int x, int y);
     QColor getQColorFromValue(int color, int alpha = 255);
     void initIsoGrid();
-
-    QFont rdFont;
 
 signals:
     void cubieModified(int x, int y, color c);

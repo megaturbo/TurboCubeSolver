@@ -1,3 +1,6 @@
+/**
+    @author: Thomas Roulin
+*/
 #include "resolutionwidget.h"
 
 #include <QBoxLayout>
@@ -12,65 +15,63 @@ ResolutionWidget::ResolutionWidget(QWidget *parent)
 {
     initDisplay();
     resetDisplay();
-
 }
 
+/**
+ * Refresh the whole widget, show the actual move, reset the buttons, etc...
+ */
 void ResolutionWidget::refreshDisplay()
 {
-
-    QStringList actSequence = CFOPSequence.join(' ').split(' ');
-    int lengthSequence = actSequence.length();
+    int lengthSequence = CFOPlist.length();
 
     if(actMoveID < lengthSequence){
-        actMoveLabel->setText(actSequence.at(actMoveID));
+        actMoveLabel->setText(CFOPlist.at(actMoveID));
     }else{
         actMoveLabel->clear();
     }
 
-    int c_end = CFOPSequence.at(0).split(' ').size();
-    int f_end = CFOPSequence.at(1).split(' ').size() + c_end;
-    int o_end = CFOPSequence.at(2).split(' ').size() + f_end;
-    int p_end = CFOPSequence.at(3).split(' ').size() + o_end;
-
+    // Concat strings
     QString C = "";
     QString F = "";
     QString O = "";
     QString P = "";
-    QString tmp;
-    QString tmp2;
+    QString tmpBefore;
+    QString tmpAfter;
 
     for(int i = 0; i < CFOPlist.size(); i++)
     {
-        tmp = "";
-        tmp2 = " ";
+        tmpBefore = "";
+        tmpAfter = " ";
 
         if(i == actMoveID)
         {
-            tmp += "<b>";
-            tmp2 += "</b>";
+            tmpBefore += "<b>";
+            tmpAfter += "</b>";
         }
 
-        if(i < c_end)
+        if(i < endC)
         {
-            C += tmp + CFOPlist.at(i) + tmp2;
+            C += tmpBefore + CFOPlist.at(i) + tmpAfter;
 
-        }else if(i < f_end)
+        }else if(i < endF)
         {
-            F += tmp + CFOPlist.at(i) + tmp2;
-        }else if(i < o_end)
+            F += tmpBefore + CFOPlist.at(i) + tmpAfter;
+        }else if(i < endO)
         {
-            O += tmp + CFOPlist.at(i) + tmp2;
-        }else if(i < p_end)
+            O += tmpBefore + CFOPlist.at(i) + tmpAfter;
+        }else if(i < endP)
         {
-            P += tmp + CFOPlist.at(i) + tmp2;
+            P += tmpBefore + CFOPlist.at(i) + tmpAfter;
         }
     }
 
+    // Refresh label content
     crossLabel->setText(C);
     f2lLabel->setText(F);
     ollLabel->setText(O);
     pllLabel->setText(P);
 
+    // Enable/disable the buttons which should be.
     if(actMoveID > 0)
     {
         pastMovePB->setEnabled(true);
@@ -85,6 +86,9 @@ void ResolutionWidget::refreshDisplay()
     }
 }
 
+/**
+ * Go back one move
+ */
 void ResolutionWidget::pastMove()
 {
     if(pastMovePB->isEnabled())
@@ -95,19 +99,22 @@ void ResolutionWidget::pastMove()
     }
 }
 
+/**
+ * Do the next move
+ */
 void ResolutionWidget::nextMove()
 {
     if(nextMovePB->isEnabled())
     {
         emit sendMove(CFOPlist.at(actMoveID));
         actMoveID++;
-//        do{
-//            actMoveID++;
-//        }while(CFOPlist.at(actMoveID) == "");
         refreshDisplay();
     }
 }
 
+/**
+ * Create the whole display, instanciate all the QObjects, Layouts and GroupBoxes
+ */
 void ResolutionWidget::initDisplay()
 {
     QString rdDefault = QFontDatabase::applicationFontFamilies(QFontDatabase::addApplicationFont(":/Fonts/reservoirdogs.ttf")).at(0);
@@ -132,6 +139,7 @@ void ResolutionWidget::initDisplay()
     f2lLabel = new QLabel(this);
     ollLabel = new QLabel(this);
     pllLabel = new QLabel(this);
+    nbMovesLabel = new QLabel(this);
 
     crossLabel->setMinimumWidth(300);
     f2lLabel->setMinimumWidth(300);
@@ -142,6 +150,7 @@ void ResolutionWidget::initDisplay()
     QVBoxLayout *cfopLayout = new QVBoxLayout();
     QHBoxLayout *mainLayout = new QHBoxLayout();
     QHBoxLayout *cfopInformationLayout = new QHBoxLayout();
+    QVBoxLayout *infoLayout = new QVBoxLayout();
 
     cfopLayout->addWidget(crossLabel);
     cfopLayout->addWidget(f2lLabel);
@@ -149,7 +158,11 @@ void ResolutionWidget::initDisplay()
     cfopLayout->addWidget(pllLabel);
 
     cfopInformationLayout->addLayout(cfopLayout);
-    cfopInformationLayout->addWidget(infoPB);
+
+    infoLayout->addWidget(nbMovesLabel);
+    infoLayout->addWidget(infoPB);
+    nbMovesLabel->setFixedWidth(200);
+    cfopInformationLayout->addLayout(infoLayout);
 
     mainLayout->addWidget(pastMovePB);
     mainLayout->addWidget(actMoveLabel);
@@ -169,6 +182,9 @@ void ResolutionWidget::initDisplay()
     this->setLayout(megaMainLayout);
 }
 
+/**
+ * Display a brief information when the information button is pressed by the user.
+ */
 void ResolutionWidget::infoSlot()
 {
     QMessageBox infoBox;
@@ -183,6 +199,10 @@ void ResolutionWidget::infoSlot()
     infoBox.exec();
 }
 
+/**
+ * Receive a new sequence and the refresh the display
+ * @param solveSequence: The actual new sequence
+ */
 void ResolutionWidget::newSolveSequence(QString solveSequence)
 {
     actMoveID = 0;
@@ -196,12 +216,21 @@ void ResolutionWidget::newSolveSequence(QString solveSequence)
         cfop[i].remove(0, 1);
     }
 
+    // Get each part of CFOP sequence
     CFOPSequence.append(cfop.at(0));
     CFOPSequence.append(cfop.at(1).split('|').join(' '));  // cuz f2l 4 pairs
     CFOPSequence.append(cfop.at(2));
     CFOPSequence.append(cfop.at(3));
 
+    // I created a list too, because i need it to display the actual move
     CFOPlist = CFOPSequence.join(' ').split(' ');
+
+    endC = CFOPSequence.at(0).split(' ').size();
+    endF = CFOPSequence.at(1).split(' ').size() + endC;
+    endO = CFOPSequence.at(2).split(' ').size() + endF;
+    endP = CFOPSequence.at(3).split(' ').size() + endO;
+
+    nbMovesLabel->setText("Solution found in <b>"+QString::number(CFOPlist.size()) + "</b> moves");
 
     refreshDisplay();
 }
@@ -215,6 +244,7 @@ void ResolutionWidget::resetDisplay()
     f2lLabel->clear();
     ollLabel->clear();
     pllLabel->clear();
+    nbMovesLabel->clear();
     pastMovePB->setDisabled(true);
     nextMovePB->setDisabled(true);
 }

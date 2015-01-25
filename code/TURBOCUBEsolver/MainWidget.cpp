@@ -126,10 +126,10 @@ MainWidget::MainWidget(QWidget *parent) :
 
     // Display settings
     this->setLayout(MainLayout);
-    this->resize(1000,600);
 
     isometricCubeWidget->setOrientation(YELLOW, RED);
 
+    this->setWindowFlags(Qt::WindowMinimizeButtonHint | Qt::WindowCloseButtonHint);
     this->show();
 }
 

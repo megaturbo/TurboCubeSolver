@@ -16,6 +16,7 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
 
     MainWidget mainWidget;
+    mainWidget.setFixedSize(mainWidget.width(), mainWidget.height());
     mainWidget.show();
 
     return a.exec();
