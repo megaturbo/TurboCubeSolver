@@ -26,7 +26,6 @@ HEADERS  += \
     MainWidget.h \
     ResolutionWidget.h
 
-FORMS    += TurboCubeSolver.ui
 
 RC_FILE = myapp.rc
 
