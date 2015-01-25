@@ -26,8 +26,8 @@ void Fridrich::clean2Sequences(QString &sequenceLeft, QString &sequenceRight)
 {
     if(!sequenceLeft.isEmpty() && !sequenceRight.isEmpty()){
 
-        Cube::cleanSequence(sequenceLeft);
-        Cube::cleanSequence(sequenceRight);
+//        Cube::cleanSequence(sequenceLeft);
+//        Cube::cleanSequence(sequenceRight);
 
         //getting the moves
         QStringList movesLeft = sequenceLeft.split(' ');
@@ -99,7 +99,7 @@ void Fridrich::cleanSequence(QStringList &sequence){
         //cleaning those sequences
         clean2Sequences(left, right);
 
-        //and putting the new sequences into the qstringlist
+        //and putting the new sequences into the stringlist
         sequence.replace(i, left);
         sequence.replace(i + j, right);
     }
@@ -230,7 +230,9 @@ QStringList Fridrich::fastestF2L(Cube *cube){
                                 PLLSequence += tempCube->turnFace(YELLOW, RED - tempCube->locateCubie(RED, BLUE, YELLOW).at(0) / 3);
                                 FOPsequence += PLLSequence;
                                 //clean sequence
+
                                 cleanSequence(FOPsequence);
+
                                 if(FOPsequence.join("").count(' ') < fewestMovesFOPSequence.join("").count(' ')){
                                     fewestMovesFOPSequence = FOPsequence;
                                 }
@@ -885,7 +887,6 @@ QString Fridrich::PLL2Look(Cube *c){
     return "";
 }
 
-//bugged ?
 QString Fridrich::PLL(Cube *c){
     color cubeMatrix[18][3];
     //this boolean checks if this step is already solved
@@ -895,7 +896,7 @@ QString Fridrich::PLL(Cube *c){
         for (int y = 0; y < 3; ++y) {
             cubeMatrix[x][y] = tempMatrix[x][y];
             //if the adjacent faces don't all have the same color, this step isn't solved yet
-            if(x < 12 && x % 3 == 0 && y == 2 && (cubeMatrix[x][y] != cubeMatrix[x + 1][y] || cubeMatrix[x][y] != cubeMatrix[x + 2][y])){
+            if(x < 12 && x % 3 == 0 && y == 2 && (tempMatrix[x][y] != tempMatrix[x + 1][y] || tempMatrix[x][y] != tempMatrix[x + 2][y])){
                 solved = false;
             }
         }
