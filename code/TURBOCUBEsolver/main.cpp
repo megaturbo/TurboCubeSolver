@@ -8,7 +8,6 @@
 #include <QVBoxLayout>
 #include <QtWidgets>
 #include <QObject>
-#include <Virtual Leak Detector/vld.h>
 #include "MainWidget.h"
 
 using namespace CubeColor;
