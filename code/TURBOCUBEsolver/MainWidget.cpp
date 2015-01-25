@@ -129,8 +129,10 @@ MainWidget::MainWidget(QWidget *parent) :
 
     isometricCubeWidget->setOrientation(YELLOW, RED);
 
+    //These settings
     this->setWindowFlags(Qt::WindowMinimizeButtonHint | Qt::WindowCloseButtonHint);
-    this->show();
+    this->setFixedSize(1000, 800);
+    this->move(QApplication::desktop()->screen()->rect().center() - this->rect().center());
 }
 
 void MainWidget::keyPressEvent(QKeyEvent *e){

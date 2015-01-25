@@ -16,7 +16,8 @@ SOURCES += main.cpp\
     Fridrich.cpp \
     IsometricCubeWidget.cpp \
     MainWidget.cpp \
-    ResolutionWidget.cpp
+    ResolutionWidget.cpp \
+    TurboSplashScreen.cpp
 
 HEADERS  += \
     CubeColor.h \
@@ -24,7 +25,8 @@ HEADERS  += \
     Fridrich.h \
     IsometricCubeWidget.h \
     MainWidget.h \
-    ResolutionWidget.h
+    ResolutionWidget.h \
+    TurboSplashScreen.h
 
 
 RC_FILE = myapp.rc

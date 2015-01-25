@@ -20,5 +20,7 @@
         <file>Pictures/moves/L2.png</file>
         <file>Pictures/moves/R2.png</file>
         <file>Pictures/moves/U2.png</file>
+        <file>Pictures/splash/splash0.png</file>
+        <file>Pictures/splash/splash1.png</file>
     </qresource>
 </RCC>
