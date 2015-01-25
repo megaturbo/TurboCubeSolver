@@ -230,9 +230,7 @@ QStringList Fridrich::fastestF2L(Cube *cube){
                                 PLLSequence += tempCube->turnFace(YELLOW, RED - tempCube->locateCubie(RED, BLUE, YELLOW).at(0) / 3);
                                 FOPsequence += PLLSequence;
                                 //clean sequence
-
                                 cleanSequence(FOPsequence);
-
                                 if(FOPsequence.join("").count(' ') < fewestMovesFOPSequence.join("").count(' ')){
                                     fewestMovesFOPSequence = FOPsequence;
                                 }
