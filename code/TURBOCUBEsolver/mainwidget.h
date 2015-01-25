@@ -27,6 +27,7 @@ private:
     QPushButton *reverseSequencePB;
     QPushButton *cubeInputPB;
     QLineEdit *sequenceLE;
+    QLabel *configModeLabel;
 
     // Orientation menu
     QPushButton *movesPB[6];
