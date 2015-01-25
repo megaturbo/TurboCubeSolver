@@ -33,12 +33,7 @@ void TurboSplashScreen::drawContents(QPainter *painter)
     painter->setPen(QColor(255,136,0));
     painter->setFont(QFont("Arial", 15));
 
-    if(elapsed > displayTime)
-    {
-        elapsed = displayTime-1;
-    }
-
-    QString msg = messages->at(elapsed/(displayTime/messages->size()));
+    QString msg = messages->at(remaining/(displayTime/messages->size()));
 
     painter->drawText(QRect(0, this->height()-50, this->width(), this->height()-80), Qt::AlignHCenter, msg);
 
