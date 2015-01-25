@@ -32,6 +32,8 @@ MainWidget::MainWidget(QWidget *parent) :
 
     sequenceLE->setFocus();
 
+    configModeLabel = new QLabel(this);
+
     //=====     RESOLUTION MENU        =====//
 
     resolutionWidget = new ResolutionWidget();
@@ -39,7 +41,6 @@ MainWidget::MainWidget(QWidget *parent) :
     //=====        RIGHT MENU           =====//
 
     // Instanciation
-//    movesPB = new QPushButton*[6]();
     movesPB[0] = new QPushButton("x", this);
     movesPB[1] = new QPushButton("y", this);
     movesPB[2] = new QPushButton("z", this);
@@ -101,6 +102,7 @@ MainWidget::MainWidget(QWidget *parent) :
 
     // Layout: Total
     MainLayout->addLayout(topLayout);
+    MainLayout->addWidget(configModeLabel);
     MainLayout->addWidget(resolutionWidget);
     MainLayout->addLayout(cubeMenuLayout);
 
@@ -129,8 +131,10 @@ MainWidget::MainWidget(QWidget *parent) :
 
     isometricCubeWidget->setOrientation(YELLOW, RED);
 
-    this->setWindowFlags(Qt::WindowMinimizeButtonHint | Qt::WindowCloseButtonHint);
-    this->show();
+    //These settings
+    this->setWindowFlags(Qt::WindowMinimizeButtonHint | Qt::WindowCloseButtonHint | Qt::MSWindowsFixedSizeDialogHint);
+    this->resize(1000, 800);
+    this->move(QApplication::desktop()->screen()->rect().center() - this->rect().center());
 }
 
 void MainWidget::keyPressEvent(QKeyEvent *e){
@@ -172,6 +176,7 @@ void MainWidget::cubieModified(int x, int y, color c)
 void MainWidget::startCubeInput()
 {
     if(isometricCubeWidget->getConfig()){
+        configModeLabel->clear();
         if(displayedCube->validateCube()){
             isometricCubeWidget->setConfig(false);
             cubeInputPB->setText("Enter &configuration");
@@ -182,6 +187,7 @@ void MainWidget::startCubeInput()
                                      QMessageBox::Ok | QMessageBox::Default);
         }
     } else {
+        configModeLabel->setText("Enter cube configuration by clicking on the cubies above.");
         isometricCubeWidget->setConfig(true);
         cubeInputPB->setText("Confirm &configuration");
         solvePB->setDisabled(true);

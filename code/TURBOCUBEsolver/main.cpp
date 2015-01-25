@@ -8,6 +8,7 @@
 #include <QtWidgets>
 #include <QObject>
 #include "MainWidget.h"
+#include "TurboSplashScreen.h"
 
 using namespace CubeColor;
 
@@ -15,9 +16,22 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
+    int splashDisplayTime = 5000;
+
     MainWidget mainWidget;
-    mainWidget.setFixedSize(mainWidget.width(), mainWidget.height());
-    mainWidget.show();
+    TurboSplashScreen *splashScreen = new TurboSplashScreen(splashDisplayTime);
+    splashScreen->addMessage("Such cube");
+    splashScreen->addMessage("much matrix");
+    splashScreen->addMessage("so rubiks");
+    splashScreen->addMessage("wow");
+
+    splashScreen->show();
+
+    QTimer::singleShot(splashDisplayTime, splashScreen, SLOT(close()));
+
+    //When splash screen is terminated, show the mainwidget.
+    //  You can destroy the splash by clicking on it
+    QObject::connect(splashScreen, SIGNAL(splashTerminated()), &mainWidget, SLOT(show()));
 
     return a.exec();
 }
