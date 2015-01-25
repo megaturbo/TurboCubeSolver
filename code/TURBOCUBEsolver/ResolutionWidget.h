@@ -33,12 +33,16 @@ private:
     QLabel *f2lLabel;
     QLabel *ollLabel;
     QLabel *pllLabel;
+    QLabel *nbMovesLabel;
     QStringList CFOPSequence;
     QStringList CFOPlist;
-    int startF;
-    int startO;
-    int startP;
+
+    // Part sizes
     int actMoveID;
+    int endC;
+    int endF;
+    int endO;
+    int endP;
 
     void initDisplay();
     void refreshDisplay();

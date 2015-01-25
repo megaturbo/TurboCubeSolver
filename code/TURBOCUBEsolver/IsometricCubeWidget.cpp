@@ -52,6 +52,7 @@ private:
     color col;
     int orientation;
 };
+
 /**********************************************************\
 |****************      Constructor     ********************|
 \**********************************************************/
@@ -84,6 +85,10 @@ IsometricCubeWidget::IsometricCubeWidget(Cube c, QWidget *parent)
     rdFont.setPointSize(30);
 }
 
+
+/**********************************************************\
+|****************    Public Methods    ********************|
+\**********************************************************/
 void IsometricCubeWidget::setOrientation(color UP, color FRONT)
 {
     for(int i = 0; i < 4; i++)
@@ -228,6 +233,9 @@ void IsometricCubeWidget::setCubeMatrix(int matrix[18][3])
     this->update();
 }
 
+/**********************************************************\
+|****************    Private Methods   ********************|
+\**********************************************************/
 void IsometricCubeWidget::initIsoGrid()
 {
     int sX, sY;

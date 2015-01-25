@@ -1150,7 +1150,7 @@ QString Fridrich::OLL(Cube *cube){
             case 1:
                 if(botRight == YELLOW){
                     if(adjFront[0] == YELLOW){
-                        return cube->moveSequence("R' U2 R' F R F' y R' U' R' U R' F", (face + 1) % 4, YELLOW);
+                        return cube->moveSequence("R' U2 R' F R F' y R' U' R' U R' F", (color)((face + 1) % 4), YELLOW);
                     }else if(adjLeft[2] == YELLOW){
                         return cube->moveSequence("F' B2 L B' L F U2' F' L B' F", face, YELLOW); //y L' R2 B R' B L U2' L' B M'
                     }

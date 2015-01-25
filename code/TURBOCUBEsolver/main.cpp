@@ -7,7 +7,6 @@
 #include <QVBoxLayout>
 #include <QtWidgets>
 #include <QObject>
-//#include <Virtual Leak Detector/vld.h>
 #include "MainWidget.h"
 
 using namespace CubeColor;
@@ -17,6 +16,7 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
 
     MainWidget mainWidget;
+    mainWidget.setFixedSize(mainWidget.width(), mainWidget.height());
     mainWidget.show();
 
     return a.exec();
