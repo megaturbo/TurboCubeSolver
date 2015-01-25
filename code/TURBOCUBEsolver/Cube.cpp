@@ -228,7 +228,7 @@ void Cube::setSticker(int x, int y, color c)
 color** Cube::getFaceMatrix(QChar face) const{
 
     int firstID;
-    color** faceMatrix;
+    color** faceMatrix = new color*[3];
 
     switch(face.toLatin1())
     {
@@ -254,6 +254,7 @@ color** Cube::getFaceMatrix(QChar face) const{
 
     for(int x = firstID; x < firstID + 3; x++)
     {
+        faceMatrix = new color[3];
         for(int y = 0; y < 3; y++)
         {
             faceMatrix[x][y] = matCube[x][y];
@@ -580,6 +581,8 @@ QString Cube::scramble(int depth)
             break;
         }
 
+        nbQ = qrand() % 3;
+
         // Get nb of quarter turn
         switch(nbQ){
             case 0:
@@ -592,8 +595,6 @@ QString Cube::scramble(int depth)
                 cQ = '\'';
                 break;
         }
-
-        nbQ = qrand() % 3;
 
         // add to scramble
         scrambling += cMove + cQ + ' ';
@@ -645,7 +646,7 @@ void Cube::cleanSequence(QString &sequence){
     QStringList moves = sequence.split(' ');
     QString cleanedSequence = "";
     QString tmp;
-    QString lastMove = "";
+    QString lastMove = "k";
 
     for (int i = 0; i < moves.length(); i++) {
         tmp = moves.at(i);
@@ -680,9 +681,9 @@ void Cube::cleanSequence(QString &sequence){
                 tmp = "";
                 break;
             }
-            lastMove = "";
+            lastMove = "k";
         }
-        if (lastMove.length() > 0) {
+        if (lastMove != "k") {
             cleanedSequence += lastMove + " ";
         }
         lastMove = tmp;
