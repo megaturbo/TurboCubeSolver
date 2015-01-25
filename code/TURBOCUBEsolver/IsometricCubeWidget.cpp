@@ -19,45 +19,38 @@ class Face{
 public:
     // Construct
     Face(color colSrc, int orientationSrc){
-        col = new color;
-        orientation = new int;
-        *col = colSrc;
-        *orientation = orientationSrc;
+        col = colSrc;
+        orientation = orientationSrc;
     }
     Face(const Face &src)
     {
-        col = new color;
-        *col = *src.col;
-        orientation = new int;
-        *orientation = *src.orientation;
+        col = src.col;
+        orientation = src.orientation;
     }
     ~Face()
     {
-        delete col;
-        delete orientation;
-        col = NULL;
-        orientation = NULL;
+
     }
 
     // Getter / Setter
     void setO(int value)
     {
-        *orientation += value;
-        *orientation %= 4;
+        orientation += value;
+        orientation %= 4;
     }
     int getO()
     {
-        return *orientation;
+        return orientation;
     }
     color getC()
     {
-        return *col;
+        return col;
     }
 
 private:
     // Attribs
-    color *col;
-    int *orientation;
+    color col;
+    int orientation;
 };
 /**********************************************************\
 |****************      Constructor     ********************|
@@ -83,6 +76,12 @@ IsometricCubeWidget::IsometricCubeWidget(Cube c, QWidget *parent)
 
     // Use the right cube
     this->setCube(c);
+
+    //init font
+    int id = QFontDatabase::addApplicationFont(":/Fonts/reservoirdogs.ttf");
+    QString family = QFontDatabase::applicationFontFamilies(id).at(0);
+    rdFont.setFamily(family);
+    rdFont.setPointSize(30);
 }
 
 void IsometricCubeWidget::setOrientation(color UP, color FRONT)
@@ -232,7 +231,7 @@ void IsometricCubeWidget::setCubeMatrix(int matrix[18][3])
 void IsometricCubeWidget::initIsoGrid()
 {
     int sX, sY;
-
+    QPoint isogrid[7][7];
 
     for (int y = 0; y < 7 ; y++)
     {
@@ -278,18 +277,24 @@ void IsometricCubeWidget::initIsoGrid()
             plgnLeft[x][y].translate(5.5*W,-1.5*H);
         }
     }
+    shadow.append(isogrid[3][6]);
+    shadow.append(isogrid[5][6]);
+    shadow.append(isogrid[5][3]);
+    shadow.append(isogrid[3][3]);
 
+    frontText = QPoint(isogrid[3][0].rx() + 0.3 * W, 100);
+    backText = QPoint(isogrid[4][0].rx() + 4 * W, 100);
 }
 
 void IsometricCubeWidget::mousePressEvent(QMouseEvent *e){
     if (config) {
-        QChar face = 'r';
-        int matX;
-        int matY;
+        QChar face = 'k';
+        int matX = 0;
+        int matY = 0;
         //Checking each isometric polygon and saving x, y and the face if we find the correct polygon
         int x = 0;
         int y = 0;
-        while(x < 3 && face == 'r')
+        while(x < 3 && face == 'k')
         {
             if(plgnBack[x][y].containsPoint(e->pos(), Qt::OddEvenFill)){
                 face = 'B';
@@ -328,7 +333,7 @@ void IsometricCubeWidget::mousePressEvent(QMouseEvent *e){
         }
 
         //if event->pos() is into a polygon
-        if(face != 'r'){
+        if(face != 'k'){
             //Getting the indices on the cube matrix
             int mx, my;
             // Get the right x and y dependig on the orientation
@@ -338,7 +343,7 @@ void IsometricCubeWidget::mousePressEvent(QMouseEvent *e){
             if(!(mx % 3 == 1 && my == 1)){
                 color mc = UNDEFINED;
                 if(e->button() == Qt::LeftButton){
-                     mc = (color)((displayCube[mx][my] + 1) % 6);
+                    mc = (color)((displayCube[mx][my] + 1) % 6);
                 } else {
                     mc = (color)((displayCube[mx][my] + 5) % 6);
                 }
@@ -349,24 +354,19 @@ void IsometricCubeWidget::mousePressEvent(QMouseEvent *e){
     }
 }
 
-void IsometricCubeWidget::paintEvent(QPaintEvent* event)
+void IsometricCubeWidget::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
 
-    painter.setBackground(Qt::blue);
+//    painter.setBackground(Qt::blue);
 
     // START TITLES
     painter.setPen(Qt::black);
 
-
-    int id = QFontDatabase::addApplicationFont(":/Fonts/reservoirdogs.ttf");
-    QString family = QFontDatabase::applicationFontFamilies(id).at(0);
-    QFont rdFont(family);
-    rdFont.setPointSize(30);
     painter.setFont(rdFont);
 
-    painter.drawText(isogrid[3][0].rx() + 0.3 * W, 100, "FRONT");
-    painter.drawText(isogrid[4][0].rx() + 4 * W, 100, "BACK");
+    painter.drawText(frontText, "FRONT");
+    painter.drawText(backText, "BACK");
 
     // END TITLES
 
@@ -374,15 +374,10 @@ void IsometricCubeWidget::paintEvent(QPaintEvent* event)
     painter.setPen(Qt::transparent);
     painter.setBrush(Qt::lightGray);
 
-    QPolygon shadow;
-    shadow.append(isogrid[3][6]);
-    shadow.append(isogrid[5][6]);
-    shadow.append(isogrid[5][3]);
-    shadow.append(isogrid[3][3]);
     painter.drawPolygon(shadow);
 
-    shadow.translate(4 * W, 0);
-    //painter.drawPolygon(shadow);
+//    shadow.translate(4 * W, 0);
+//    painter.drawPolygon(shadow);
 
     // END SHADOW
 
@@ -420,11 +415,8 @@ void IsometricCubeWidget::paintEvent(QPaintEvent* event)
             painter.setBrush(getDaCola('D', x, y));
             painter.drawPolygon(plgnDown[x][y]);
 
-
         }
     }
-
-
 }
 
 QColor IsometricCubeWidget::getDaCola(QChar face, int x, int y)
@@ -477,7 +469,7 @@ void IsometricCubeWidget::getMXMY(int x, int y, int &mx, int &my, QChar face)
         break;
     }
 
-    mx = mx+actFace->getC()*3;
+    mx = mx + actFace->getC()*3;
 }
 bool IsometricCubeWidget::getConfig() const
 {

@@ -6,7 +6,15 @@ MainWidget::MainWidget(QWidget *parent) :
 {
 
     // Set the displayCube solved
-    initSolvedCube();
+    color solvedMatrix[18][3];
+
+    for (int x = 0; x < 18; ++x) {
+        for (int y = 0; y < 3; ++y) {
+            solvedMatrix[x][y] = (color)(x / 3);
+        }
+    }
+    displayedCube = new Cube(solvedMatrix);
+//    initSolvedCube();
 
     // Display widget
     isometricCubeWidget = new IsometricCubeWidget(*displayedCube);
@@ -31,7 +39,7 @@ MainWidget::MainWidget(QWidget *parent) :
     //=====        RIGHT MENU           =====//
 
     // Instanciation
-    movesPB = new QPushButton*[6]();
+//    movesPB = new QPushButton*[6]();
     movesPB[0] = new QPushButton("x", this);
     movesPB[1] = new QPushButton("y", this);
     movesPB[2] = new QPushButton("z", this);
@@ -219,7 +227,7 @@ void MainWidget::initSolvedCube()
             solvedMatrix[x][y] = (color)(x / 3);
         }
     }
-    displayedCube = new Cube(solvedMatrix);
+    displayedCube->setMatrix(solvedMatrix);
 }
 
 void MainWidget::reverseSequenceSlot()
@@ -237,15 +245,24 @@ void MainWidget::resetSlot()
 
 void MainWidget::scrambleSlot()
 {
-    sequenceLE->setText(displayedCube->scramble(5));
+    resolutionWidget->resetDisplay();
+    sequenceLE->setText(displayedCube->scramble(25));
     isometricCubeWidget->setCube(*displayedCube);
 }
 
 void MainWidget::solveSlot()
 {
     Cube *tmpCube = new Cube(*displayedCube);
-    resolutionWidget->newSolveSequence(Fridrich::solve(tmpCube));
+    Cube *tmpCube2 = new Cube(*displayedCube);
+
+    QString solv = Fridrich::solve(tmpCube);
+    QString fastSolv = Fridrich::fastestFridrichSolve(tmpCube2);
+
     delete tmpCube;
+    delete tmpCube2;
+
+    resolutionWidget->newSolveSequence(fastSolv);
+
     isometricCubeWidget->setOrientation(YELLOW, RED);
 }
 

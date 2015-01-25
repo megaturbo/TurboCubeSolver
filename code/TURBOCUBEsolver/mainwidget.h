@@ -33,7 +33,7 @@ private:
     QLineEdit *sequenceLE;
 
     // Orientation menu
-    QPushButton **movesPB;
+    QPushButton *movesPB[6];
 
     Cube *displayedCube;
 

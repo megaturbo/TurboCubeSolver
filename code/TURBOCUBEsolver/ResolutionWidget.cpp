@@ -19,7 +19,7 @@ void ResolutionWidget::refreshDisplay()
 {
 
     QStringList actSequence = CFOPSequence.join(' ').split(' ');
-    int lengthSequence = actSequence.   length();
+    int lengthSequence = actSequence.length();
 
     if(actMoveID < lengthSequence){
         actMoveLabel->setText(actSequence.at(actMoveID));
@@ -77,7 +77,7 @@ void ResolutionWidget::refreshDisplay()
     }else{
         pastMovePB->setDisabled(true);
     }
-    if(actMoveID >= lengthSequence )
+    if(actMoveID >= lengthSequence)
     {
         nextMovePB->setDisabled(true);
     }else{
@@ -101,6 +101,9 @@ void ResolutionWidget::nextMove()
     {
         emit sendMove(CFOPlist.at(actMoveID));
         actMoveID++;
+//        do{
+//            actMoveID++;
+//        }while(CFOPlist.at(actMoveID) == "");
         refreshDisplay();
     }
 }
@@ -201,7 +204,6 @@ void ResolutionWidget::newSolveSequence(QString solveSequence)
     CFOPlist = CFOPSequence.join(' ').split(' ');
 
     refreshDisplay();
-
 }
 
 void ResolutionWidget::resetDisplay()

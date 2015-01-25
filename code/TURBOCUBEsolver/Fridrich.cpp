@@ -9,96 +9,307 @@ QString Fridrich::solve(Cube *cube){
     QString step2 = F2L(cube);
     QString step3 = OLL2Look(cube);
     step3 += OLL2Look(cube); //2-look OLL
-    QString step4 = PLL2Look(cube);
-    step4 += PLL2Look(cube); //2-look PLL
-    //QString step4 = PLL(cube);
+    //    QString step4 = PLL2Look(cube);
+    //    step4 += PLL2Look(cube); //2-look PLL
+
+    QString step4 = PLL(cube); //1-look PLL might still be buggy
+
     //positionning the solved YELLOW face
     step4 += cube->turnFace(YELLOW, RED - cube->locateCubie(RED, BLUE, YELLOW).at(0) / 3);
     step1.chop(1);
     step3.chop(1);
     step4.chop(1);
-    //    qDebug() << "Cross: " << step1 << step1.count(' ') << " moves.";
-    //    qDebug() << "F2L: " << step2 << step2.count(' ') << " moves.";
-    //    qDebug() << "OLL: " << step3 << step3.count(' ') << " moves.";
-    //    qDebug() << "PLL: " << step4 << step4.count(' ') << " moves.";
-    //    qDebug() << "Total moves to solve: " << step1.count(' ') + step2.count(' ') + step3.count(' ') + step4.count(' ');
     return "[" + step1 + "][" + step2 + "][" + step3 + "][" + step4 + "]";
 }
 
-QString Fridrich::crossEdge(Cube *cube, int firstEdgeColor)
+void Fridrich::clean2Sequences(QString &sequenceLeft, QString &sequenceRight)
+{
+    if(!sequenceLeft.isEmpty() && !sequenceRight.isEmpty()){
+
+//        Cube::cleanSequence(sequenceLeft);
+//        Cube::cleanSequence(sequenceRight);
+
+        //getting the moves
+        QStringList movesLeft = sequenceLeft.split(' ');
+        QStringList movesRight = sequenceRight.split(' ');
+        //as each move is followed by a space, the movesLeft and right ends with an empty string. This doesn't matter for the right one but it does for the left one
+        movesLeft.removeLast();
+        //getting the needed moves
+        QString left = movesLeft.last();
+        QString right = movesRight.first();
+        //if the last move of the left sequence and the first move of the right one are on the same face, we can simplify them into only one or zero move
+        if(left.at(0) == right.at(0)){
+            int nbQTurn = 2;
+            if(right.length() > 1) {
+                if(right[1]=='2') {
+                    nbQTurn += 1;
+                } else {
+                    nbQTurn += 2;
+                }
+            }
+            if (left.length() > 1) {
+                if (left[1]=='2') {
+                    nbQTurn += 1;
+                } else {
+                    nbQTurn += 2;
+                }
+            }
+            nbQTurn %= 4;
+            switch(nbQTurn){
+            case 1:
+                right = right[0];
+                break;
+            case 2:
+                right = right[0] + "2";
+                break;
+            case 3:
+                right = right[0] + "\'";
+                break;
+            default:
+                right = "";
+                break;
+            }
+            //removing the last left move because it will be merged into the right sequence
+            movesLeft.removeLast();
+            sequenceLeft = movesLeft.join(" ");
+            sequenceLeft += " ";
+
+            //if the new move is empty, we remove the old one, else we replace the old move with it
+            if(right != ""){
+                movesRight.replace(0, right);
+            } else {
+                movesRight.removeFirst();
+            }
+            sequenceRight = movesRight.join(" ");
+        }
+    }
+}
+
+void Fridrich::cleanSequence(QStringList &sequence){
+    for(int i = 0; i < sequence.length() - 1; i++)
+    {
+        QString left = sequence.at(i);
+        QString right;
+        int j = 0;
+        do{
+            //if the sequence directly on the right of the left one is empty, we check the next one and so on
+            right = sequence.at(i + ++j);
+        }while(right.isEmpty() && i + j < sequence.length() - 1);
+
+        //cleaning those sequences
+        clean2Sequences(left, right);
+
+        //and putting the new sequences into the stringlist
+        sequence.replace(i, left);
+        sequence.replace(i + j, right);
+    }
+}
+
+void Fridrich::statFastSolve(){
+    color solvedMatrix[18][3];
+    QString testSequence;
+    int testResults[70];
+    for (int x = 0; x < 18; ++x) {
+        for (int y = 0; y < 3; ++y) {
+            solvedMatrix[x][y] = (color)(x / 3);
+        }
+    }
+    for (int i = 0; i < 10; ++i) {
+        Cube *testCube = new Cube(solvedMatrix);
+        testCube->scramble();
+        testSequence = fastestFridrichSolve(testCube);
+        testResults[testSequence.count(' ')]++;
+        delete testCube;
+    }
+    QString s = "";
+    for (int i = 0; i < 70; ++i) {
+        s += QString::number(i) + " ";
+    }
+    s += "\n";
+    for (int i = 0; i < 70; ++i) {
+        s += QString::number(testResults[i]) + " ";
+    }
+    qDebug() << s;
+}
+
+QString Fridrich::fastestFridrichSolve(Cube *cube){
+    //we only call the cross because it calls FOP
+    return fastestCross(cube);
+}
+
+QString Fridrich::fastestCross(Cube *cube){
+    QStringList fewestMovesCFOPSequence;
+    for (int i = 0; i < 100; ++i) {
+        fewestMovesCFOPSequence += "U ";
+    }
+    //Solving the 4 cubies {WHITE, RED}, {WHITE, ORANGE}, {WHITE, GREEN}, {WHITE, BLUE} in every possible order
+    for (int color1 = 0; color1 < 4; color1++) {
+        for (int color2 = 0; color2 < 4; ++color2) {
+            if(color2 != color1){
+                for (int color3 = 0; color3 < 4; ++color3){
+                    if(color3 != color2 && color3 != color1){
+                        for (int color4 = 0; color4 < 4; ++color4) {
+                            if(color4 != color3 && color4 != color2 && color4 != color1){
+                                Cube *tempCube = new Cube(*cube);
+                                QList<color> *solved = new QList<color>();
+                                QString sequence = "";
+                                sequence += crossEdge(tempCube, color1, solved);
+                                sequence += crossEdge(tempCube, color2, solved);
+                                sequence += crossEdge(tempCube, color3, solved);
+                                sequence += crossEdge(tempCube, color4, solved);
+                                sequence += tempCube->turnFace(WHITE, tempCube->locateCubie(WHITE, RED).at(2) / 3 - RED);
+                                //For each possibility of doing the cross, we do FOP and then keep as a definitive sequence the fastest way of solving the cube
+                                QStringList CFOP;
+                                CFOP.append(sequence);
+                                CFOP.append(fastestF2L(tempCube));
+                                cleanSequence(CFOP);
+                                if(CFOP.join("").count(' ') < fewestMovesCFOPSequence.join("").count(' ')){
+                                    fewestMovesCFOPSequence = CFOP;
+                                }
+                                delete solved;
+                                delete tempCube;
+                                tempCube = 0;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    cube->moveSequence(fewestMovesCFOPSequence.join(""), RED, YELLOW);
+    //Constructing the string used by the resolution widget, each step is bracketed and the F2P pairs are separated with |
+    QString ret = "[" + fewestMovesCFOPSequence.at(0);
+    if(ret.endsWith(" ")){
+        ret.chop(1);
+    }
+    ret += "][";
+    for (int i = 1; i < 5; i++) {
+        ret += fewestMovesCFOPSequence.at(i);
+        if(ret.endsWith(" ")){
+            ret.chop(1);
+        }
+        ret += "|";
+    }
+    ret.chop(1);
+    ret += "][" + fewestMovesCFOPSequence.at(5) + fewestMovesCFOPSequence.at(6);
+    if(ret.endsWith(" ")){
+        ret.chop(1);
+    }
+    ret += "][" + fewestMovesCFOPSequence.at(7);
+    if(ret.endsWith(" ")){
+        ret.chop(1);
+    }
+    ret += "]";
+
+    return ret;
+}
+
+QStringList Fridrich::fastestF2L(Cube *cube){
+    QStringList fewestMovesFOPSequence;
+    for (int i = 0; i < 50; ++i) {
+        fewestMovesFOPSequence += "F2 L ";
+    }
+    for (int color1 = 0; color1 < 4; color1++) { //Solving the 4 pairs of cubies {{WHITE, RED, BLUE}, {RED BLUE}},
+        //{{WHITE, BLUE, ORANGE}, {BLUE, ORANGE}}, {{WHITE, ORANGE, GREEN}, {ORANGE, GREEN}},
+        //{{WHITE, GREEN, RED}, {GREEN, RED}}
+        for (int color2 = 0; color2 < 4; ++color2) {
+            if(color2 != color1){
+                for (int color3 = 0; color3 < 4; ++color3){
+                    if(color3 != color2 && color3 != color1){
+                        for (int color4 = 0; color4 < 4; ++color4) {
+                            if(color4 != color3 && color4 != color2 && color4 != color1){
+                                Cube *tempCube = new Cube(*cube);
+                                QStringList FOPsequence;
+                                FOPsequence += F2LPair(tempCube, color1);
+                                FOPsequence += F2LPair(tempCube, color2);
+                                FOPsequence += F2LPair(tempCube, color3);
+                                FOPsequence += F2LPair(tempCube, color4);
+                                FOPsequence += OLL2Look(tempCube);
+                                FOPsequence += OLL2Look(tempCube);
+                                QString PLLSequence = PLL(tempCube);
+                                PLLSequence += tempCube->turnFace(YELLOW, RED - tempCube->locateCubie(RED, BLUE, YELLOW).at(0) / 3);
+                                FOPsequence += PLLSequence;
+                                //clean sequence
+                                cleanSequence(FOPsequence);
+                                if(FOPsequence.join("").count(' ') < fewestMovesFOPSequence.join("").count(' ')){
+                                    fewestMovesFOPSequence = FOPsequence;
+                                }
+                                delete tempCube;
+                                tempCube = 0;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return fewestMovesFOPSequence;
+}
+
+QString Fridrich::crossEdge(Cube *cube, int firstEdgeColor, QList<color> *solved)
 {
     QString sequenceToSolve = "";
     color edgeColor = (color) firstEdgeColor;
     QList<int> cubieIndices = cube->locateCubie(WHITE, edgeColor); //Locating the cubie
     color faceWhiteSticker = (color) (cubieIndices.at(0) / 3); //face on which the WHITE sticker is
     color faceColorSticker = (color) (cubieIndices.at(2) / 3); //face on which the col sticker is
-    //while the cubie is not at its solved state
-    while(faceWhiteSticker != WHITE || faceColorSticker != edgeColor){
-        //Depending on where the WHITE sticker is:
-        switch(faceWhiteSticker){
-        case YELLOW: //if it's on the YELLOW face
-            sequenceToSolve.append(cube->turnFace(YELLOW, edgeColor - faceColorSticker));
-            sequenceToSolve.append(cube->turnFace(edgeColor, 2));
-            //cubie solved
-            break;
-        case WHITE: //if the WHITE sticker is on the WHITE face but col is not on the right face
-            //Turning this cubie on the yellow face to further solve it
-            sequenceToSolve.append(cube->turnFace(faceColorSticker, 2));
-            break;
-        default: //if the WHITE sticker is not on the WHITE or YELLOW
-            //if it's just on quarter turn away from being correctly placed
-            if(edgeColor == faceColorSticker){
-                //if it's on the right of the face
-                if(cubieIndices.at(2) > faceColorSticker * 3 + 1){
-                    sequenceToSolve.append(cube->turnFace(edgeColor, -1));
-                } else {
-                    sequenceToSolve.append(cube->turnFace(edgeColor, 1));
-                }
-            }
-            //if it is on any of the 4 edges, we turn the face it's on so the white sticker is on the yellow face
-            else if (cubieIndices.at(1) == 1){
-                //if it's on the right of the face
-                if(cubieIndices.at(2) > faceColorSticker * 3 + 1){
-                    sequenceToSolve.append(cube->turnFace(faceColorSticker));
-                    sequenceToSolve.append(cube->turnFace(YELLOW, edgeColor - faceColorSticker));
-                    sequenceToSolve.append(cube->turnFace(faceColorSticker, -1));
-                } else {
-                    sequenceToSolve.append(cube->turnFace(faceColorSticker, -1));
-                    sequenceToSolve.append(cube->turnFace(YELLOW, edgeColor - faceColorSticker));
-                    sequenceToSolve.append(cube->turnFace(faceColorSticker));
-                }
-            }
-            //if the col sticker is on WHITE
-            else if (faceColorSticker == WHITE){
-                //if the WHITE sticker is on col
-                if(faceWhiteSticker == edgeColor){
-                    //we do the corresponding algorithm
-                    sequenceToSolve.append(cube->turnFace(faceWhiteSticker));
-                    sequenceToSolve.append(cube->turnFace(WHITE, -1));
-                    sequenceToSolve.append(cube->turnFace((faceWhiteSticker + 1) % 4, 1));
-                    sequenceToSolve.append(cube->turnFace(WHITE));
-                }
-                else {
-                    //we put the white sticker on yellow
-                    sequenceToSolve.append(cube->turnFace(faceWhiteSticker, 1));
-                    sequenceToSolve.append(cube->turnFace((faceWhiteSticker + 1) % 4, -1));
-                    sequenceToSolve.append(cube->turnFace(YELLOW, -1));
-                    sequenceToSolve.append(cube->turnFace((faceWhiteSticker + 1) % 4, 1));
-                }
-            }
-            //col sticker is on YELLOW
-            else {
-                sequenceToSolve.append(cube->turnFace(YELLOW, edgeColor - faceWhiteSticker + 1));
-                sequenceToSolve.append(cube->turnFace((edgeColor + 1) % 4, 1));
-                sequenceToSolve.append(cube->turnFace(edgeColor, -1));
-                sequenceToSolve.append(cube->turnFace((edgeColor + 1) % 4, -1));
-            }
-            break;
+
+    //Depending on where the WHITE sticker is:
+    switch(faceWhiteSticker){
+    case YELLOW: //if it's on the YELLOW face
+        if(solved->length() != 0){
+            sequenceToSolve.append(cube->turnFace(YELLOW, ((edgeColor - solved->at(0)) + (cube->locateCubie(WHITE, solved->at(0)).at(2) / 3) - faceColorSticker)));
         }
-        cubieIndices = cube->locateCubie(WHITE, edgeColor);
-        faceWhiteSticker = (color) (cubieIndices.at(0) / 3);
-        faceColorSticker = (color) (cubieIndices.at(2) / 3);
+        sequenceToSolve.append(cube->turnFace(cube->locateCubie(WHITE, edgeColor).at(2) / 3, 2));
+        break;
+    case WHITE: //if the WHITE sticker is on the WHITE face but col is not on the right face
+        //if none on the white face are solved
+        if(solved->length() == 0){
+        }
+        //if the cubie is correct relatively to the other edges we are trying to solve
+        else if ((solved->at(0) - edgeColor + 4) % 4 == (cube->locateCubie(WHITE, solved->at(0)).at(2) / 3 - faceColorSticker + 4) % 4){
+        } else {
+            sequenceToSolve.append(cube->turnFace(faceColorSticker, 2));
+            sequenceToSolve.append(cube->turnFace(YELLOW, ((edgeColor - solved->at(0)) + (cube->locateCubie(WHITE, solved->at(0)).at(2) / 3) - faceColorSticker)));
+            sequenceToSolve.append(cube->turnFace(cube->locateCubie(WHITE, edgeColor).at(2) / 3, 2));
+        }
+        break;
+    default: //if the WHITE sticker is not on the WHITE or YELLOW
+        //the edge is on the middle layer
+        if(faceColorSticker < 4){
+            if(solved->length() != 0){
+                sequenceToSolve.append(cube->turnFace(WHITE, ((edgeColor - solved->at(0)) + (cube->locateCubie(WHITE, solved->at(0)).at(2) / 3)) - faceColorSticker));
+            }
+            //if it's on the right of the face
+            if(cubieIndices.at(2) > faceColorSticker * 3 + 1){
+                sequenceToSolve.append(cube->turnFace(cube->locateCubie(WHITE, edgeColor).at(2) / 3, -1));
+            } else {
+                sequenceToSolve.append(cube->turnFace(cube->locateCubie(WHITE, edgeColor).at(2) / 3, 1));
+            }
+        }
+        //the edge is on WHITE
+        else if (faceColorSticker == WHITE){
+            sequenceToSolve.append(cube->turnFace(faceWhiteSticker, 1));
+            if(solved->length() != 0){
+                sequenceToSolve.append(cube->turnFace(WHITE, ((edgeColor - solved->at(0)) + (cube->locateCubie(WHITE, solved->at(0)).at(2) / 3)) - cube->locateCubie(WHITE, edgeColor).at(2) / 3));
+            }
+            sequenceToSolve.append(cube->turnFace((faceWhiteSticker + 1) % 4, 1));
+        }
+        //the edge is on YELLOW
+        else {
+            if(solved->length() != 0){
+                sequenceToSolve.append(cube->turnFace(YELLOW, ((edgeColor - solved->at(0)) + (cube->locateCubie(WHITE, solved->at(0)).at(2) / 3) - faceWhiteSticker)));
+            }
+            sequenceToSolve.append(cube->turnFace(cube->locateCubie(WHITE, edgeColor).at(0) / 3, -1));
+            if(solved->length() != 0){
+                sequenceToSolve.append(cube->turnFace(WHITE, ((edgeColor - solved->at(0)) + (cube->locateCubie(WHITE, solved->at(0)).at(2) / 3)) - cube->locateCubie(WHITE, edgeColor).at(2) / 3));
+            }
+            sequenceToSolve.append(cube->turnFace(cube->locateCubie(WHITE, edgeColor).at(2) / 3, 1));
+        }
+        break;
     }
+    solved->append(edgeColor);
+
     return sequenceToSolve;
 }
 
@@ -428,14 +639,17 @@ QString Fridrich::cross(Cube *cube){
                         for (int color4 = 0; color4 < 4; ++color4) {
                             if(color4 != color3 && color4 != color2 && color4 != color1){
                                 Cube *tempCube = new Cube(*cube);
+                                QList<color> *solved = new QList<color>();
                                 QString sequence = "";
-                                sequence += crossEdge(tempCube, color1);
-                                sequence += crossEdge(tempCube, color2);
-                                sequence += crossEdge(tempCube, color3);
-                                sequence += crossEdge(tempCube, color4);
+                                sequence += crossEdge(tempCube, color1, solved);
+                                sequence += crossEdge(tempCube, color2, solved);
+                                sequence += crossEdge(tempCube, color3, solved);
+                                sequence += crossEdge(tempCube, color4, solved);
+                                sequence += tempCube->turnFace(WHITE, tempCube->locateCubie(WHITE, RED).at(2) / 3 - RED);
                                 if(sequence.count(' ') < fewestMovesSequence.count(' ')){
                                     fewestMovesSequence = sequence;
                                 }
+                                delete solved;
                                 delete tempCube;
                                 tempCube = 0;
                             }
@@ -596,14 +810,14 @@ QString Fridrich::OLL2Look(Cube *cube){
         else if ((cubeMatrix[YELLOW * 3 + 1][0] == YELLOW && cubeMatrix[YELLOW * 3 + 1][2] == YELLOW) || (cubeMatrix[YELLOW * 3 + 0][1] == YELLOW && cubeMatrix[YELLOW * 3 + 2][1] == YELLOW)) {
             //horizontal line
             if(cubeMatrix[face * 3 + 1][2] == YELLOW){
-                return cube->moveSequence("L' B' L U' R' U R U' R' U R L' B L", face, YELLOW);
+                return cube->moveSequence("F R U R' U' F'", face, YELLOW);
             }
         }
         //other cases
         else {
             //little L yellow left and up
             if (cubeMatrix[face * 3 + 1][2] == YELLOW && cubeMatrix[((face + 1) % 4) * 3 + 1][2] != YELLOW){
-                return cube->moveSequence("F R U R' U' R U R' U' F'", face, YELLOW);
+                return cube->moveSequence("F U R U' R' F'", face, YELLOW);
             }
         }
     }
@@ -655,7 +869,7 @@ QString Fridrich::PLL2Look(Cube *c){
                 }
                 //the 4 edges are diagonally swapped
                 else if (cubeMatrix[((face + 3) % 4) * 3 + 1][2] == cubeMatrix[face* 3][2] && cubeMatrix[((face + 3) % 4) * 3][2] == cubeMatrix[face * 3 + 1][2]) {
-                    return c->moveSequence("R' U' R2 U R U R' U' R U R U' R U' R' U2", face, YELLOW);
+                    return c->moveSequence("R' U' R2 U R U R' U' R U R U' R U' R'", face, YELLOW);
                 }
             }
             //2 corners are inverted
@@ -671,7 +885,6 @@ QString Fridrich::PLL2Look(Cube *c){
     return "";
 }
 
-//bugged
 QString Fridrich::PLL(Cube *c){
     color cubeMatrix[18][3];
     //this boolean checks if this step is already solved
@@ -681,7 +894,7 @@ QString Fridrich::PLL(Cube *c){
         for (int y = 0; y < 3; ++y) {
             cubeMatrix[x][y] = tempMatrix[x][y];
             //if the adjacent faces don't all have the same color, this step isn't solved yet
-            if(x < 12 && x % 3 == 0 && y == 2 && (cubeMatrix[x][y] != cubeMatrix[x + 1][y] || cubeMatrix[x][y] != cubeMatrix[x + 2][y])){
+            if(x < 12 && x % 3 == 0 && y == 2 && (tempMatrix[x][y] != tempMatrix[x + 1][y] || tempMatrix[x][y] != tempMatrix[x + 2][y])){
                 solved = false;
             }
         }
@@ -717,7 +930,7 @@ QString Fridrich::PLL(Cube *c){
                 }
                 //the 4 edges are diagonally swapped
                 else if (cubeMatrix[((face + 3) % 4) * 3 + 1][2] == cubeMatrix[face* 3][2] && cubeMatrix[((face + 3) % 4) * 3][2] == cubeMatrix[face * 3 + 1][2]) {
-                    return c->moveSequence("R' U' R2 U R U R' U' R U R U' R U' R' U2", face, YELLOW);
+                    return c->moveSequence("R' U' R2 U R U R' U' R U R U' R U' R'", face, YELLOW);
                 }
             }
             //2 corners are inverted
@@ -750,14 +963,14 @@ QString Fridrich::PLL(Cube *c){
                     }
                     //edge from right face on evaluated face
                     else if(cubeMatrix[face * 3 + 1][2] == cubeMatrix[((face + 3) % 4) * 3 + 2][2]){
-                        return c->moveSequence("R' U2 R U2 R' F R U R' U' R' F' R2 U'", face, YELLOW);
+                        return c->moveSequence("R' U2 R U2 R' F R U R' U' R' F' R2", face, YELLOW);
                     }
                 }
                 //edge from evaluated face on the left
                 else if(cubeMatrix[face * 3][2] == cubeMatrix[((face + 1) % 4) * 3 + 1][2]){
                     //edge from left on the evaluated face
                     if(cubeMatrix[face * 3 + 1][2] == cubeMatrix[((face + 1) % 4) * 3][2]){
-                        return c->moveSequence("L U2 L' U2 L F' L' U' L U L F L2 U", face, YELLOW);
+                        return c->moveSequence("L U2 L' U2 L F' L' U' L U L F L2", face, YELLOW);
                     }
                     //edge from opposite face on evaluated face
                     else if(cubeMatrix[face * 3 + 1][2] == cubeMatrix[((face + 1) % 4) * 3 + 2][2]){
@@ -776,11 +989,11 @@ QString Fridrich::PLL(Cube *c){
                     }
                     //edge from opposite face on right face
                     else if(cubeMatrix[((face + 3) % 4) * 3 + 1][2] == cubeMatrix[((face + 3) % 4) * 3][2]){
-                        return c->moveSequence("R U R' F' R U R' U' R' F R2 U' R' U'", (color)((face + 3) % 4), YELLOW);
+                        return c->moveSequence("R U R' F' R U R' U' R' F R2 U' R'", (color)((face + 3) % 4), YELLOW);
                     }
                     //edge from opposite face on left face
                     else if(cubeMatrix[((face + 1) % 4) * 3 + 1][2] == cubeMatrix[((face + 1) % 4) * 3 + 2][2]){
-                        return c->moveSequence("L' U' L F L' U' L U L F' L2 U L U", (color)((face + 1) % 4), YELLOW);
+                        return c->moveSequence("L' U' L F L' U' L U L F' L2 U L", (color)((face + 1) % 4), YELLOW);
                     }
                 }
             }
@@ -804,7 +1017,6 @@ QString Fridrich::PLL(Cube *c){
                 else if(cubeMatrix[face * 3 + 1][2] == cubeMatrix[face * 3][2]){
                     return c->moveSequence("R U' R' U R B U B' R' U' R B' R B R' U R'", face, YELLOW);
                 }
-
             }
             //evaluated face has left corner and edge similar
             else if(cubeMatrix[face * 3 + 1][2] == cubeMatrix[face * 3 + 2][2]){
@@ -818,6 +1030,6 @@ QString Fridrich::PLL(Cube *c){
                 }
             }
         }
-        return "";
     }
+    return "";
 }
