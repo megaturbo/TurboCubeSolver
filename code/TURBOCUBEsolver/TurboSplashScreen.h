@@ -9,8 +9,9 @@ class TurboSplashScreen : public QSplashScreen
 {
     Q_OBJECT
 public:
-    TurboSplashScreen();
+    TurboSplashScreen(int displayTime);
     virtual void mousePressEvent(QMouseEvent *);
+    void addMessage(QString message);
 
 protected:
     virtual void drawContents(QPainter *painter);
@@ -18,9 +19,10 @@ protected:
 private:
     QPixmap *pixmap0;
     QPixmap *pixmap1;
-    QPixmap *actPixmap;
-
     QElapsedTimer timer;
+    QStringList *messages;
+
+    int displayTime;
 
     void closeEvent(QCloseEvent *event);
 

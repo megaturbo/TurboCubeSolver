@@ -16,12 +16,18 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    MainWidget mainWidget;
+    int splashDisplayTime = 5000;
 
-    TurboSplashScreen *splashScreen = new TurboSplashScreen();
+    MainWidget mainWidget;
+    TurboSplashScreen *splashScreen = new TurboSplashScreen(splashDisplayTime);
+    splashScreen->addMessage("Such cube");
+    splashScreen->addMessage("much matrix");
+    splashScreen->addMessage("so rubiks");
+    splashScreen->addMessage("wow");
+
     splashScreen->show();
 
-    QTimer::singleShot(2500, splashScreen, SLOT(close()));
+    QTimer::singleShot(splashDisplayTime, splashScreen, SLOT(close()));
 
     //When splash screen is terminated, show the mainwidget.
     //  You can destroy the splash by clicking on it
