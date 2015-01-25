@@ -3,8 +3,6 @@
 
 #include <QWidget>
 #include <QtWidgets>
-#include "InputWidget.h"
-#include "CubeInputWidget.h"
 #include "IsometricCubeWidget.h"
 #include "Cube.h"
 #include "Fridrich.h"
@@ -18,8 +16,6 @@ public:
     void keyPressEvent(QKeyEvent *e);
 
 private:
-    InputWidget *inputWidget;
-    CubeInputWidget *cubeInputWidget;
     IsometricCubeWidget *isometricCubeWidget;
     ResolutionWidget *resolutionWidget;
 

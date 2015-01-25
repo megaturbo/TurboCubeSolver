@@ -1,7 +1,6 @@
 #include "Fridrich.h"
 #include <QString>
 #include <QStringBuilder>
-#include <cubie.h>
 #include <qdebug.h>
 
 QString Fridrich::solve(Cube *cube){
