@@ -749,10 +749,12 @@ QString Cube::moveSequence(QString sequence, color colorFront, color colorUp) {
 
 //matrix rotations
 QString Cube::U(int nbQuarterTurn, color colorFront, color colorUp) {
+    Q_UNUSED(colorFront);
     return turnFace(colorUp, nbQuarterTurn);
 }
 
 QString Cube::D(int nbQuarterTurn, color colorFront, color colorUp) {
+    Q_UNUSED(colorFront);
     //Defining the face we'll spin relatively to which face are up and front
     color face;
     switch(colorUp){
@@ -770,6 +772,7 @@ QString Cube::D(int nbQuarterTurn, color colorFront, color colorUp) {
 }
 
 QString Cube::B(int nbQuarterTurn, color colorFront, color colorUp) {
+    Q_UNUSED(colorUp);
     //Defining the face we'll spin relatively to which face are up and front
     color face;
     switch(colorFront){
@@ -787,6 +790,7 @@ QString Cube::B(int nbQuarterTurn, color colorFront, color colorUp) {
 }
 
 QString Cube::F(int nbQuarterTurn, color colorFront, color colorUp) {
+    Q_UNUSED(colorUp);
     return turnFace(colorFront, nbQuarterTurn);
 }
 
@@ -832,6 +836,7 @@ QString Cube::L(int nbQuarterTurn, color colorFront, color colorUp) {
     switch(colorFront){
     case YELLOW:
         face = (color) ((colorUp + 3) % 4);
+        break;
     case WHITE:
         face = (color) ((colorUp + 1) % 4);
         break;
