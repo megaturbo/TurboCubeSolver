@@ -132,8 +132,8 @@ MainWidget::MainWidget(QWidget *parent) :
     isometricCubeWidget->setOrientation(YELLOW, RED);
 
     //These settings
-    this->setWindowFlags(Qt::WindowMinimizeButtonHint | Qt::WindowCloseButtonHint);
-    this->setFixedSize(1000, 800);
+    this->setWindowFlags(Qt::WindowMinimizeButtonHint | Qt::WindowCloseButtonHint | Qt::MSWindowsFixedSizeDialogHint);
+    this->resize(1000, 800);
     this->move(QApplication::desktop()->screen()->rect().center() - this->rect().center());
 }
 
