@@ -25,7 +25,8 @@ void ResolutionWidget::refreshDisplay()
     int lengthSequence = CFOPlist.length();
 
     if(actMoveID < lengthSequence){
-        actMoveLabel->setText(CFOPlist.at(actMoveID));
+        QPixmap movePixmap(":Pictures/moves/" + CFOPlist.at(actMoveID) + ".png");
+        actMoveLabel->setPixmap(movePixmap);
     }else{
         actMoveLabel->clear();
     }
@@ -133,6 +134,7 @@ void ResolutionWidget::initDisplay()
     nextMovePB->setFont(rdFont);
     pastMovePB->setFixedSize(100,100);
     actMoveLabel->setFixedSize(100,100);
+    actMoveLabel->setStyleSheet("border-image:url(:Pictures/moves/background.png);");
     nextMovePB->setFixedSize(100,100);
 
     crossLabel = new QLabel(this);
