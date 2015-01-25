@@ -15,6 +15,7 @@ bool Cube::validateCube(){
     //Defining legal cubies and what the location is on the solved cube
     QList<QList<color> > cubies;
     QList<QList<int> > loc;
+
     //CORNERS
     cubies.append(QList<color>()<<WHITE<<RED<<BLUE);
     loc.append(QList<int>()<<14<<2<<2<<0<<3<<0);
@@ -68,17 +69,15 @@ bool Cube::validateCube(){
     int nbSwaps = 0;
 
     //if any one of the legal cubies doesn't exist on the cube, then it is not valid
+    //CORNERS
     for (int i = 0; i < 8; ++i) {
+        //locating the cubie, if it does not exist, then the cube is impossible
         QList<int> indices = copy.locateCubie(cubies.at(i)[0], cubies.at(i)[1], cubies.at(i)[2]);
         if(indices.length() < 1){
             return false;
         }
-        //Swapping corners to count parity
-        QList<int> loca;
-        for (int j = 0; j < indices.length(); ++j) {
-            loca.append(loc.at(i)[j]);
-        }
-        if(!copy.cubieEqual(loca, cubies.at(i)[0], cubies.at(i)[1], cubies.at(i)[2])){
+        //Swapping corners to count parity if the cubie is not at its solved position
+        if(!copy.cubieEqual(loc.at(i), cubies.at(i)[0], cubies.at(i)[1], cubies.at(i)[2])){
             nbSwaps++;
             for (int j = 0; j < 3; ++j) {
                 color save = copy.matCube[loc.at(i)[2 * j]][loc.at(i)[2 * j + 1]];
@@ -88,17 +87,15 @@ bool Cube::validateCube(){
         }
     }
 
+    //EDGES
     for (int i = 8; i < 20; ++i) {
+        //locating the cubie, if it does not exist, then the cube is impossible
         QList<int> indices = copy.locateCubie(cubies.at(i)[0], cubies.at(i)[1]);
         if(indices.length() < 1){
             return false;
         }
-        //Swapping edges to count parity
-        QList<int> loca;
-        for (int j = 0; j < indices.length(); ++j) {
-            loca.append(loc.at(i)[j]);
-        }
-        if(!copy.cubieEqual(loca, cubies.at(i)[0], cubies.at(i)[1])){
+        //Swapping edges to count parity if the cubie is not at its solved position
+        if(!copy.cubieEqual(loc.at(i), cubies.at(i)[0], cubies.at(i)[1])){
             nbSwaps++;
             for (int j = 0; j < 2; ++j) {
                 color save = copy.matCube[loc.at(i)[2 * j]][loc.at(i)[2 * j + 1]];
@@ -144,7 +141,7 @@ bool Cube::validateCube(){
         }
     }
 
-    //if the last corner is flipped
+    //if the last edge is flipped
     if(copy.matCube[loc.at(19)[0]][loc.at(19)[1]] != GREEN){
         return false;
     }
@@ -254,7 +251,7 @@ color** Cube::getFaceMatrix(QChar face) const{
 
     for(int x = firstID; x < firstID + 3; x++)
     {
-        faceMatrix = new color[3];
+//        faceMatrix = new color[3];
         for(int y = 0; y < 3; y++)
         {
             faceMatrix[x][y] = matCube[x][y];
@@ -265,6 +262,7 @@ color** Cube::getFaceMatrix(QChar face) const{
 
 }
 
+//don't forget to delete the matrix returned after use
 color** Cube::getMatrix() const{
     color** mat = new color*[18];
     for (int i = 0; i < 18; ++i) {
@@ -749,8 +747,7 @@ QString Cube::moveSequence(QString sequence, color colorFront, color colorUp) {
     return facesTurned;
 }
 
-//matrix rotation per face
-//TODO: turn faces relatively
+//matrix rotations
 QString Cube::U(int nbQuarterTurn, color colorFront, color colorUp) {
     return turnFace(colorUp, nbQuarterTurn);
 }
@@ -868,12 +865,13 @@ QString Cube::turnFace(int faceToTurn, int nbQuarterTurns) {
     color face = (color) faceToTurn;
     //The string s contains the move done with the YELLOW face up and RIGHT face front
     QString s = "";
-    //defining the indices of the stickers on the face
-    //those will get spinned
+    //reducing nbQuarterTurns to 0, 1, 2 or 3. If 0, we don't do anything and just return an empty string
     nbQuarterTurns = (nbQuarterTurns + 8) % 4;
     if(nbQuarterTurns == 0){
         return "";
     }
+    //defining the indices of the stickers on the face
+    //those will get spinned
     QList<int> indicesFaceX = QList<int>() << face * 3 + 2 <<  face * 3 + 2 <<
                             face * 3 + 1 <<  face * 3 + 2 <<
                             face * 3 <<  face * 3 <<
@@ -1015,7 +1013,7 @@ QString Cube::turnFace(int faceToTurn, int nbQuarterTurns) {
             matCube[indicesX[i + 6]][indicesY[i + 6]] = saveAdjacent[i];
         }
         break;
-    case 3: //3 = -1 % 4
+    case 3:
         s += "'";
         //turning the face
         saveFace[0] = matCube[indicesFaceX[0]][indicesFaceY[0]];
@@ -1047,6 +1045,7 @@ QString Cube::turnFace(int faceToTurn, int nbQuarterTurns) {
     return s;
 }
 
+//returns true if the cubie at the stickers defined by the indices is these colors
 bool Cube::cubieEqual(QList<int> indices, color firstColor, color secondColor) {
     return ((matCube[indices.at(0)][indices.at(1)] == firstColor && matCube[indices.at(2)][indices.at(3)] == secondColor)
          || (matCube[indices.at(0)][indices.at(1)] == secondColor && matCube[indices.at(2)][indices.at(3)] == firstColor));
