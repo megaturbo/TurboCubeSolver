@@ -1,4 +1,3 @@
-#include "turbocubesolver.h"
 #include <QApplication>
 #include <qdebug.h>
 #include <Cube.h>

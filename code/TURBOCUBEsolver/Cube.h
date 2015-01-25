@@ -6,7 +6,6 @@
 #include <Cube.h>
 #include <QList>
 #include <CubeColor.h>
-#include <cubie.h>
 #include <QMatrix>
 
 using namespace CubeColor;

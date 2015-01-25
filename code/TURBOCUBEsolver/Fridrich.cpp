@@ -1,14 +1,13 @@
 #include "Fridrich.h"
 #include <QString>
-#include <QStringBuilder>
-#include <cubie.h>
 #include <qdebug.h>
 
 QString Fridrich::solve(Cube *cube){
     QString step1 = cross(cube);
     QString step2 = F2L(cube);
-    QString step3 = OLL2Look(cube);
-    step3 += OLL2Look(cube); //2-look OLL
+    QString step3 = OLL(cube);
+//    QString step3 = OLL2Look(cube);
+//    step3 += OLL2Look(cube); //2-look OLL
     //    QString step4 = PLL2Look(cube);
     //    step4 += PLL2Look(cube); //2-look PLL
 
@@ -103,33 +102,6 @@ void Fridrich::cleanSequence(QStringList &sequence){
         sequence.replace(i, left);
         sequence.replace(i + j, right);
     }
-}
-
-void Fridrich::statFastSolve(){
-    color solvedMatrix[18][3];
-    QString testSequence;
-    int testResults[70];
-    for (int x = 0; x < 18; ++x) {
-        for (int y = 0; y < 3; ++y) {
-            solvedMatrix[x][y] = (color)(x / 3);
-        }
-    }
-    for (int i = 0; i < 10; ++i) {
-        Cube *testCube = new Cube(solvedMatrix);
-        testCube->scramble();
-        testSequence = fastestFridrichSolve(testCube);
-        testResults[testSequence.count(' ')]++;
-        delete testCube;
-    }
-    QString s = "";
-    for (int i = 0; i < 70; ++i) {
-        s += QString::number(i) + " ";
-    }
-    s += "\n";
-    for (int i = 0; i < 70; ++i) {
-        s += QString::number(testResults[i]) + " ";
-    }
-    qDebug() << s;
 }
 
 QString Fridrich::fastestFridrichSolve(Cube *cube){
@@ -327,8 +299,7 @@ QString Fridrich::F2LPair(Cube *cube, int firstCornerColor)
     color faceSecondEdge = (color) (edgeIndices.at(2) / 3);
     //while the pair of cubies is not at its solved state. The loop is useful
     //because we can reduce complex cases to simpler ones and let the program solve them
-    int loopCounter = 0;
-    while((faceWhiteSticker != WHITE  || faceFirstCorner != firstEdgeColor || faceFirstEdge!= firstEdgeColor || faceSecondEdge!= secondEdgeColor) && loopCounter++ < 50){
+    while(faceWhiteSticker != WHITE  || faceFirstCorner != firstEdgeColor || faceFirstEdge!= firstEdgeColor || faceSecondEdge!= secondEdgeColor){
         //edge cubie on the YELLOW face
         if(faceFirstEdge == YELLOW || faceSecondEdge == YELLOW){
             //corner cubie on the YELLOW face
@@ -621,9 +592,6 @@ QString Fridrich::F2LPair(Cube *cube, int firstCornerColor)
         faceSecondCorner = (color) (cornerIndices.at(4) / 3); //face on which the col2 sticker is
         faceFirstEdge = (color) (edgeIndices.at(0) / 3);
         faceSecondEdge = (color) (edgeIndices.at(2) / 3);
-    }
-    if (loopCounter > 59){
-        qDebug() << "Failure for pair " << firstEdgeColor << secondEdgeColor;
     }
     return sequenceToSolve;
 }
@@ -1028,6 +996,186 @@ QString Fridrich::PLL(Cube *c){
                 else if(cubeMatrix[((face + 1) % 4) * 3 + 1][2] == cubeMatrix[face * 3][2]){
                     return c->moveSequence("F R U' R' U' R U R' F' R U R' U' R' F R F'", face, YELLOW);
                 }
+            }
+        }
+    }
+    return "";
+}
+
+QString Fridrich::OLL(Cube *cube){
+    //copying the matrix
+    color cubeMatrix[18][3];
+    //this boolean checks if this step is already solved
+    bool solved = true;
+    color** tempMatrix = cube->getMatrix();
+    for (int x = 0; x < 18; ++x) {
+        for (int y = 0; y < 3; ++y) {
+            cubeMatrix[x][y] = tempMatrix[x][y];
+            //if x and y are on the YELLOW face and are not YELLOW, this step isn't solved yet
+            if(x >= YELLOW * 3 && cubeMatrix[x][y] != YELLOW){
+                solved = false;
+            }
+        }
+        delete [] tempMatrix[x];
+    }
+    delete [] tempMatrix;
+    //is it solved yet?
+    if(solved){
+        return "";
+    }
+    //the different cases can be seen from all four faces, so the program has to check them four
+    for (int col = 0; col < 4; ++col) {
+        //Face from which the cube is seen
+        color face = (color) col;
+        //The four YELLOW corners, seen from the face we are now evaluating (they aren't all used in the 2-look OLL)
+        color topRight;
+        color topLeft;
+        color botRight;
+        color botLeft;
+        //The four YELLOW edges
+        color top;
+        color bot;
+        color left;
+        color right;
+        color adjFront[3];
+        color adjRight[3];
+        color adjLeft[3];
+        color adjOpp[3];
+        for (int i = 0; i < 3; ++i) {
+            adjFront[i] = cubeMatrix[face * 3 + 2 - i][2];
+            adjRight[i] = cubeMatrix[((face + 3) % 4) * 3 + 2 - i][2];
+            adjLeft[i] = cubeMatrix[((face + 1) % 4) * 3 + 2 - i][2];
+            adjOpp[i] = cubeMatrix[((face + 2) % 4) * 3 + 2 - i][2];
+        }
+        switch(face){
+        case RED:
+            topLeft = cubeMatrix[YELLOW * 3][0];
+            topRight = cubeMatrix[YELLOW * 3 + 2][0];
+            botLeft = cubeMatrix[YELLOW * 3][2];
+            botRight = cubeMatrix[YELLOW * 3 + 2][2];
+            top = cubeMatrix[YELLOW * 3 + 1][0];
+            bot = cubeMatrix[YELLOW * 3 + 1][2];
+            left = cubeMatrix[YELLOW * 3][1];
+            right = cubeMatrix[YELLOW * 3 + 2][1];
+            break;
+        case BLUE:
+            topLeft = cubeMatrix[YELLOW * 3 + 2][0];
+            topRight = cubeMatrix[YELLOW * 3 + 2][2];
+            botLeft = cubeMatrix[YELLOW * 3][0];
+            botRight = cubeMatrix[YELLOW * 3][2];
+            top = cubeMatrix[YELLOW * 3 + 2][1];
+            bot = cubeMatrix[YELLOW * 3][1];
+            left = cubeMatrix[YELLOW * 3 + 1][0];
+            right = cubeMatrix[YELLOW * 3 + 1][2];
+            break;
+        case ORANGE:
+            topLeft = cubeMatrix[YELLOW * 3 + 2][2];
+            topRight = cubeMatrix[YELLOW * 3][2];
+            botLeft = cubeMatrix[YELLOW * 3 + 2][0];
+            botRight = cubeMatrix[YELLOW * 3][0];
+            top = cubeMatrix[YELLOW * 3 + 1][2];
+            bot = cubeMatrix[YELLOW * 3 + 1][0];
+            left = cubeMatrix[YELLOW * 3 + 2][1];
+            right = cubeMatrix[YELLOW * 3][1];
+            break;
+        case GREEN:
+            topRight = cubeMatrix[YELLOW * 3][0];
+            topLeft = cubeMatrix[YELLOW * 3][2];
+            botRight = cubeMatrix[YELLOW * 3 + 2][0];
+            botLeft = cubeMatrix[YELLOW * 3 + 2][2];
+            top = cubeMatrix[YELLOW * 3][1];
+            bot = cubeMatrix[YELLOW * 3 + 2][1];
+            left = cubeMatrix[YELLOW * 3 + 1][2];
+            right = cubeMatrix[YELLOW * 3 + 1][0];
+            break;
+        default:
+            break;
+        }
+        //counting the number of solved corners to check the state of the cube
+        int nbCorner = (topRight == YELLOW) + (topLeft == YELLOW) + (botRight == YELLOW) + (botLeft == YELLOW);
+        int nbEdge = (top == YELLOW) + (bot == YELLOW) + (left == YELLOW) + (right == YELLOW);
+        //The YELLOW face edges are all solved and form a cross
+        if (nbEdge == 4) {
+            //No corner solved yet
+            if(nbCorner == 0) {
+                //The YELLOW stickers on the corners are parallel
+                if(adjFront[0] == YELLOW && adjFront[2] == YELLOW && adjOpp[0] == YELLOW && adjOpp[2] == YELLOW) {
+                    return cube->moveSequence("R U2 R' U' R U R' U' R U' R'", face, YELLOW);
+                }
+                //The YELLOW stickers on the corners are not parallel
+                else if (adjFront[0] == YELLOW && adjOpp[2] == YELLOW && adjRight[0] == YELLOW && adjRight[2] == YELLOW) {
+                    return cube->moveSequence("L U' R' U L' U R U R' U R", face, YELLOW);
+                }
+            }
+            //One corner solved
+            else if (nbCorner == 1){
+                //the bottom left corner on the YELLOW face points outwards
+                if(botRight == YELLOW && adjFront[0] != YELLOW) {
+                    return cube->moveSequence("R' U2 R U R' U R", face, YELLOW);
+                }
+                //the bottom left corner on the YELLOW face points the evaluated face
+                else if (botRight == YELLOW && adjFront[0] == YELLOW) {
+                    return cube->moveSequence("L' U R U' L U R'", face, YELLOW);
+                }
+            }
+            //Two corners solved and diagonal
+            else if((botLeft == YELLOW && topRight == YELLOW) || (botRight == YELLOW && topLeft == YELLOW)){
+                if(adjLeft[2] == YELLOW) {
+                    return cube->moveSequence("R' F' L' F R F' L F", face, YELLOW);
+                }
+            }
+            //Two corners solved not diagonal
+            else if(nbCorner == 2) {
+                //YELLOW stickers are on the evaluated face
+                if (adjFront[0] == YELLOW && adjFront[2] == YELLOW) {
+                    return cube->moveSequence("R2 D R' U2 R D' R' U2 R'", face, YELLOW);
+                }
+                //one YELLOW sticker is on the evaluated face, and the other one is opposite to it
+                else if (adjFront[2] == YELLOW) {
+                    return cube->moveSequence("R' F' L F R F' L' F", face, YELLOW);
+                }
+            }
+        }
+        //Dots
+        else if (nbEdge == 0) {
+            qDebug() << nbCorner;
+            switch(nbCorner){
+            case 0:
+                if(adjLeft[0] == YELLOW && adjLeft[2] == YELLOW && adjRight[0] == YELLOW && adjRight[2] == YELLOW){
+                    return cube->moveSequence("R U B' R B R2 U' R' F R F'", face, YELLOW);
+                } else if (adjFront[0] == YELLOW && adjFront[2] == YELLOW && adjLeft[0] == YELLOW && adjRight[2] == YELLOW){
+                    return cube->moveSequence("R' F R F' U2 R' F R F2 U2 F", face, YELLOW);
+                }
+                break;
+            case 1:
+                if(botRight == YELLOW){
+                    if(adjFront[0] == YELLOW){
+                        return cube->moveSequence("R' U2 R' F R F' y R' U' R' U R' F", (face + 1) % 4, YELLOW);
+                    }else if(adjLeft[2] == YELLOW){
+                        return cube->moveSequence("F' B2 L B' L F U2' F' L B' F", face, YELLOW); //y L' R2 B R' B L U2' L' B M'
+                    }
+                }
+                break;
+            case 2:
+                break;
+            case 4:
+                break;
+            }
+
+//            return cube->moveSequence("R U R' U R' F R F' U2 R' F R F'", face, YELLOW);
+        }
+        //the edge stickers form a YELLOW line on the YELLOW face
+        else if ((left == YELLOW && right == YELLOW) || (top == YELLOW && bot == YELLOW)) {
+            //horizontal line
+            if(left == YELLOW){
+                return cube->moveSequence("F R U R' U' F'", face, YELLOW);
+            }
+        }
+        //other cases
+        else {
+            //little L yellow left and top
+            if (left == YELLOW && top == YELLOW){
+                return cube->moveSequence("F U R U' R' F'", face, YELLOW);
             }
         }
     }
