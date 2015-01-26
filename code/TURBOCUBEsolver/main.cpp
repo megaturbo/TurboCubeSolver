@@ -20,13 +20,6 @@ int main(int argc, char *argv[])
 
     MainWidget mainWidget;
     TurboSplashScreen *splashScreen = new TurboSplashScreen(splashDisplayTime);
-    splashScreen->addMessage("Such cube");
-    splashScreen->addMessage("much matrix");
-    splashScreen->addMessage("so rubiks");
-    splashScreen->addMessage("wow");
-    splashScreen->addMessage("MANY PINK SO AMAZE");
-    splashScreen->addMessage("turbodoge");
-
 
     splashScreen->show();
 
