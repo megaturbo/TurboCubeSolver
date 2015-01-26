@@ -73,6 +73,12 @@ void ResolutionWidget::refreshDisplay()
     ollLabel->setText(O);
     pllLabel->setText(P);
 
+    if(endP == 0)
+    {
+        nbMovesLabel->setText("<b>The cube is already solved.</b>");
+    }
+
+
     // Enable/disable the buttons which should be.
     if(actMoveID > 0)
     {
@@ -212,20 +218,20 @@ void ResolutionWidget::newSolveSequence(QString solveSequence)
     resetDisplay();
     nextMovePB->setEnabled(true);
 
+    solveSequence.chop(1);
     CFOPlist = solveSequence.split(' ');
-    qDebug << "solve received: " << solveSequence;
 
     // Get parts sizes
     endC = CFOPlist.at(0).toInt();
-    endF = CFOPlist.at(1).toInt();
-    endO = CFOPlist.at(2).toInt();
-    endP = CFOPlist.at(3).toInt();
+    endF = CFOPlist.at(1).toInt() + endC;
+    endO = CFOPlist.at(2).toInt() + endF;
+    endP = CFOPlist.at(3).toInt() + endO;
 
     // remove the sizes
-    for(int i = 0; i < 4; i++)
-    {
-        CFOPlist.removeAt(i);
-    }
+    CFOPlist.removeAt(0);
+    CFOPlist.removeAt(0);
+    CFOPlist.removeAt(0);
+    CFOPlist.removeAt(0);
 
     nbMovesLabel->setText("Solution found in <b>"+QString::number(CFOPlist.size()) + "</b> moves");
 
@@ -234,7 +240,6 @@ void ResolutionWidget::newSolveSequence(QString solveSequence)
 
 void ResolutionWidget::resetDisplay()
 {
-    CFOPSequence.clear();
     CFOPlist.clear();
     actMoveLabel->clear();
     crossLabel->clear();
