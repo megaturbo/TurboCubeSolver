@@ -11,8 +11,8 @@ class Fridrich
 public:
     static QString solve(Cube *cube);
     static QString fastestFridrichSolve(Cube *cube);
+    static void test();
 
-    void F2LEdgeYellow(QList<int> edgeIndices, QList<int> cornerIndices, color firstEdgeColor, color faceSecondEdge, Cube *cube, color faceWhiteSticker, color faceFirstEdge, color secondEdgeColor, color faceSecondCorner, QString sequenceToSolve, color faceFirstCorner);
 private:
     //Secondary steps
     static QString crossEdge(Cube *cube, int firstEdgeColor, QList<color> *solved);
@@ -28,7 +28,7 @@ private:
     static QString PLL2Look(Cube *cube);
 
     //fast methods where we try each possible solution and keep the fastest one
-    static QString fastestCross(Cube *cube);
+    static QStringList fastestCross(Cube *cube);
     static QStringList fastestF2L(Cube *cube);
 
     static void cleanSequence(QStringList &sequence);

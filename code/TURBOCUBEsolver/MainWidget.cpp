@@ -28,7 +28,7 @@ MainWidget::MainWidget(QWidget *parent) :
     resetPB = new QPushButton("&Reset", this);
     sequencePB = new QPushButton("Send Sequence", this);
     sequenceLE = new QLineEdit(this);
-    reverseSequencePB = new QPushButton("R", this);
+    reverseSequencePB = new QPushButton("Reverse", this);
 
     sequenceLE->setFocus();
 
@@ -177,17 +177,18 @@ void MainWidget::startCubeInput()
 {
     if(isometricCubeWidget->getConfig()){
         configModeLabel->clear();
-        if(displayedCube->validateCube()){
+        QString message = displayedCube->validateCube();
+        if(message == "true"){
             isometricCubeWidget->setConfig(false);
             cubeInputPB->setText("Enter &configuration");
             solvePB->setEnabled(true);
         } else {
             QMessageBox::information(this, tr("Cube error"),
-                                     tr("The cube you tried to input is in an impossible configuration."),
+                                     message,
                                      QMessageBox::Ok | QMessageBox::Default);
         }
     } else {
-        configModeLabel->setText("Enter cube configuration by clicking on the cubies above.");
+        configModeLabel->setText("Enter cube configuration by clicking directly on the stickers of the cube.");
         isometricCubeWidget->setConfig(true);
         cubeInputPB->setText("Confirm &configuration");
         solvePB->setDisabled(true);
@@ -245,6 +246,11 @@ void MainWidget::resetSlot()
 {
     resolutionWidget->resetDisplay();
 
+
+    if(!isometricCubeWidget->getConfig()){
+        solvePB->setEnabled(true);
+    }
+
     initSolvedCube();
     isometricCubeWidget->setCube(*displayedCube);
 }
@@ -261,19 +267,38 @@ void MainWidget::solveSlot()
     Cube *tmpCube = new Cube(*displayedCube);
     Cube *tmpCube2 = new Cube(*displayedCube);
 
-    QString solv = Fridrich::solve(tmpCube);
-    QString fastSolv = Fridrich::fastestFridrichSolve(tmpCube2);
+//    QString solv = Fridrich::solve(tmpCube);
+//    QString fastSolv = Fridrich::fastestFridrichSolve(tmpCube2);
 
     delete tmpCube;
     delete tmpCube2;
 
-    resolutionWidget->newSolveSequence(fastSolv);
+//    resolutionWidget->newSolveSequence(fastSolv);
+    Fridrich::test();
 
     isometricCubeWidget->setOrientation(YELLOW, RED);
 }
 
 void MainWidget::sendSequenceSlot()
 {
-    displayedCube->moveSequence(sequenceLE->text(), isometricCubeWidget->getFront(), isometricCubeWidget->getUp());
-    isometricCubeWidget->setCube(*displayedCube);
+    if(sequenceLE->text() == "PINK"){
+        solvePB->setDisabled(true);
+        int col[18][3];
+        for (int x = 0; x < 18; ++x) {
+            for (int y = 0; y < 3; ++y) {
+                col[x][y] = PINK;
+            }
+        }
+        displayedCube->setMatrix(col);
+        isometricCubeWidget->setCube(*displayedCube);
+        this->update();
+    } else if (sequenceLE->text() == "TURBO"){
+        QTimer *timer = new QTimer(this);
+        connect(timer, SIGNAL(timeout()), this, SLOT(scrambleSlot()));
+        timer->start(50);
+        QTimer::singleShot(3000, timer, SLOT(stop()));
+    }else{
+        displayedCube->moveSequence(sequenceLE->text(), isometricCubeWidget->getFront(), isometricCubeWidget->getUp());
+        isometricCubeWidget->setCube(*displayedCube);
+    }
 }

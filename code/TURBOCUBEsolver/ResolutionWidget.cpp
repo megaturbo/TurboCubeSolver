@@ -9,6 +9,7 @@
 #include <QDebug>
 #include "Cube.h"
 #include <QMessageBox>
+#include <QDebug>
 
 ResolutionWidget::ResolutionWidget(QWidget *parent)
     : QWidget(parent)
@@ -66,11 +67,29 @@ void ResolutionWidget::refreshDisplay()
         }
     }
 
+    if(C == ""){
+        C = "<b>Already solved</b>";
+    }
+    if(F == ""){
+        F = "<b>Already solved</b>";
+    }
+    if(O == ""){
+        O = "<b>Already solved</b>";
+    }
+    if(P == ""){
+        P = "<b>Already solved</b>";
+    }
     // Refresh label content
     crossLabel->setText(C);
     f2lLabel->setText(F);
     ollLabel->setText(O);
     pllLabel->setText(P);
+
+    if(endP == 0)
+    {
+        nbMovesLabel->setText("<b>The cube is already solved.</b>");
+    }
+
 
     // Enable/disable the buttons which should be.
     if(actMoveID > 0)
@@ -150,16 +169,37 @@ void ResolutionWidget::initDisplay()
 
     QGroupBox *groupBox = new QGroupBox("Resolution", this);
     QVBoxLayout *cfopLayout = new QVBoxLayout();
+    QVBoxLayout *cfopLabelLayout = new QVBoxLayout();
     QHBoxLayout *mainLayout = new QHBoxLayout();
     QHBoxLayout *cfopInformationLayout = new QHBoxLayout();
+    QHBoxLayout *cfopMainLayout = new QHBoxLayout();
     QVBoxLayout *infoLayout = new QVBoxLayout();
+
+    QLabel *crossTitle = new QLabel("Cross", this);
+    QLabel *f2lTitle = new QLabel("F2L", this);
+    QLabel *ollTitle = new QLabel("OLL", this);
+    QLabel *pllTitle = new QLabel("PLL", this);
+
+    crossTitle->setMaximumWidth(50);
+    f2lTitle->setMaximumWidth(50);
+    ollTitle->setMaximumWidth(50);
+    pllTitle->setMaximumWidth(50);
+
+    cfopLabelLayout->addWidget(crossTitle);
+    cfopLabelLayout->addWidget(f2lTitle);
+    cfopLabelLayout->addWidget(ollTitle);
+    cfopLabelLayout->addWidget(pllTitle);
 
     cfopLayout->addWidget(crossLabel);
     cfopLayout->addWidget(f2lLabel);
     cfopLayout->addWidget(ollLabel);
     cfopLayout->addWidget(pllLabel);
 
-    cfopInformationLayout->addLayout(cfopLayout);
+
+    cfopMainLayout->addLayout(cfopLabelLayout);
+    cfopMainLayout->addLayout(cfopLayout);
+
+    cfopInformationLayout->addLayout(cfopMainLayout);
 
     infoLayout->addWidget(nbMovesLabel);
     infoLayout->addWidget(infoPB);
@@ -211,26 +251,20 @@ void ResolutionWidget::newSolveSequence(QString solveSequence)
     resetDisplay();
     nextMovePB->setEnabled(true);
 
-    QStringList cfop = solveSequence.split("]");
-    // remove the first character which is '[' cuz of the string concatenation
-    for(int i = 0; i < cfop.length(); i++)
-    {
-        cfop[i].remove(0, 1);
-    }
+    solveSequence.chop(1);
+    CFOPlist = solveSequence.split(' ');
 
-    // Get each part of CFOP sequence
-    CFOPSequence.append(cfop.at(0));
-    CFOPSequence.append(cfop.at(1).split('|').join(' '));  // cuz f2l 4 pairs
-    CFOPSequence.append(cfop.at(2));
-    CFOPSequence.append(cfop.at(3));
+    // Get parts sizes
+    endC = CFOPlist.at(0).toInt();
+    endF = CFOPlist.at(1).toInt() + endC;
+    endO = CFOPlist.at(2).toInt() + endF;
+    endP = CFOPlist.at(3).toInt() + endO;
 
-    // I created a list too, because i need it to display the actual move
-    CFOPlist = CFOPSequence.join(' ').split(' ');
-
-    endC = CFOPSequence.at(0).split(' ').size();
-    endF = CFOPSequence.at(1).split(' ').size() + endC;
-    endO = CFOPSequence.at(2).split(' ').size() + endF;
-    endP = CFOPSequence.at(3).split(' ').size() + endO;
+    // remove the sizes
+    CFOPlist.removeAt(0);
+    CFOPlist.removeAt(0);
+    CFOPlist.removeAt(0);
+    CFOPlist.removeAt(0);
 
     nbMovesLabel->setText("Solution found in <b>"+QString::number(CFOPlist.size()) + "</b> moves");
 
@@ -239,7 +273,6 @@ void ResolutionWidget::newSolveSequence(QString solveSequence)
 
 void ResolutionWidget::resetDisplay()
 {
-    CFOPSequence.clear();
     CFOPlist.clear();
     actMoveLabel->clear();
     crossLabel->clear();

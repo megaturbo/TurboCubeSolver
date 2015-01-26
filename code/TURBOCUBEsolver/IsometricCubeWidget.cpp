@@ -514,33 +514,9 @@ int IsometricCubeWidget::getValueFromFace(QChar face, int x, int y)
 
 }
 
-QColor IsometricCubeWidget::getQColorFromValue(int color, int alpha)
+QColor IsometricCubeWidget::getQColorFromValue(int col, int alpha)
 {
-    QColor returnColor;
-
-    switch(color){
-    case RED:
-        returnColor = QColor(204,0,0);
-        break;
-    case BLUE:
-        returnColor = QColor(0,153,204);
-        break;
-    case ORANGE:
-        returnColor = QColor(255,136,0);
-        break;
-    case GREEN:
-        returnColor = QColor(102,153,0);
-        break;
-    case WHITE:
-        returnColor = Qt::white;
-        break;
-    case YELLOW:
-        returnColor = QColor(255,219,51);
-        break;
-    case UNDEFINED:
-        returnColor = Qt::gray;
-        break;
-    }
+    QColor returnColor = getQColor((color)col);
 
     returnColor.setAlpha(alpha);
 

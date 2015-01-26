@@ -34,7 +34,6 @@ private:
     QLabel *ollLabel;
     QLabel *pllLabel;
     QLabel *nbMovesLabel;
-    QStringList CFOPSequence;
     QStringList CFOPlist;
 
     // Part sizes
