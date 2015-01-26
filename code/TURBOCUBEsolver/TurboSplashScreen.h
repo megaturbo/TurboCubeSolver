@@ -10,6 +10,7 @@ class TurboSplashScreen : public QSplashScreen
     Q_OBJECT
 public:
     TurboSplashScreen(int displayTime);
+    ~TurboSplashScreen();
     virtual void mousePressEvent(QMouseEvent *);
     void addMessage(QString message);
 

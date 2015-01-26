@@ -34,6 +34,11 @@ TurboSplashScreen::TurboSplashScreen(int displayTime)
     timer.start();
 }
 
+TurboSplashScreen::~TurboSplashScreen()
+{
+
+}
+
 void TurboSplashScreen::drawContents(QPainter *painter)
 {
     int elapsed = timer.elapsed();
