@@ -9,6 +9,7 @@
 #include <QDebug>
 #include "Cube.h"
 #include <QMessageBox>
+#include <QDebug>
 
 ResolutionWidget::ResolutionWidget(QWidget *parent)
     : QWidget(parent)
@@ -211,35 +212,20 @@ void ResolutionWidget::newSolveSequence(QString solveSequence)
     resetDisplay();
     nextMovePB->setEnabled(true);
 
-    QStringList cfop = solveSequence.split("]");
-    // remove the first character which is '[' cuz of the string concatenation
-    for(int i = 0; i < cfop.length(); i++)
+    CFOPlist = solveSequence.split(' ');
+    qDebug << "solve received: " << solveSequence;
+
+    // Get parts sizes
+    endC = CFOPlist.at(0).toInt();
+    endF = CFOPlist.at(1).toInt();
+    endO = CFOPlist.at(2).toInt();
+    endP = CFOPlist.at(3).toInt();
+
+    // remove the sizes
+    for(int i = 0; i < 4; i++)
     {
-        cfop[i].remove(0, 1);
+        CFOPlist.removeAt(i);
     }
-
-    // Get each part of CFOP sequence
-    CFOPSequence.append(cfop.at(0));
-    CFOPSequence.append(cfop.at(1).split('|').join(' '));  // cuz f2l 4 pairs
-    CFOPSequence.append(cfop.at(2));
-    CFOPSequence.append(cfop.at(3));
-
-    // I created a list too, because i need it to display the actual move
-    CFOPlist = CFOPSequence.join(' ').split(' ');
-
-    // Clean the list
-    for(int i = 0; i < CFOPlist.length(); i++)
-    {
-        if(CFOPlist.at(i) == "")
-        {
-            CFOPlist.removeAt(i);
-        }
-    }
-
-    endC = CFOPSequence.at(0).split(' ').size();
-    endF = CFOPSequence.at(1).split(' ').size() + endC;
-    endO = CFOPSequence.at(2).split(' ').size() + endF;
-    endP = CFOPSequence.at(3).split(' ').size() + endO;
 
     nbMovesLabel->setText("Solution found in <b>"+QString::number(CFOPlist.size()) + "</b> moves");
 
