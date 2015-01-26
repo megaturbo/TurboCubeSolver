@@ -11,7 +11,7 @@ Cube::~Cube(){
 
 }
 
-bool Cube::validateCube(){
+QString Cube::validateCube(){
     //Defining legal cubies and what the location is on the solved cube
     QList<QList<color> > cubies;
     QList<QList<int> > loc;
@@ -74,7 +74,8 @@ bool Cube::validateCube(){
         //locating the cubie, if it does not exist, then the cube is impossible
         QList<int> indices = copy.locateCubie(cubies.at(i)[0], cubies.at(i)[1], cubies.at(i)[2]);
         if(indices.length() < 1){
-            return false;
+            QString message = "The cubie " + toString(cubies.at(i)[0]) + ", " + toString(cubies.at(i)[1]) + ", " + toString(cubies.at(i)[2]) + " does not exist on the cube.";
+            return message;
         }
         //Swapping corners to count parity if the cubie is not at its solved position
         if(!copy.cubieEqual(loc.at(i), cubies.at(i)[0], cubies.at(i)[1], cubies.at(i)[2])){
@@ -92,7 +93,8 @@ bool Cube::validateCube(){
         //locating the cubie, if it does not exist, then the cube is impossible
         QList<int> indices = copy.locateCubie(cubies.at(i)[0], cubies.at(i)[1]);
         if(indices.length() < 1){
-            return false;
+            QString message = "The cubie " + toString(cubies.at(i)[0]) + ", " + toString(cubies.at(i)[1]) + " is missing.";
+            return message;
         }
         //Swapping edges to count parity if the cubie is not at its solved position
         if(!copy.cubieEqual(loc.at(i), cubies.at(i)[0], cubies.at(i)[1])){
@@ -107,7 +109,7 @@ bool Cube::validateCube(){
 
     //parity check
     if(nbSwaps % 2 == 1){
-        return false;
+        return "The parity on the cube is wrong. The number of swaps on the cube cannot be odd.";
     }
 
     //rotating corners by pairs, if the last corner is not correctly oriented, then the cube isn't legal
@@ -126,7 +128,7 @@ bool Cube::validateCube(){
 
     //if the last corner is flipped
     if(copy.matCube[loc.at(7)[0]][loc.at(7)[1]] != YELLOW){
-        return false;
+        return "The orientation of the corner cubies is wrong.";
     }
 
     //flipping the edges
@@ -143,19 +145,19 @@ bool Cube::validateCube(){
 
     //if the last edge is flipped
     if(copy.matCube[loc.at(19)[0]][loc.at(19)[1]] != GREEN){
-        return false;
+        return "The orientation of the edge cubies is wrong.";
     }
 
     //checking the corners stickers
     for (int i = 0; i < 17; ++i) {
         for (int j = 0; j < 3; ++j) {
             if(copy.matCube[i][j] != (color)(i / 3)){
-                return false;
+                return "All cubies exist on the cube but one or more has its stickers inverted.";
             }
         }
     }
 
-    return true;
+    return "true";
 }
 
 void Cube::qDebugDisplay() {

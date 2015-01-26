@@ -39,7 +39,7 @@ class Cube {
     color** getMatrix() const;
     color** getFaceMatrix(QChar face) const;
 
-    bool validateCube();
+    QString validateCube();
 
 public slots:
 

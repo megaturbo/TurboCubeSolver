@@ -108,8 +108,12 @@ void ResolutionWidget::nextMove()
     if(nextMovePB->isEnabled())
     {
         emit sendMove(CFOPlist.at(actMoveID));
-        actMoveID++;
-        refreshDisplay();
+        do{
+            actMoveID++;
+        }while(CFOPlist.at(actMoveID) == "");
+        if(actMoveID < CFOPlist.length()){
+            refreshDisplay();
+        }
     }
 }
 

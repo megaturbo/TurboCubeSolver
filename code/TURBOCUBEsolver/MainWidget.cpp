@@ -177,17 +177,18 @@ void MainWidget::startCubeInput()
 {
     if(isometricCubeWidget->getConfig()){
         configModeLabel->clear();
-        if(displayedCube->validateCube()){
+        QString message = displayedCube->validateCube();
+        if(message == "true"){
             isometricCubeWidget->setConfig(false);
             cubeInputPB->setText("Enter &configuration");
             solvePB->setEnabled(true);
         } else {
             QMessageBox::information(this, tr("Cube error"),
-                                     tr("The cube you tried to input is in an impossible configuration."),
+                                     message,
                                      QMessageBox::Ok | QMessageBox::Default);
         }
     } else {
-        configModeLabel->setText("Enter cube configuration by clicking on the cubies above.");
+        configModeLabel->setText("Enter cube configuration by clicking directly on the stickers of the cube.");
         isometricCubeWidget->setConfig(true);
         cubeInputPB->setText("Confirm &configuration");
         solvePB->setDisabled(true);
