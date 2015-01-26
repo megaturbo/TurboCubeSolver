@@ -24,6 +24,31 @@ int main(int argc, char *argv[])
     splashScreen->addMessage("much matrix");
     splashScreen->addMessage("so rubiks");
     splashScreen->addMessage("wow");
+    splashScreen->addMessage("Such cube");
+    splashScreen->addMessage("much matrix");
+    splashScreen->addMessage("so rubiks");
+    splashScreen->addMessage("wow");
+
+    splashScreen->addMessage("Such cube");
+    splashScreen->addMessage("much matrix");
+    splashScreen->addMessage("so rubiks");
+    splashScreen->addMessage("wow");
+
+    splashScreen->addMessage("Such cube");
+    splashScreen->addMessage("much matrix");
+    splashScreen->addMessage("so rubiks");
+    splashScreen->addMessage("wow");
+
+    splashScreen->addMessage("Such cube");
+    splashScreen->addMessage("much matrix");
+    splashScreen->addMessage("so rubiks");
+    splashScreen->addMessage("wow");
+
+    splashScreen->addMessage("Such cube");
+    splashScreen->addMessage("much matrix");
+    splashScreen->addMessage("so rubiks");
+    splashScreen->addMessage("wow");
+
 
     splashScreen->show();
 
