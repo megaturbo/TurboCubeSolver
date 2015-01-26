@@ -68,28 +68,17 @@ void ResolutionWidget::refreshDisplay()
     }
 
     if(C == ""){
-            qDebug() << "taggle";
-        C = "Cross already solved";
-    } else {
-            qDebug() << "ta mere";
-        C = "Cross: " + C;
+        C = "<b>Already solved</b>";
     }
     if(F == ""){
-        F = "F2L already solved";
-    } else {
-        F = "F2L: " + F;
+        F = "<b>Already solved</b>";
     }
     if(O == ""){
-        O = "OLL already solved";
-    } else {
-        O = "OLL: " + O;
+        O = "<b>Already solved</b>";
     }
     if(P == ""){
-        P = "PLL already solved";
-    } else {
-        P = "PLL: " + P;
+        P = "<b>Already solved</b>";
     }
-
     // Refresh label content
     crossLabel->setText(C);
     f2lLabel->setText(F);
@@ -180,16 +169,37 @@ void ResolutionWidget::initDisplay()
 
     QGroupBox *groupBox = new QGroupBox("Resolution", this);
     QVBoxLayout *cfopLayout = new QVBoxLayout();
+    QVBoxLayout *cfopLabelLayout = new QVBoxLayout();
     QHBoxLayout *mainLayout = new QHBoxLayout();
     QHBoxLayout *cfopInformationLayout = new QHBoxLayout();
+    QHBoxLayout *cfopMainLayout = new QHBoxLayout();
     QVBoxLayout *infoLayout = new QVBoxLayout();
+
+    QLabel *crossTitle = new QLabel("Cross", this);
+    QLabel *f2lTitle = new QLabel("F2L", this);
+    QLabel *ollTitle = new QLabel("OLL", this);
+    QLabel *pllTitle = new QLabel("PLL", this);
+
+    crossTitle->setMaximumWidth(50);
+    f2lTitle->setMaximumWidth(50);
+    ollTitle->setMaximumWidth(50);
+    pllTitle->setMaximumWidth(50);
+
+    cfopLabelLayout->addWidget(crossTitle);
+    cfopLabelLayout->addWidget(f2lTitle);
+    cfopLabelLayout->addWidget(ollTitle);
+    cfopLabelLayout->addWidget(pllTitle);
 
     cfopLayout->addWidget(crossLabel);
     cfopLayout->addWidget(f2lLabel);
     cfopLayout->addWidget(ollLabel);
     cfopLayout->addWidget(pllLabel);
 
-    cfopInformationLayout->addLayout(cfopLayout);
+
+    cfopMainLayout->addLayout(cfopLabelLayout);
+    cfopMainLayout->addLayout(cfopLayout);
+
+    cfopInformationLayout->addLayout(cfopMainLayout);
 
     infoLayout->addWidget(nbMovesLabel);
     infoLayout->addWidget(infoPB);
