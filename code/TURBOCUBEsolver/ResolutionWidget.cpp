@@ -67,6 +67,27 @@ void ResolutionWidget::refreshDisplay()
         }
     }
 
+    if(C == ""){
+        C == "Cross already solved";
+    } else {
+        C == "Cross: " + C;
+    }
+    if(F == ""){
+        F == "F2L already solved";
+    } else {
+        F == "F2L: " + F;
+    }
+    if(O == ""){
+        O == "OLL already solved";
+    } else {
+        O == "OLL: " + O;
+    }
+    if(P == ""){
+        P == "PLL already solved";
+    } else {
+        P == "PLL: " + P;
+    }
+
     // Refresh label content
     crossLabel->setText(C);
     f2lLabel->setText(F);
@@ -213,7 +234,7 @@ void ResolutionWidget::newSolveSequence(QString solveSequence)
     nextMovePB->setEnabled(true);
 
     CFOPlist = solveSequence.split(' ');
-    qDebug << "solve received: " << solveSequence;
+//    qDebug << "solve received: " << solveSequence;
 
     // Get parts sizes
     endC = CFOPlist.at(0).toInt();
