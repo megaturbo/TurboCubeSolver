@@ -28,7 +28,7 @@ MainWidget::MainWidget(QWidget *parent) :
     resetPB = new QPushButton("&Reset", this);
     sequencePB = new QPushButton("Send Sequence", this);
     sequenceLE = new QLineEdit(this);
-    reverseSequencePB = new QPushButton("R", this);
+    reverseSequencePB = new QPushButton("Reverse", this);
 
     sequenceLE->setFocus();
 
@@ -246,6 +246,11 @@ void MainWidget::resetSlot()
 {
     resolutionWidget->resetDisplay();
 
+
+    if(!isometricCubeWidget->getConfig()){
+        solvePB->setEnabled(true);
+    }
+
     initSolvedCube();
     isometricCubeWidget->setCube(*displayedCube);
 }
@@ -262,19 +267,33 @@ void MainWidget::solveSlot()
     Cube *tmpCube = new Cube(*displayedCube);
     Cube *tmpCube2 = new Cube(*displayedCube);
 
-    QString solv = Fridrich::solve(tmpCube);
-    QString fastSolv = Fridrich::fastestFridrichSolve(tmpCube2);
+//    QString solv = Fridrich::solve(tmpCube);
+//    QString fastSolv = Fridrich::fastestFridrichSolve(tmpCube2);
 
     delete tmpCube;
     delete tmpCube2;
 
-    resolutionWidget->newSolveSequence(fastSolv);
+//    resolutionWidget->newSolveSequence(fastSolv);
+    Fridrich::test();
 
     isometricCubeWidget->setOrientation(YELLOW, RED);
 }
 
 void MainWidget::sendSequenceSlot()
 {
-    displayedCube->moveSequence(sequenceLE->text(), isometricCubeWidget->getFront(), isometricCubeWidget->getUp());
-    isometricCubeWidget->setCube(*displayedCube);
+    if(sequenceLE->text() == "PINK"){
+        solvePB->setDisabled(true);
+        int col[18][3];
+        for (int x = 0; x < 18; ++x) {
+            for (int y = 0; y < 3; ++y) {
+                col[x][y] = PINK;
+            }
+        }
+        displayedCube->setMatrix(col);
+        isometricCubeWidget->setCube(*displayedCube);
+        this->update();
+    } else {
+        displayedCube->moveSequence(sequenceLE->text(), isometricCubeWidget->getFront(), isometricCubeWidget->getUp());
+        isometricCubeWidget->setCube(*displayedCube);
+    }
 }

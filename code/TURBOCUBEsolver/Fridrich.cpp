@@ -2,6 +2,32 @@
 #include <QString>
 #include <qdebug.h>
 
+void Fridrich::test(){
+    color solvedMatrix[18][3];
+
+    for (int x = 0; x < 18; ++x) {
+        for (int y = 0; y < 3; ++y) {
+            solvedMatrix[x][y] = (color)(x / 3);
+        }
+    }
+    double average = 0;
+    int max = -10;
+    int min = 500;
+    for (int i = 0; i < 5000; ++i) {
+        Cube testCube = Cube(solvedMatrix);
+        testCube.scramble();
+        QString s = cross(&testCube);
+        average += (double)(s.count(' '))/5000;
+        if(s.count(' ') < min){
+            min = s.count(' ');
+        }
+        if(s.count(' ') > max){
+            max = s.count(' ');
+        }
+    }
+    qDebug() << "Average " << average << ", max " << max << ", min " << min;
+}
+
 QString Fridrich::solve(Cube *cube){
     QString step1 = cross(cube);
     QString step2 = F2L(cube);
@@ -113,11 +139,9 @@ QString Fridrich::fastestFridrichSolve(Cube *cube){
 
     QString ret;
     for (int i = 0; i < 4; ++i) {
-        qDebug() << QString::number(CFOP.at(i).count(' '));
         ret += QString::number(CFOP.at(i).count(' ')) + " ";
     }
     ret += CFOP.join("");
-    qDebug() << ret;
     return ret;
 }
 
