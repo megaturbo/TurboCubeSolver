@@ -231,6 +231,15 @@ void ResolutionWidget::newSolveSequence(QString solveSequence)
     // I created a list too, because i need it to display the actual move
     CFOPlist = CFOPSequence.join(' ').split(' ');
 
+    // Clean the list
+    for(int i = 0; i < CFOPlist.length(); i++)
+    {
+        if(CFOPlist.at(i) == "")
+        {
+            CFOPlist.removeAt(i);
+        }
+    }
+
     endC = CFOPSequence.at(0).split(' ').size();
     endF = CFOPSequence.at(1).split(' ').size() + endC;
     endO = CFOPSequence.at(2).split(' ').size() + endF;
