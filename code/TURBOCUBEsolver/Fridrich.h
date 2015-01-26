@@ -28,7 +28,7 @@ private:
     static QString PLL2Look(Cube *cube);
 
     //fast methods where we try each possible solution and keep the fastest one
-    static QString fastestCross(Cube *cube);
+    static QStringList fastestCross(Cube *cube);
     static QStringList fastestF2L(Cube *cube);
 
     static void cleanSequence(QStringList &sequence);

@@ -107,10 +107,21 @@ void Fridrich::cleanSequence(QStringList &sequence){
 
 QString Fridrich::fastestFridrichSolve(Cube *cube){
     //we only call the cross because it calls FOP
-    return fastestCross(cube);
+    QStringList CFOP = fastestCross(cube);
+
+    cube->moveSequence(CFOP.join(""), RED, YELLOW);
+
+    QString ret;
+    for (int i = 0; i < 4; ++i) {
+        qDebug() << QString::number(CFOP.at(i).count(' '));
+        ret += QString::number(CFOP.at(i).count(' ')) + " ";
+    }
+    ret += CFOP.join("");
+    qDebug() << ret;
+    return ret;
 }
 
-QString Fridrich::fastestCross(Cube *cube){
+QStringList Fridrich::fastestCross(Cube *cube){
     QStringList fewestMovesCFOPSequence;
     for (int i = 0; i < 100; ++i) {
         fewestMovesCFOPSequence += "U ";
@@ -149,32 +160,7 @@ QString Fridrich::fastestCross(Cube *cube){
             }
         }
     }
-    cube->moveSequence(fewestMovesCFOPSequence.join(""), RED, YELLOW);
-    //Constructing the string used by the resolution widget, each step is bracketed and the F2P pairs are separated with |
-    QString ret = "[" + fewestMovesCFOPSequence.at(0);
-    if(ret.endsWith(" ")){
-        ret.chop(1);
-    }
-    ret += "][";
-    for (int i = 1; i < 5; i++) {
-        ret += fewestMovesCFOPSequence.at(i);
-        if(ret.endsWith(" ")){
-            ret.chop(1);
-        }
-        ret += "|";
-    }
-    ret.chop(1);
-    ret += "][" + fewestMovesCFOPSequence.at(5);
-    if(ret.endsWith(" ")){
-        ret.chop(1);
-    }
-    ret += "][" + fewestMovesCFOPSequence.at(6);
-    if(ret.endsWith(" ")){
-        ret.chop(1);
-    }
-    ret += "]";
-
-    return ret;
+    return fewestMovesCFOPSequence;
 }
 
 QStringList Fridrich::fastestF2L(Cube *cube){
@@ -193,10 +179,12 @@ QStringList Fridrich::fastestF2L(Cube *cube){
                             if(color4 != color3 && color4 != color2 && color4 != color1){
                                 Cube *tempCube = new Cube(*cube);
                                 QStringList FOPsequence;
-                                FOPsequence += F2LPair(tempCube, color1);
-                                FOPsequence += F2LPair(tempCube, color2);
-                                FOPsequence += F2LPair(tempCube, color3);
-                                FOPsequence += F2LPair(tempCube, color4);
+                                QString F2Lsequence;
+                                F2Lsequence += F2LPair(tempCube, color1);
+                                F2Lsequence += F2LPair(tempCube, color2);
+                                F2Lsequence += F2LPair(tempCube, color3);
+                                F2Lsequence += F2LPair(tempCube, color4);
+                                FOPsequence += F2Lsequence;
                                 FOPsequence += OLL(tempCube);
                                 QString PLLSequence = PLL(tempCube);
                                 PLLSequence += tempCube->turnFace(YELLOW, RED - tempCube->locateCubie(RED, BLUE, YELLOW).at(0) / 3);
