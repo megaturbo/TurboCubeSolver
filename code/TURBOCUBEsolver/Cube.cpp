@@ -231,29 +231,29 @@ color** Cube::getFaceMatrix(QChar face) const{
 
     switch(face.toLatin1())
     {
-        case 'F':
-            firstID = 0;
-            break;
-        case 'R':
-            firstID = 3;
-            break;
-        case 'B':
-            firstID = 6;
-            break;
-        case 'L':
-            firstID = 9;
-            break;
-        case 'U':
-            firstID = 12;
-            break;
-        case 'D':
-            firstID = 15;
-            break;
+    case 'F':
+        firstID = 0;
+        break;
+    case 'R':
+        firstID = 3;
+        break;
+    case 'B':
+        firstID = 6;
+        break;
+    case 'L':
+        firstID = 9;
+        break;
+    case 'U':
+        firstID = 12;
+        break;
+    case 'D':
+        firstID = 15;
+        break;
     }
 
     for(int x = firstID; x < firstID + 3; x++)
     {
-//        faceMatrix = new color[3];
+        //        faceMatrix = new color[3];
         for(int y = 0; y < 3; y++)
         {
             faceMatrix[x][y] = matCube[x][y];
@@ -550,7 +550,7 @@ QString Cube::scramble(int depth)
     QString cMove;
     QString cQ;
 
-//    qsrand(QDateTime::currentDateTime().toTime_t());
+    //    qsrand(QDateTime::currentDateTime().toTime_t());
     qsrand(QDateTime::currentDateTime().toMSecsSinceEpoch());
 
     for(int i = 0; i < depth; i++)
@@ -562,23 +562,23 @@ QString Cube::scramble(int depth)
 
         // Get move
         switch (nextMove) {
-            case 0:
-                cMove = 'U';
-                break;
-            case 1:
-                cMove = 'D';
-                break;
-            case 2:
-                cMove = 'L';
-                break;
-            case 3:
-                cMove = 'R';
-                break;
-            case 4:
-                cMove = 'F';
-                break;
-            case 5:
-                cMove = 'B';
+        case 0:
+            cMove = 'U';
+            break;
+        case 1:
+            cMove = 'D';
+            break;
+        case 2:
+            cMove = 'L';
+            break;
+        case 3:
+            cMove = 'R';
+            break;
+        case 4:
+            cMove = 'F';
+            break;
+        case 5:
+            cMove = 'B';
             break;
         }
 
@@ -586,15 +586,15 @@ QString Cube::scramble(int depth)
 
         // Get nb of quarter turn
         switch(nbQ){
-            case 0:
-                cQ = "";
-                break;
-            case 1:
-                cQ = '2';
-                break;
-            case 2:
-                cQ = '\'';
-                break;
+        case 0:
+            cQ = "";
+            break;
+        case 1:
+            cQ = '2';
+            break;
+        case 2:
+            cQ = '\'';
+            break;
         }
 
         // add to scramble
@@ -604,7 +604,7 @@ QString Cube::scramble(int depth)
         firstLastMove = nextMove;
     }
 
-//    qDebug() << scrambling;
+    //    qDebug() << scrambling;
 
     this->moveSequence(scrambling, RED, YELLOW);
 
@@ -645,62 +645,71 @@ QString Cube::reverseSequence(QString sequence)
 //It returns the cleaned sequence
 void Cube::cleanSequence(QString &sequence){
     QStringList moves = sequence.split(' ');
-    QString cleanedSequence = "";
-    QString tmp;
-    QString lastMove = "k";
-
-    for (int i = 0; i < moves.length(); i++) {
-        tmp = moves.at(i);
-        if (tmp.at(0) == lastMove.at(0)) {
-            int nbQTurn = 2;
-            if(tmp.length() > 1) {
-                if(tmp[1]=='2') {
-                    nbQTurn += 1;
-                } else {
-                    nbQTurn += 2;
-                }
-            }
-            if (lastMove.length() > 1) {
-                if (lastMove[1]=='2') {
-                    nbQTurn += 1;
-                } else {
-                    nbQTurn += 2;
-                }
-            }
-            nbQTurn %= 4;
-            switch(nbQTurn){
-            case 1:
-                tmp = tmp[0];
-                break;
-            case 2:
-                tmp = tmp[0] + "2";
-                break;
-            case 3:
-                tmp = tmp[0] + "\'";
-                break;
-            default:
-                tmp = "";
-                break;
-            }
-            lastMove = "k";
-        }
-        if (lastMove != "k") {
-            cleanedSequence += lastMove + " ";
-        }
-        lastMove = tmp;
+    if(moves.last() == ""){
+        moves.removeLast();
     }
-    cleanedSequence += tmp;
-    sequence = cleanedSequence;
+    if(moves.size() > 1){
+        QStringList cleanedSequence;
+        cleanedSequence += moves.first();
+        moves.removeFirst();
+        QString right = "";
+        QString left = "";
+        while(moves.length() > 0){
+            left = cleanedSequence.last();
+            right = moves.first();
+            if(right.at(0) == left.at(0)){
+                int nbQTurn = 2;
+                if(right.length() > 1) {
+                    if(right[1]=='2') {
+                        nbQTurn += 1;
+                    } else {
+                        nbQTurn += 2;
+                    }
+                }
+                if (left.length() > 1) {
+                    if (left[1]=='2') {
+                        nbQTurn += 1;
+                    } else {
+                        nbQTurn += 2;
+                    }
+                }
+                nbQTurn %= 4;
+                switch(nbQTurn){
+                case 1:
+                    left = right[0];
+                    cleanedSequence.replace(cleanedSequence.size() - 1, left);
+                    break;
+                case 2:
+                    left = right[0] + "2";
+                    cleanedSequence.replace(cleanedSequence.size() - 1, left);
+                    break;
+                case 3:
+                    left = right[0] + "\'";
+                    cleanedSequence.replace(cleanedSequence.size() - 1, left);
+                    break;
+                default:
+                    cleanedSequence.removeLast();
+                    break;
+                }
+                moves.removeFirst();
+            } else {
+                cleanedSequence += moves.first();
+                moves.removeFirst();
+            }
+        }
+        cleanedSequence += "";
+        sequence = cleanedSequence.join(" ");
+    }
 }
 
 
 /**
- * @brief Cube::moveSequence Move a sequence depending of the cube orientation
- * @param sequence The sequence to do
- * @param colorF The color on the Front
- * @param colorU The color on the Up
- * @return The actual sequence did
- */
+         * @brief Cube::moveSequence Move a sequence depending of the cube orientation
+         * @param sequence The sequence to do
+         * @param colorF The color on the Front
+         * @param colorU The color on the Up
+         * @return The actual sequence did
+         */
 QString Cube::moveSequence(QString sequence, color colorFront, color colorUp) {
 
     QStringList moves = sequence.split(' ');
@@ -881,13 +890,13 @@ QString Cube::turnFace(int faceToTurn, int nbQuarterTurns) {
     //defining the indices of the stickers on the face
     //those will get spinned
     QList<int> indicesFaceX = QList<int>() << face * 3 + 2 <<  face * 3 + 2 <<
-                            face * 3 + 1 <<  face * 3 + 2 <<
-                            face * 3 <<  face * 3 <<
-                            face * 3 + 1 <<  face * 3;
+                                              face * 3 + 1 <<  face * 3 + 2 <<
+                                              face * 3 <<  face * 3 <<
+                                              face * 3 + 1 <<  face * 3;
     QList<int> indicesFaceY = QList<int>() << 1 <<  0 <<
-                            2 <<  2 <<
-                            1 <<  2 <<
-                            0 <<  0;
+                                              2 <<  2 <<
+                                              1 <<  2 <<
+                                              0 <<  0;
     //defining the indices of the stickers adjacent to the face
     //those too will get spinned
     QList<int> indicesX;
@@ -898,61 +907,61 @@ QString Cube::turnFace(int faceToTurn, int nbQuarterTurns) {
         //if the RED face gets turned, then:
         //{WHITE, BLUE, YELLOW, GREEN} are adjacent, in this order;
         indicesX = QList<int>() <<WHITE * 3 <<  WHITE * 3 + 1 <<  WHITE * 3 + 2 <<
-                                BLUE * 3 <<  BLUE * 3 <<  BLUE * 3 <<
-                                YELLOW * 3 <<  YELLOW * 3 + 1 <<  YELLOW * 3 + 2 <<
-                                GREEN * 3 + 2 <<  GREEN * 3 + 2 <<  GREEN * 3 + 2;
+                                  BLUE * 3 <<  BLUE * 3 <<  BLUE * 3 <<
+                                  YELLOW * 3 <<  YELLOW * 3 + 1 <<  YELLOW * 3 + 2 <<
+                                  GREEN * 3 + 2 <<  GREEN * 3 + 2 <<  GREEN * 3 + 2;
         indicesY = QList<int>() <<2 <<  2 <<  2 <<
-                                0 <<  1 <<  2 <<
-                                2 <<  2 <<  2 <<
-                                2 <<  1 <<  0;
+                                  0 <<  1 <<  2 <<
+                                  2 <<  2 <<  2 <<
+                                  2 <<  1 <<  0;
         break;
     case BLUE:
         s = "L";
         //if the BLUE face gets turned <<  then:
         //{WHITE <<  ORANGE <<  YELLOW <<  RED are adjacent <<  in this order;
         indicesX = QList<int>() <<WHITE * 3 + 2 <<  WHITE * 3 + 2 <<  WHITE * 3 + 2 <<
-                                ORANGE * 3 <<  ORANGE * 3 <<  ORANGE * 3 <<
-                                YELLOW * 3 <<  YELLOW * 3 <<  YELLOW * 3 <<
-                                RED * 3 + 2 <<  RED * 3 + 2 <<  RED * 3 + 2;
+                                  ORANGE * 3 <<  ORANGE * 3 <<  ORANGE * 3 <<
+                                  YELLOW * 3 <<  YELLOW * 3 <<  YELLOW * 3 <<
+                                  RED * 3 + 2 <<  RED * 3 + 2 <<  RED * 3 + 2;
         indicesY = QList<int>() <<2 <<  1 <<  0 <<
-                                0 <<  1 <<  2 <<
-                                0 <<  1 <<  2 <<
-                                2 <<  1 <<  0;
+                                  0 <<  1 <<  2 <<
+                                  0 <<  1 <<  2 <<
+                                  2 <<  1 <<  0;
         break;
     case ORANGE:
         s = "B";
         //if the ORANGE face gets turned <<  then:
         //{WHITE <<  GREEN <<  YELLOW <<  BLUE are adjacent <<  in this order;
         indicesX = QList<int>() <<WHITE * 3 + 2 <<  WHITE * 3 + 1 <<  WHITE * 3 <<
-                                GREEN * 3 <<  GREEN * 3 <<  GREEN * 3 <<
-                                YELLOW * 3 + 2 <<  YELLOW * 3 + 1 <<  YELLOW * 3 <<
-                                BLUE * 3 + 2 <<  BLUE * 3 + 2 <<  BLUE * 3 + 2;
+                                  GREEN * 3 <<  GREEN * 3 <<  GREEN * 3 <<
+                                  YELLOW * 3 + 2 <<  YELLOW * 3 + 1 <<  YELLOW * 3 <<
+                                  BLUE * 3 + 2 <<  BLUE * 3 + 2 <<  BLUE * 3 + 2;
         indicesY = QList<int>() <<0 <<  0 <<  0 <<
-                                0 <<  1 <<  2 <<
-                                0 <<  0  << 0 <<
-                                2 <<  1 <<  0;
+                                  0 <<  1 <<  2 <<
+                                  0 <<  0  << 0 <<
+                                  2 <<  1 <<  0;
         break;
     case GREEN:
         s = "R";
         //if the GREEN face gets turned <<  then:
         //{WHITE <<  RED <<  YELLOW <<  ORANGE are adjacent <<  in this order;
         indicesX = QList<int>() <<WHITE * 3 <<  WHITE * 3 <<  WHITE * 3 <<
-                                RED * 3 <<  RED * 3 <<  RED * 3 <<
-                                YELLOW * 3 + 2 <<  YELLOW * 3 + 2 <<  YELLOW * 3 + 2 <<
-                                ORANGE * 3 + 2 <<  ORANGE * 3 + 2 <<  ORANGE * 3 + 2;
+                                  RED * 3 <<  RED * 3 <<  RED * 3 <<
+                                  YELLOW * 3 + 2 <<  YELLOW * 3 + 2 <<  YELLOW * 3 + 2 <<
+                                  ORANGE * 3 + 2 <<  ORANGE * 3 + 2 <<  ORANGE * 3 + 2;
         indicesY = QList<int>() <<0 <<  1 <<  2 <<
-                                0 <<  1 <<  2 <<
-                                2 <<  1 <<  0 <<
-                                2 <<  1 <<  0;
+                                  0 <<  1 <<  2 <<
+                                  2 <<  1 <<  0 <<
+                                  2 <<  1 <<  0;
         break;
     case WHITE:
         s = "D";
         //if the WHITE face gets turned <<  then:
         //{RED <<  GREEN <<  ORANGE <<  BLUE are adjacent <<  in this order;
         indicesX = QList<int>() <<RED * 3 <<  RED * 3 + 1 <<  RED * 3 + 2 <<
-                                GREEN * 3 <<  GREEN * 3 + 1 <<  GREEN * 3 + 2 <<
-                                ORANGE * 3 <<  ORANGE * 3 + 1 <<  ORANGE * 3 + 2 <<
-                                BLUE * 3 <<  BLUE * 3 + 1 <<  BLUE * 3 + 2;
+                                  GREEN * 3 <<  GREEN * 3 + 1 <<  GREEN * 3 + 2 <<
+                                  ORANGE * 3 <<  ORANGE * 3 + 1 <<  ORANGE * 3 + 2 <<
+                                  BLUE * 3 <<  BLUE * 3 + 1 <<  BLUE * 3 + 2;
         indicesY = QList<int>() <<0 <<  0 <<  0 <<  0 <<  0 <<  0 <<  0 <<  0 <<  0 <<  0 <<  0 <<  0;
         break;
     case YELLOW:
@@ -960,9 +969,9 @@ QString Cube::turnFace(int faceToTurn, int nbQuarterTurns) {
         //if the YELLOW face gets turned <<  then:
         //{RED <<  BLUE <<  ORANGE <<  GREEN are adjacent <<  in this order;
         indicesX = QList<int>() <<RED * 3 <<  RED * 3 + 1 <<  RED * 3 + 2 <<
-                                BLUE * 3 <<  BLUE * 3 + 1 <<  BLUE * 3 + 2 <<
-                                ORANGE * 3 <<  ORANGE * 3 + 1 <<  ORANGE * 3 + 2 <<
-                                GREEN * 3 <<  GREEN * 3 + 1 <<  GREEN * 3 + 2;
+                                  BLUE * 3 <<  BLUE * 3 + 1 <<  BLUE * 3 + 2 <<
+                                  ORANGE * 3 <<  ORANGE * 3 + 1 <<  ORANGE * 3 + 2 <<
+                                  GREEN * 3 <<  GREEN * 3 + 1 <<  GREEN * 3 + 2;
         indicesY = QList<int>() <<2 <<  2 <<  2 <<  2 <<  2 <<  2 <<  2 <<  2 <<  2 <<  2 <<  2 <<  2;
         break;
     default:
@@ -1056,13 +1065,13 @@ QString Cube::turnFace(int faceToTurn, int nbQuarterTurns) {
 //returns true if the cubie at the stickers defined by the indices is these colors
 bool Cube::cubieEqual(QList<int> indices, color firstColor, color secondColor) {
     return ((matCube[indices.at(0)][indices.at(1)] == firstColor && matCube[indices.at(2)][indices.at(3)] == secondColor)
-         || (matCube[indices.at(0)][indices.at(1)] == secondColor && matCube[indices.at(2)][indices.at(3)] == firstColor));
+            || (matCube[indices.at(0)][indices.at(1)] == secondColor && matCube[indices.at(2)][indices.at(3)] == firstColor));
 
 }
 
 bool Cube::cubieEqual(QList<int> indices, color firstColor, color secondColor, color thirdColor) {
     return((matCube[indices.at(4)][indices.at(5)] == firstColor && cubieEqual(indices, secondColor, thirdColor))
-        || (matCube[indices.at(4)][indices.at(5)] == secondColor && cubieEqual(indices, firstColor, thirdColor))
-        || (matCube[indices.at(4)][indices.at(5)] == thirdColor && cubieEqual(indices, firstColor, secondColor)));
+            || (matCube[indices.at(4)][indices.at(5)] == secondColor && cubieEqual(indices, firstColor, thirdColor))
+            || (matCube[indices.at(4)][indices.at(5)] == thirdColor && cubieEqual(indices, firstColor, secondColor)));
 }
 

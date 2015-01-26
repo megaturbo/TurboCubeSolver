@@ -31,7 +31,7 @@ private:
     static QStringList fastestCross(Cube *cube);
     static QStringList fastestF2L(Cube *cube);
 
-    static void cleanSequence(QStringList &sequence);
+    static void cleanSequences(QStringList &sequence);
     static void clean2Sequences(QString &sequenceLeft, QString &sequenceRight);
 };
 
