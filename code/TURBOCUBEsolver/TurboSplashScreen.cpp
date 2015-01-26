@@ -1,17 +1,35 @@
 #include "TurboSplashScreen.h"
 #include <QCloseEvent>
 #include <QDebug>
+#include <QGlobal.h>
+#include <QTime>
 
 TurboSplashScreen::TurboSplashScreen(int displayTime)
 {
     messages = new QStringList();
-    messages->append("This splash screen looks nice, isn't it ?");
+    messages->append("This splash screen looks nice, doesn't it ?");
+    messages->append("Such cube");
+    messages->append("much matrix");
+    messages->append("so rubiks");
+    messages->append("wow");
+    messages->append("MANY PINK SO AMAZE");
+    messages->append("turbodoge");
+    messages->append("Painting stickers...");
+    messages->append("Fixing cubie parity...");
+    messages->append("Carving wooden cubies...");
+    messages->append("Lubricating processor...");
+    messages->append("TURBO-scrambling cube frenetically...");
+    messages->append("Swapping mispositionned cubies...");
 
     pixmap0 = new QPixmap(":Pictures/splash/splash0.png");
     pixmap1 = new QPixmap(":Pictures/splash/splash1.png");
     this->setPixmap(*pixmap0);
 
     this->displayTime = displayTime;
+
+    qsrand(QDateTime::currentDateTime().toMSecsSinceEpoch());
+    msg = messages->at(qrand() % messages->size());
+    middle = false;
 
     timer.start();
 }
@@ -33,8 +51,14 @@ void TurboSplashScreen::drawContents(QPainter *painter)
     painter->setPen(QColor(255,136,0));
     painter->setFont(QFont("Arial", 15));
 
-    QString msg = messages->at(remaining/(displayTime/messages->size()));
 
+    qsrand(QDateTime::currentDateTime().toMSecsSinceEpoch());
+
+//    QString msg = messages->at(remaining/(displayTime/messages->size()));
+    if(remaining < displayTime / 2 && !middle){
+        msg = messages->at(qrand() % messages->size());
+        middle = true;
+    }
     painter->drawText(QRect(0, this->height()-50, this->width(), this->height()-80), Qt::AlignHCenter, msg);
 
     update();
