@@ -12,7 +12,6 @@ public:
     static QString solve(Cube *cube);
     static QString fastestFridrichSolve(Cube *cube);
 
-    void F2LEdgeYellow(QList<int> edgeIndices, QList<int> cornerIndices, color firstEdgeColor, color faceSecondEdge, Cube *cube, color faceWhiteSticker, color faceFirstEdge, color secondEdgeColor, color faceSecondCorner, QString sequenceToSolve, color faceFirstCorner);
 private:
     //Secondary steps
     static QString crossEdge(Cube *cube, int firstEdgeColor, QList<color> *solved);

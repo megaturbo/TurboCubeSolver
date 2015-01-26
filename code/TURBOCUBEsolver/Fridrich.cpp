@@ -668,6 +668,7 @@ QString Fridrich::F2L(Cube *cube){
     return fewestMovesSequence.join("|");
 }
 
+
 QString Fridrich::PLL2Look(Cube *c){
     color cubeMatrix[18][3];
     //this boolean checks if this step is already solved
