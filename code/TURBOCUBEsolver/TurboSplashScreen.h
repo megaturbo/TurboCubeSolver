@@ -21,6 +21,8 @@ private:
     QPixmap *pixmap1;
     QElapsedTimer timer;
     QStringList *messages;
+    QString msg;
+    bool middle;
 
     int displayTime;
 

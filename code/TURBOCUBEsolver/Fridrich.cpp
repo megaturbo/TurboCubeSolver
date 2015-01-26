@@ -31,30 +31,27 @@ void Fridrich::test(){
 QString Fridrich::solve(Cube *cube){
     QString step1 = cross(cube);
     QString step2 = F2L(cube);
-    //    QString step3 = OLL2Look(cube);
-    //    step3 += OLL2Look(cube); //2-look OLL
-    //    QString step4 = PLL2Look(cube);
-    //    step4 += PLL2Look(cube); //2-look PLL
-
     QString step3 = OLL(cube);
     QString step4 = PLL(cube);
 
     //positionning the solved YELLOW face
     step4 += cube->turnFace(YELLOW, RED - cube->locateCubie(RED, BLUE, YELLOW).at(0) / 3);
-    step1.chop(1);
-    step3.chop(1);
-    step4.chop(1);
-    //    qDebug() << "[" + step1 + "][" + step2 + "][" + step3 + "][" + step4 + "]";
-    return "[" + step1 + "][" + step2 + "][" + step3 + "][" + step4 + "]";
+
+    QString ret;
+    ret += QString::number(step1.count(' ')) + " ";
+    ret += QString::number(step2.count(' ')) + " ";
+    ret += QString::number(step3.count(' ')) + " ";
+    ret += QString::number(step4.count(' ')) + " ";
+    ret += step1;
+    ret += step2;
+    ret += step3;
+    ret += step4;
+    return ret;
 }
 
 void Fridrich::clean2Sequences(QString &sequenceLeft, QString &sequenceRight)
 {
     if(!sequenceLeft.isEmpty() && !sequenceRight.isEmpty()){
-
-        //        Cube::cleanSequence(sequenceLeft);
-        //        Cube::cleanSequence(sequenceRight);
-
         //getting the moves
         QStringList movesLeft = sequenceLeft.split(' ');
         QStringList movesRight = sequenceRight.split(' ');
@@ -134,8 +131,6 @@ void Fridrich::cleanSequence(QStringList &sequence){
 QString Fridrich::fastestFridrichSolve(Cube *cube){
     //we only call the cross because it calls FOP
     QStringList CFOP = fastestCross(cube);
-
-    cube->moveSequence(CFOP.join(""), RED, YELLOW);
 
     QString ret;
     for (int i = 0; i < 4; ++i) {
@@ -674,72 +669,7 @@ QString Fridrich::F2L(Cube *cube){
         }
     }
     cube->moveSequence(fewestMovesSequence.join(""), RED, YELLOW);
-    for (int i = 0; i < fewestMovesSequence.length(); ++i) {
-        fewestMovesSequence[i].chop(1);
-    }
-    return fewestMovesSequence.join("|");
-}
-
-
-QString Fridrich::PLL2Look(Cube *c){
-    color cubeMatrix[18][3];
-    //this boolean checks if this step is already solved
-    bool solved = true;
-    color** tempMatrix = c->getMatrix();
-    for (int x = 0; x < 18; ++x) {
-        for (int y = 0; y < 3; ++y) {
-            cubeMatrix[x][y] = tempMatrix[x][y];
-            //if the adjacent faces don't all have the same color, this step isn't solved yet
-            if(x < 12 && x % 3 == 0 && y == 2 && (cubeMatrix[x][y] != cubeMatrix[x + 1][y] || cubeMatrix[x][y] != cubeMatrix[x + 2][y])){
-                solved = false;
-            }
-        }
-        delete [] tempMatrix[x];
-    }
-    delete [] tempMatrix;
-    tempMatrix = 0;
-    //is it solved yet?
-    if (solved) {
-        return "";
-    }
-    //Again, the different cases here can be seen from 4 different angles
-    for (int col = 0; col < 4; ++col) {
-        color face = (color) col;
-        //2 corners are the same color on the evaluated face
-        if (cubeMatrix[face * 3][2] == cubeMatrix[face * 3 + 2][2]) {
-            //the 4 corners are solved relatively to each others
-            if (cubeMatrix[((face + 2) % 4) * 3][2] == cubeMatrix[((face + 2) % 4) * 3 + 2][2]) {
-                //1 edge is solved respectively to its adjacent corners
-                if (cubeMatrix[face * 3 + 1][2] == cubeMatrix[face * 3][2]) {
-                    //the edge on the right and YELLOW face must go on the left face
-                    if (cubeMatrix[((face + 2) % 4) * 3][2] == cubeMatrix[((face + 1) % 4) * 3 + 1][2]) {
-                        return c->moveSequence("R' U R' U' R' U' R' U R U R2", face, YELLOW);
-                    }
-                    //the edge on the left and YELLOW face must go on the right face
-                    else if (cubeMatrix[((face + 2) % 4) * 3][2] == cubeMatrix[((face + 3) % 4) * 3 + 1][2]) {
-                        return c->moveSequence("R2 U' R' U' R U R U R U' R", face, YELLOW);
-                    }
-                }
-                //the 4 edges are on the face opposite to the one they belong to
-                else if (cubeMatrix[face * 3 + 1][2] == cubeMatrix[((face + 2) % 4) * 3][2] && cubeMatrix[face * 3][2] == cubeMatrix[((face + 2) % 4) * 3  + 1][2]) {
-                    return c->moveSequence("R2 L2 D R2 L2 U2 R2 L2 D R2 L2", face, YELLOW);
-                }
-                //the 4 edges are diagonally swapped
-                else if (cubeMatrix[((face + 3) % 4) * 3 + 1][2] == cubeMatrix[face* 3][2] && cubeMatrix[((face + 3) % 4) * 3][2] == cubeMatrix[face * 3 + 1][2]) {
-                    return c->moveSequence("R' U' R2 U R U R' U' R U R U' R U' R'", face, YELLOW);
-                }
-            }
-            //2 corners are inverted
-            else if ((int)cubeMatrix[((face + 2) % 4) * 3][2] == (cubeMatrix[((face + 2) % 4) * 3 + 2][2] + 2) % 4) {
-                return c->moveSequence("R U R' U' R' F R2 U' R' U' R U R' F'", (color)((face + 3) % 4), YELLOW);
-            }
-        }
-        //no corners correct
-        else if ((int)cubeMatrix[face * 3][2] == (cubeMatrix[face * 3 + 2][2] + 2) % 4 && (int)cubeMatrix[((face + 1) % 4) * 3][2] == (cubeMatrix[((face + 1) % 4) * 3 + 2][2] + 2) % 4) {
-            return c->moveSequence("R' U R' U' B' D B' D' B2 R' B' R B R", face, YELLOW);
-        }
-    }
-    return "";
+    return fewestMovesSequence.join("");
 }
 
 QString Fridrich::PLL(Cube *c){

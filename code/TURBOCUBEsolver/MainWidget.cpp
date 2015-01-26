@@ -265,16 +265,12 @@ void MainWidget::scrambleSlot()
 void MainWidget::solveSlot()
 {
     Cube *tmpCube = new Cube(*displayedCube);
-    Cube *tmpCube2 = new Cube(*displayedCube);
 
-    QString solv = Fridrich::solve(tmpCube);
-    QString fastSolv = Fridrich::fastestFridrichSolve(tmpCube2);
+    QString fastSolv = Fridrich::fastestFridrichSolve(tmpCube);
 
     delete tmpCube;
-    delete tmpCube2;
 
     resolutionWidget->newSolveSequence(fastSolv);
-    //Fridrich::test();
 
     isometricCubeWidget->setOrientation(YELLOW, RED);
 }
@@ -292,7 +288,12 @@ void MainWidget::sendSequenceSlot()
         displayedCube->setMatrix(col);
         isometricCubeWidget->setCube(*displayedCube);
         this->update();
-    } else {
+    } else if (sequenceLE->text() == "TURBO"){
+        QTimer *timer = new QTimer(this);
+        connect(timer, SIGNAL(timeout()), this, SLOT(scrambleSlot()));
+        timer->start(50);
+        QTimer::singleShot(3000, timer, SLOT(stop()));
+    }else{
         displayedCube->moveSequence(sequenceLE->text(), isometricCubeWidget->getFront(), isometricCubeWidget->getUp());
         isometricCubeWidget->setCube(*displayedCube);
     }
