@@ -11,6 +11,7 @@ class Fridrich
 public:
     static QString solve(Cube *cube);
     static QString fastestFridrichSolve(Cube *cube);
+    static void test();
 
 private:
     //Secondary steps

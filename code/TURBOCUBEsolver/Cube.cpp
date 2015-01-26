@@ -550,7 +550,8 @@ QString Cube::scramble(int depth)
     QString cMove;
     QString cQ;
 
-    qsrand(QDateTime::currentDateTime ().toTime_t ());
+//    qsrand(QDateTime::currentDateTime().toTime_t());
+    qsrand(QDateTime::currentDateTime().toMSecsSinceEpoch());
 
     for(int i = 0; i < depth; i++)
     {
