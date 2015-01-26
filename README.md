@@ -1,4 +1,4 @@
-![](https://raw.githubusercontent.com/thomasroulin/TurboCubeSolver/master/Pictures/LoadScreen_0.png)
+![](https://github.com/thomasroulin/TurboCubeSolver/blob/master/Pictures/GitWiki/LoadScreen_0.png)
 
 TurboCubeSolver
 ===============
