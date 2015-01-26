@@ -296,11 +296,11 @@ void MainWidget::sendSequenceSlot()
         displayedCube->setMatrix(col);
         isometricCubeWidget->setCube(*displayedCube);
         this->update();
-    } else if (seq == "TURBO"){
+    } else if (seq == "TURBO" or seq == "MEGATURBO"){
         QTimer *timer = new QTimer(this);
         connect(timer, SIGNAL(timeout()), this, SLOT(scrambleSlot()));
         timer->start(50);
-        QTimer::singleShot(3000, timer, SLOT(stop()));
+        if(seq == "TURBO") QTimer::singleShot(3000, timer, SLOT(stop()));
     }else{
         displayedCube->moveSequence(sequenceLE->text(), isometricCubeWidget->getFront(), isometricCubeWidget->getUp());
         isometricCubeWidget->setCube(*displayedCube);
