@@ -277,18 +277,26 @@ void MainWidget::solveSlot()
 
 void MainWidget::sendSequenceSlot()
 {
-    if(sequenceLE->text() == "PINK"){
+    QString seq = sequenceLE->text();
+
+    if(seq == "PINK" || seq == "50 SHADES OF PINK"){
+        initPinkSeed();
         solvePB->setDisabled(true);
         int col[18][3];
         for (int x = 0; x < 18; ++x) {
             for (int y = 0; y < 3; ++y) {
-                col[x][y] = PINK;
+                if(seq == "PINK")
+                {
+                    col[x][y] = PINK;
+                }else{
+                    col[x][y] = FIFTYPINKS;
+                }
             }
         }
         displayedCube->setMatrix(col);
         isometricCubeWidget->setCube(*displayedCube);
         this->update();
-    } else if (sequenceLE->text() == "TURBO"){
+    } else if (seq == "TURBO"){
         QTimer *timer = new QTimer(this);
         connect(timer, SIGNAL(timeout()), this, SLOT(scrambleSlot()));
         timer->start(50);
