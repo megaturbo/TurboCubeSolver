@@ -230,7 +230,16 @@ void ResolutionWidget::initDisplay()
 void ResolutionWidget::infoSlot()
 {
     QMessageBox infoBox;
-    infoBox.setInformativeText("Before following resolution step, don't forget to keep the yellow face on the top and the red face againt you.");
+    QString infoText;
+    infoText += "The notation works as follows. Each letter represents a face rotation:<br/>";
+    infoText += "<ul><li>U is <b>up</b></li><li>F is <b>front</b></li><li>R is <b>right</b></li><li>L is <b>left</b></li><li>D is <b>down</b></li><li>B is <b>back</b></li></ul>";
+    infoText += "<br/>The letter tells you to move that face clockwise by a quarter turn. ";
+    infoText += "A letter with an apostrophe tells you to move that face anticlockwise by a quarter turn. ";
+    infoText += "A letter with a 2 tells you to move that face by half a turn.<br/><br/>";
+    infoText += "If you intend to use that notation for the resolution step, don't forget to keep the yellow face ";
+    infoText += "up and the red face againt you, as the program solves it this way.";
+    infoText += "<br/><br/>More info at <a href=\"http://solvethecube.com/notation\">http://solvethecube.com/notation</a>.";
+    infoBox.setInformativeText(infoText);
     infoBox.setText("<h3>Resolution information</h3>");
     infoBox.setStandardButtons(QMessageBox::Ok);
     infoBox.setDefaultButton(QMessageBox::Ok);
