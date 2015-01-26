@@ -2,9 +2,11 @@
 #define CUBECOLOR_H
 #include <QString>
 #include <QColor>
+#include <QGlobal.h>
+#include <QTime>
 
 namespace CubeColor{
-    enum color {PINK = -2, UNDEFINED = -1, RED = 0, BLUE = 1, ORANGE = 2, GREEN = 3, WHITE = 4, YELLOW = 5};
+    enum color {FIFTYPINKS = -3, PINK = -2, UNDEFINED = -1, RED = 0, BLUE = 1, ORANGE = 2, GREEN = 3, WHITE = 4, YELLOW = 5};
 
     inline QString toString(color col){
         switch(col){
@@ -34,11 +36,20 @@ namespace CubeColor{
         }
     }
 
+    inline void initPinkSeed()
+    {
+        qsrand(QDateTime::currentDateTime().toMSecsSinceEpoch());
+    }
+
     inline QColor getQColor(int col){
         return getQColor((color) col);
     }
 
     inline QColor getQColor(color col){
+
+        int green;
+        int blue;
+
         switch(col){
         case RED:
             return QColor(204,0,0);
@@ -60,6 +71,11 @@ namespace CubeColor{
             break;
         case PINK:
             return QColor(255, 20, 147);
+            break;
+        case FIFTYPINKS:
+            green = (qrand() % 200);
+            blue = (qrand() % 51) + 100;
+            return QColor(255, green, blue);
             break;
         case UNDEFINED:
             return Qt::gray;
