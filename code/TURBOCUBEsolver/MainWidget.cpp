@@ -267,14 +267,14 @@ void MainWidget::solveSlot()
     Cube *tmpCube = new Cube(*displayedCube);
     Cube *tmpCube2 = new Cube(*displayedCube);
 
-//    QString solv = Fridrich::solve(tmpCube);
-//    QString fastSolv = Fridrich::fastestFridrichSolve(tmpCube2);
+    QString solv = Fridrich::solve(tmpCube);
+    QString fastSolv = Fridrich::fastestFridrichSolve(tmpCube2);
 
     delete tmpCube;
     delete tmpCube2;
 
-//    resolutionWidget->newSolveSequence(fastSolv);
-    Fridrich::test();
+    resolutionWidget->newSolveSequence(fastSolv);
+    //Fridrich::test();
 
     isometricCubeWidget->setOrientation(YELLOW, RED);
 }
