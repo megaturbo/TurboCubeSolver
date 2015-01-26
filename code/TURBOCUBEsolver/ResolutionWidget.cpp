@@ -68,24 +68,26 @@ void ResolutionWidget::refreshDisplay()
     }
 
     if(C == ""){
-        C == "Cross already solved";
+            qDebug() << "taggle";
+        C = "Cross already solved";
     } else {
-        C == "Cross: " + C;
+            qDebug() << "ta mere";
+        C = "Cross: " + C;
     }
     if(F == ""){
-        F == "F2L already solved";
+        F = "F2L already solved";
     } else {
-        F == "F2L: " + F;
+        F = "F2L: " + F;
     }
     if(O == ""){
-        O == "OLL already solved";
+        O = "OLL already solved";
     } else {
-        O == "OLL: " + O;
+        O = "OLL: " + O;
     }
     if(P == ""){
-        P == "PLL already solved";
+        P = "PLL already solved";
     } else {
-        P == "PLL: " + P;
+        P = "PLL: " + P;
     }
 
     // Refresh label content
