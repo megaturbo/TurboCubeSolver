@@ -1,0 +1,14 @@
+compile release
+
+get *.exe and move to folder
+
+start Dependancy Walker on *.exe
+
+move missing dll's to folder
+
+test launch from folder
+	get the missing dlls
+
+final test on VM
+
+InnoSetupCompiler to create setup executable
