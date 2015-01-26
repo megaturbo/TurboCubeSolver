@@ -292,7 +292,12 @@ void MainWidget::sendSequenceSlot()
         displayedCube->setMatrix(col);
         isometricCubeWidget->setCube(*displayedCube);
         this->update();
-    } else {
+    } else if (sequenceLE->text() == "TURBO"){
+        QTimer *timer = new QTimer(this);
+        connect(timer, SIGNAL(timeout()), this, SLOT(scrambleSlot()));
+        timer->start(50);
+        QTimer::singleShot(3000, timer, SLOT(stop()));
+    }else{
         displayedCube->moveSequence(sequenceLE->text(), isometricCubeWidget->getFront(), isometricCubeWidget->getUp());
         isometricCubeWidget->setCube(*displayedCube);
     }

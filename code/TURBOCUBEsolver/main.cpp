@@ -24,6 +24,8 @@ int main(int argc, char *argv[])
     splashScreen->addMessage("much matrix");
     splashScreen->addMessage("so rubiks");
     splashScreen->addMessage("wow");
+    splashScreen->addMessage("MANY PINK SO AMAZE");
+    splashScreen->addMessage("turbodoge");
 
 
     splashScreen->show();
