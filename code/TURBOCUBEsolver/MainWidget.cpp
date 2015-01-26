@@ -267,7 +267,7 @@ void MainWidget::solveSlot()
     delete tmpCube;
     delete tmpCube2;
 
-    resolutionWidget->newSolveSequence(solv);
+    resolutionWidget->newSolveSequence(fastSolv);
 
     isometricCubeWidget->setOrientation(YELLOW, RED);
 }
