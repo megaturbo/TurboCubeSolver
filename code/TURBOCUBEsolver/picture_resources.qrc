@@ -1,26 +1,26 @@
 <RCC>
     <qresource prefix="/">
         <file>Pictures/yellowUredF.png</file>
+        <file>Pictures/moves/background.png</file>
+        <file>Pictures/splash/splash0.png</file>
+        <file>Pictures/splash/splash1.png</file>
         <file>Pictures/moves/B.png</file>
         <file>Pictures/moves/B'.png</file>
+        <file>Pictures/moves/B2.png</file>
         <file>Pictures/moves/D.png</file>
+        <file>Pictures/moves/D2.png</file>
         <file>Pictures/moves/D'.png</file>
         <file>Pictures/moves/F.png</file>
         <file>Pictures/moves/F'.png</file>
+        <file>Pictures/moves/F2.png</file>
         <file>Pictures/moves/L.png</file>
         <file>Pictures/moves/L'.png</file>
+        <file>Pictures/moves/L2.png</file>
         <file>Pictures/moves/R.png</file>
         <file>Pictures/moves/R'.png</file>
+        <file>Pictures/moves/R2.png</file>
         <file>Pictures/moves/U.png</file>
         <file>Pictures/moves/U'.png</file>
-        <file>Pictures/moves/background.png</file>
-        <file>Pictures/moves/B2.png</file>
-        <file>Pictures/moves/D2.png</file>
-        <file>Pictures/moves/F2.png</file>
-        <file>Pictures/moves/L2.png</file>
-        <file>Pictures/moves/R2.png</file>
         <file>Pictures/moves/U2.png</file>
-        <file>Pictures/splash/splash0.png</file>
-        <file>Pictures/splash/splash1.png</file>
     </qresource>
 </RCC>
