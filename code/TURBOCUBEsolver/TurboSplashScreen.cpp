@@ -51,11 +51,8 @@ void TurboSplashScreen::drawContents(QPainter *painter)
     painter->setPen(QColor(255,136,0));
     painter->setFont(QFont("Arial", 15));
 
-
-    qsrand(QDateTime::currentDateTime().toMSecsSinceEpoch());
-
-//    QString msg = messages->at(remaining/(displayTime/messages->size()));
     if(remaining < displayTime / 2 && !middle){
+        qsrand(QDateTime::currentDateTime().toMSecsSinceEpoch());
         msg = messages->at(qrand() % messages->size());
         middle = true;
     }
