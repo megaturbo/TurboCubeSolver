@@ -9,7 +9,6 @@
 *.so
 *.dll
 *.dylib
-*.exe
 code/build*
 
 # Qt-es
