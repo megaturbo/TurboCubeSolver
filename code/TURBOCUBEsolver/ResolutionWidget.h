@@ -4,6 +4,8 @@
 #include <QWidget>
 #include <QLabel>
 #include <QPushButton>
+#include <QLineEdit>
+#include <QTimer>
 
 class ResolutionWidget : public QWidget
 {
@@ -17,6 +19,8 @@ public slots:
     void newSolveSequence(QString);
     void pastMove();
     void nextMove();
+    void playSlot();
+    void pauseSlot();
 
 private slots:
     void infoSlot();
@@ -28,6 +32,8 @@ private:
     QPushButton *infoPB;
     QPushButton *nextMovePB;
     QPushButton *pastMovePB;
+    QPushButton *playPB;
+    QPushButton *pausePB;
     QLabel *actMoveLabel;
     QLabel *crossLabel;
     QLabel *f2lLabel;
@@ -35,6 +41,8 @@ private:
     QLabel *pllLabel;
     QLabel *nbMovesLabel;
     QStringList CFOPlist;
+    QLineEdit *timeLE;
+    QTimer *timer;
 
     // Part sizes
     int actMoveID;

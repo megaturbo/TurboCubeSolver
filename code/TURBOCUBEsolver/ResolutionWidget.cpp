@@ -10,6 +10,7 @@
 #include "Cube.h"
 #include <QMessageBox>
 #include <QDebug>
+#include <QDoubleValidator>
 
 ResolutionWidget::ResolutionWidget(QWidget *parent)
     : QWidget(parent)
@@ -101,6 +102,9 @@ void ResolutionWidget::refreshDisplay()
     if(actMoveID >= lengthSequence)
     {
         nextMovePB->setDisabled(true);
+        pausePB->setDisabled(true);
+        playPB->setDisabled(true);
+        timer->stop();
     }else{
         nextMovePB->setEnabled(true);
     }
@@ -116,6 +120,9 @@ void ResolutionWidget::pastMove()
         emit sendMove(Cube::reverseSequence(CFOPlist.at(actMoveID-1)));
         actMoveID--;
         refreshDisplay();
+        playPB->setDisabled(false);
+        timer->stop();
+        pausePB->setDisabled(true);
     }
 }
 
@@ -148,6 +155,17 @@ void ResolutionWidget::initDisplay()
     actMoveLabel = new QLabel(this);
     nextMovePB = new QPushButton(">", this);
 
+    playPB = new QPushButton("Play", this);
+    pausePB = new QPushButton("Pause", this);
+    timeLE = new QLineEdit("1.0", this);
+    timeLE->setValidator(new QDoubleValidator(0.01, 10, 3, this));
+    timeLE->setMaximumWidth(50);
+    playPB->setMaximumWidth(50);
+    pausePB->setMaximumWidth(50);
+    pausePB->setDisabled(true);
+    playPB->setDisabled(true);
+    timer = new QTimer(this);
+
     pastMovePB->setFont(rdFont);
     actMoveLabel->setFont(rdFont);
     nextMovePB->setFont(rdFont);
@@ -168,12 +186,14 @@ void ResolutionWidget::initDisplay()
     pllLabel->setMinimumWidth(300);
 
     QGroupBox *groupBox = new QGroupBox("Resolution", this);
+    QVBoxLayout *bigLayout = new QVBoxLayout();
     QVBoxLayout *cfopLayout = new QVBoxLayout();
     QVBoxLayout *cfopLabelLayout = new QVBoxLayout();
     QHBoxLayout *mainLayout = new QHBoxLayout();
     QHBoxLayout *cfopInformationLayout = new QHBoxLayout();
     QHBoxLayout *cfopMainLayout = new QHBoxLayout();
     QVBoxLayout *infoLayout = new QVBoxLayout();
+    QHBoxLayout *playLayout = new QHBoxLayout();
 
     QLabel *crossTitle = new QLabel("Cross", this);
     QLabel *f2lTitle = new QLabel("F2L", this);
@@ -195,6 +215,9 @@ void ResolutionWidget::initDisplay()
     cfopLayout->addWidget(ollLabel);
     cfopLayout->addWidget(pllLabel);
 
+    playLayout->addWidget(playPB);
+    playLayout->addWidget(pausePB);
+    playLayout->addWidget(timeLE);
 
     cfopMainLayout->addLayout(cfopLabelLayout);
     cfopMainLayout->addLayout(cfopLayout);
@@ -211,7 +234,10 @@ void ResolutionWidget::initDisplay()
     mainLayout->addWidget(nextMovePB);
     mainLayout->addLayout(cfopInformationLayout);
 
-    groupBox->setLayout(mainLayout);
+    bigLayout->addLayout(playLayout);
+    bigLayout->addLayout(mainLayout);
+
+    groupBox->setLayout(bigLayout);
 
     QVBoxLayout *megaMainLayout = new QVBoxLayout();
 
@@ -220,6 +246,9 @@ void ResolutionWidget::initDisplay()
     connect(pastMovePB, SIGNAL(clicked()), this, SLOT(pastMove()));
     connect(nextMovePB, SIGNAL(clicked()), this, SLOT(nextMove()));
     connect(infoPB, SIGNAL(clicked()), this, SLOT(infoSlot()));
+    connect(playPB, SIGNAL(clicked()), this, SLOT(playSlot()));
+    connect(pausePB, SIGNAL(clicked()), this, SLOT(pauseSlot()));
+    connect(timer, SIGNAL(timeout()), this, SLOT(nextMove()));
 
     this->setLayout(megaMainLayout);
 }
@@ -259,6 +288,7 @@ void ResolutionWidget::newSolveSequence(QString solveSequence)
     actMoveID = 0;
     resetDisplay();
     nextMovePB->setEnabled(true);
+    playPB->setEnabled(true);
 
     solveSequence.chop(1);
     CFOPlist = solveSequence.split(' ');
@@ -291,4 +321,23 @@ void ResolutionWidget::resetDisplay()
     nbMovesLabel->clear();
     pastMovePB->setDisabled(true);
     nextMovePB->setDisabled(true);
+    playPB->setDisabled(true);
+    pausePB->setDisabled(true);
+    timer->stop();
+}
+
+void ResolutionWidget::playSlot(){
+    if(CFOPlist.size() > 0){
+        timer->start((timeLE->text().toDouble()) * 1000);
+        playPB->setDisabled(true);
+        pausePB->setDisabled(false);
+    }
+}
+
+void ResolutionWidget::pauseSlot(){
+    if(timer->isActive()){
+        timer->stop();
+        playPB->setDisabled(false);
+        pausePB->setDisabled(true);
+    }
 }
