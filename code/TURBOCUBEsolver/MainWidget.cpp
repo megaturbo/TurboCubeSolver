@@ -300,7 +300,12 @@ void MainWidget::sendSequenceSlot()
         QTimer *timer = new QTimer(this);
         connect(timer, SIGNAL(timeout()), this, SLOT(scrambleSlot()));
         timer->start(50);
-        if(seq == "TURBO") QTimer::singleShot(3000, timer, SLOT(stop()));
+        if(seq == "TURBO"){
+            QTimer *timeStop = new QTimer(this);
+            timeStop->setSingleShot(true);
+            connect(timeStop, SIGNAL(timeout()), timer, SLOT(stop()));
+            timeStop->start(3000);
+        }
     }else{
         displayedCube->moveSequence(sequenceLE->text(), isometricCubeWidget->getFront(), isometricCubeWidget->getUp());
         isometricCubeWidget->setCube(*displayedCube);

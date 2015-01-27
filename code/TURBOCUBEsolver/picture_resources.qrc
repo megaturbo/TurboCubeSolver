@@ -22,5 +22,9 @@
         <file>Pictures/moves/U.png</file>
         <file>Pictures/moves/U'.png</file>
         <file>Pictures/moves/U2.png</file>
+        <file>Pictures/icons/next.png</file>
+        <file>Pictures/icons/past.png</file>
+        <file>Pictures/icons/pause.png</file>
+        <file>Pictures/icons/play.png</file>
     </qresource>
 </RCC>

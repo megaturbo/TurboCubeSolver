@@ -10,6 +10,7 @@
 #include "Cube.h"
 #include <QMessageBox>
 #include <QDebug>
+#include <QDoubleValidator>
 
 ResolutionWidget::ResolutionWidget(QWidget *parent)
     : QWidget(parent)
@@ -101,7 +102,10 @@ void ResolutionWidget::refreshDisplay()
     if(actMoveID >= lengthSequence)
     {
         nextMovePB->setDisabled(true);
+        playpausePB->setDisabled(true);
+        timer->stop();
     }else{
+        playpausePB->setEnabled(true);
         nextMovePB->setEnabled(true);
     }
 }
@@ -116,6 +120,8 @@ void ResolutionWidget::pastMove()
         emit sendMove(Cube::reverseSequence(CFOPlist.at(actMoveID-1)));
         actMoveID--;
         refreshDisplay();
+        playpausePB->setIcon(QIcon(QPixmap(":Pictures/icons/play.png")));
+        timer->stop();
     }
 }
 
@@ -144,13 +150,24 @@ void ResolutionWidget::initDisplay()
     infoPB = new QPushButton("Information", this);
     infoPB->setFixedWidth(100);
 
-    pastMovePB = new QPushButton("<", this);
+    pastMovePB = new QPushButton(this);
     actMoveLabel = new QLabel(this);
-    nextMovePB = new QPushButton(">", this);
+    nextMovePB = new QPushButton(this);
 
-    pastMovePB->setFont(rdFont);
+    QLabel *timerLabel = new QLabel("Timer", this);
+    timerLabel->setMaximumWidth(100);
+    playpausePB = new QPushButton(this);
+    timeLE = new QLineEdit("1.0", this);
+    timeLE->setValidator(new QDoubleValidator(0.01, 10, 3, this));
+    timeLE->setMaximumWidth(50);
+    playpausePB->setMaximumWidth(50);
+    playpausePB->setIcon(QIcon(QPixmap(":Pictures/icons/play.png")));
+    timer = new QTimer(this);
+
+    pastMovePB->setIcon(QIcon(QPixmap(":Pictures/icons/past.png")));
+    nextMovePB->setIcon(QIcon(QPixmap(":Pictures/icons/next.png")));
+
     actMoveLabel->setFont(rdFont);
-    nextMovePB->setFont(rdFont);
     pastMovePB->setFixedSize(100,100);
     actMoveLabel->setFixedSize(100,100);
     actMoveLabel->setStyleSheet("border-image:url(:Pictures/moves/background.png);");
@@ -168,12 +185,14 @@ void ResolutionWidget::initDisplay()
     pllLabel->setMinimumWidth(300);
 
     QGroupBox *groupBox = new QGroupBox("Resolution", this);
+    QVBoxLayout *bigLayout = new QVBoxLayout();
     QVBoxLayout *cfopLayout = new QVBoxLayout();
     QVBoxLayout *cfopLabelLayout = new QVBoxLayout();
     QHBoxLayout *mainLayout = new QHBoxLayout();
     QHBoxLayout *cfopInformationLayout = new QHBoxLayout();
     QHBoxLayout *cfopMainLayout = new QHBoxLayout();
     QVBoxLayout *infoLayout = new QVBoxLayout();
+    QHBoxLayout *playLayout = new QHBoxLayout();
 
     QLabel *crossTitle = new QLabel("Cross", this);
     QLabel *f2lTitle = new QLabel("F2L", this);
@@ -195,6 +214,10 @@ void ResolutionWidget::initDisplay()
     cfopLayout->addWidget(ollLabel);
     cfopLayout->addWidget(pllLabel);
 
+    playLayout->setAlignment(Qt::AlignLeft);
+    playLayout->addWidget(timerLabel);
+    playLayout->addWidget(playpausePB);
+    playLayout->addWidget(timeLE);
 
     cfopMainLayout->addLayout(cfopLabelLayout);
     cfopMainLayout->addLayout(cfopLayout);
@@ -211,7 +234,10 @@ void ResolutionWidget::initDisplay()
     mainLayout->addWidget(nextMovePB);
     mainLayout->addLayout(cfopInformationLayout);
 
-    groupBox->setLayout(mainLayout);
+    bigLayout->addLayout(playLayout);
+    bigLayout->addLayout(mainLayout);
+
+    groupBox->setLayout(bigLayout);
 
     QVBoxLayout *megaMainLayout = new QVBoxLayout();
 
@@ -220,6 +246,8 @@ void ResolutionWidget::initDisplay()
     connect(pastMovePB, SIGNAL(clicked()), this, SLOT(pastMove()));
     connect(nextMovePB, SIGNAL(clicked()), this, SLOT(nextMove()));
     connect(infoPB, SIGNAL(clicked()), this, SLOT(infoSlot()));
+    connect(playpausePB, SIGNAL(clicked()), this, SLOT(playpauseSlot()));
+    connect(timer, SIGNAL(timeout()), this, SLOT(nextMove()));
 
     this->setLayout(megaMainLayout);
 }
@@ -259,6 +287,7 @@ void ResolutionWidget::newSolveSequence(QString solveSequence)
     actMoveID = 0;
     resetDisplay();
     nextMovePB->setEnabled(true);
+    playpausePB->setEnabled(true);
 
     solveSequence.chop(1);
     CFOPlist = solveSequence.split(' ');
@@ -291,4 +320,21 @@ void ResolutionWidget::resetDisplay()
     nbMovesLabel->clear();
     pastMovePB->setDisabled(true);
     nextMovePB->setDisabled(true);
+    playpausePB->setDisabled(true);
+    playpausePB->setIcon(QIcon(QPixmap(":Pictures/icons/play.png")));
+    timer->stop();
+}
+
+void ResolutionWidget::playpauseSlot(){
+    if(CFOPlist.size() > 0){
+        if(!timer->isActive())
+        {
+            timer->start((timeLE->text().toDouble()) * 1000);
+            playpausePB->setIcon(QIcon(QPixmap(":Pictures/icons/pause.png")));
+        }else if(timer->isActive())
+        {
+            timer->stop();
+            playpausePB->setIcon(QIcon(QPixmap(":Pictures/icons/play.png")));
+        }
+    }
 }
