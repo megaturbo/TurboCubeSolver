@@ -102,10 +102,10 @@ void ResolutionWidget::refreshDisplay()
     if(actMoveID >= lengthSequence)
     {
         nextMovePB->setDisabled(true);
-        pausePB->setDisabled(true);
-        playPB->setDisabled(true);
+        playpausePB->setDisabled(true);
         timer->stop();
     }else{
+        playpausePB->setEnabled(true);
         nextMovePB->setEnabled(true);
     }
 }
@@ -120,9 +120,8 @@ void ResolutionWidget::pastMove()
         emit sendMove(Cube::reverseSequence(CFOPlist.at(actMoveID-1)));
         actMoveID--;
         refreshDisplay();
-        playPB->setDisabled(false);
+        playpausePB->setIcon(QIcon(QPixmap(":Pictures/icons/play.png")));
         timer->stop();
-        pausePB->setDisabled(true);
     }
 }
 
@@ -151,24 +150,24 @@ void ResolutionWidget::initDisplay()
     infoPB = new QPushButton("Information", this);
     infoPB->setFixedWidth(100);
 
-    pastMovePB = new QPushButton("<", this);
+    pastMovePB = new QPushButton(this);
     actMoveLabel = new QLabel(this);
-    nextMovePB = new QPushButton(">", this);
+    nextMovePB = new QPushButton(this);
 
-    playPB = new QPushButton("Play", this);
-    pausePB = new QPushButton("Pause", this);
+    QLabel *timerLabel = new QLabel("Timer", this);
+    timerLabel->setMaximumWidth(100);
+    playpausePB = new QPushButton(this);
     timeLE = new QLineEdit("1.0", this);
     timeLE->setValidator(new QDoubleValidator(0.01, 10, 3, this));
     timeLE->setMaximumWidth(50);
-    playPB->setMaximumWidth(50);
-    pausePB->setMaximumWidth(50);
-    pausePB->setDisabled(true);
-    playPB->setDisabled(true);
+    playpausePB->setMaximumWidth(50);
+    playpausePB->setIcon(QIcon(QPixmap(":Pictures/icons/play.png")));
     timer = new QTimer(this);
 
-    pastMovePB->setFont(rdFont);
+    pastMovePB->setIcon(QIcon(QPixmap(":Pictures/icons/past.png")));
+    nextMovePB->setIcon(QIcon(QPixmap(":Pictures/icons/next.png")));
+
     actMoveLabel->setFont(rdFont);
-    nextMovePB->setFont(rdFont);
     pastMovePB->setFixedSize(100,100);
     actMoveLabel->setFixedSize(100,100);
     actMoveLabel->setStyleSheet("border-image:url(:Pictures/moves/background.png);");
@@ -215,8 +214,9 @@ void ResolutionWidget::initDisplay()
     cfopLayout->addWidget(ollLabel);
     cfopLayout->addWidget(pllLabel);
 
-    playLayout->addWidget(playPB);
-    playLayout->addWidget(pausePB);
+    playLayout->setAlignment(Qt::AlignLeft);
+    playLayout->addWidget(timerLabel);
+    playLayout->addWidget(playpausePB);
     playLayout->addWidget(timeLE);
 
     cfopMainLayout->addLayout(cfopLabelLayout);
@@ -246,8 +246,7 @@ void ResolutionWidget::initDisplay()
     connect(pastMovePB, SIGNAL(clicked()), this, SLOT(pastMove()));
     connect(nextMovePB, SIGNAL(clicked()), this, SLOT(nextMove()));
     connect(infoPB, SIGNAL(clicked()), this, SLOT(infoSlot()));
-    connect(playPB, SIGNAL(clicked()), this, SLOT(playSlot()));
-    connect(pausePB, SIGNAL(clicked()), this, SLOT(pauseSlot()));
+    connect(playpausePB, SIGNAL(clicked()), this, SLOT(playpauseSlot()));
     connect(timer, SIGNAL(timeout()), this, SLOT(nextMove()));
 
     this->setLayout(megaMainLayout);
@@ -288,7 +287,7 @@ void ResolutionWidget::newSolveSequence(QString solveSequence)
     actMoveID = 0;
     resetDisplay();
     nextMovePB->setEnabled(true);
-    playPB->setEnabled(true);
+    playpausePB->setEnabled(true);
 
     solveSequence.chop(1);
     CFOPlist = solveSequence.split(' ');
@@ -321,23 +320,21 @@ void ResolutionWidget::resetDisplay()
     nbMovesLabel->clear();
     pastMovePB->setDisabled(true);
     nextMovePB->setDisabled(true);
-    playPB->setDisabled(true);
-    pausePB->setDisabled(true);
+    playpausePB->setDisabled(true);
+    playpausePB->setIcon(QIcon(QPixmap(":Pictures/icons/play.png")));
     timer->stop();
 }
 
-void ResolutionWidget::playSlot(){
+void ResolutionWidget::playpauseSlot(){
     if(CFOPlist.size() > 0){
-        timer->start((timeLE->text().toDouble()) * 1000);
-        playPB->setDisabled(true);
-        pausePB->setDisabled(false);
-    }
-}
-
-void ResolutionWidget::pauseSlot(){
-    if(timer->isActive()){
-        timer->stop();
-        playPB->setDisabled(false);
-        pausePB->setDisabled(true);
+        if(!timer->isActive())
+        {
+            timer->start((timeLE->text().toDouble()) * 1000);
+            playpausePB->setIcon(QIcon(QPixmap(":Pictures/icons/pause.png")));
+        }else if(timer->isActive())
+        {
+            timer->stop();
+            playpausePB->setIcon(QIcon(QPixmap(":Pictures/icons/play.png")));
+        }
     }
 }

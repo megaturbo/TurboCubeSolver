@@ -19,8 +19,7 @@ public slots:
     void newSolveSequence(QString);
     void pastMove();
     void nextMove();
-    void playSlot();
-    void pauseSlot();
+    void playpauseSlot();
 
 private slots:
     void infoSlot();
@@ -32,8 +31,7 @@ private:
     QPushButton *infoPB;
     QPushButton *nextMovePB;
     QPushButton *pastMovePB;
-    QPushButton *playPB;
-    QPushButton *pausePB;
+    QPushButton *playpausePB;
     QLabel *actMoveLabel;
     QLabel *crossLabel;
     QLabel *f2lLabel;

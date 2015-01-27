@@ -14,8 +14,6 @@ using namespace CubeColor;
 
 int main(int argc, char *argv[])
 {
-    QString s = "B' U B' U' U B' U' B' U B U B2 U2 ";
-    Cube::cleanSequence(s);
 
     QApplication a(argc, argv);
 

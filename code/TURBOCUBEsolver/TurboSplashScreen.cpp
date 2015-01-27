@@ -13,6 +13,7 @@ TurboSplashScreen::TurboSplashScreen(int displayTime)
     messages->append("so rubiks");
     messages->append("wow");
     messages->append("MANY PINK SO AMAZE");
+    messages->append("Please remember: No nuclear weaponry");
     messages->append("turbodoge");
     messages->append("Painting stickers...");
     messages->append("Fixing cubie parity...");
